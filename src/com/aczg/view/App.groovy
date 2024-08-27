@@ -1,9 +1,5 @@
 package com.aczg.view
+import com.aczg.controller.MenuController
 
-import com.aczg.controller.CandidatoController
-import com.aczg.controller.EmpresaController
-
-CandidatoController candidatoController = new CandidatoController()
-candidatoController.mostrarDados()
-EmpresaController empresaController = new EmpresaController()
-empresaController.mostrarDados()
+MenuController startMenu = new MenuController()
+startMenu.gerarMenu()
