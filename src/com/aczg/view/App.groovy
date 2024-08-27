@@ -1,4 +1,6 @@
 package com.aczg.view
 
-class App {
-}
+import com.aczg.controller.CandidatoController
+
+CandidatoController candidatoController = new CandidatoController()
+candidatoController.mostrarTodosCandidatos()
