@@ -1,8 +1,6 @@
 package com.aczg.controller
 
-class MenuController {
-
-    private Scanner scanner = new Scanner(System.in);
+class MenuController implements validadorEntrada{
 
     CandidatoController candidatoController = new CandidatoController()
     EmpresaController empresaController = new EmpresaController()
@@ -53,31 +51,15 @@ class MenuController {
                 println "Scanner fechado ou em estado inválido: ${e.message}"
                 encerrarAplicacao()
             }
-
-        }
-
-    }
-
-    private String validarResposta(String mensagemInterativa) {
-        while (true) {
-            print "${mensagemInterativa}"
-            String resposta = scanner.nextLine()
-
-            if (resposta && !resposta.trim().isEmpty()) {
-                return resposta
-            }
-            println "Entrada Inválida!"
-
         }
     }
 
     private void cadastrarEmpresa(){
-        println "Funcionalidade em desenvolvimento..."
-
+        empresaController.adicionarEmpresa()
     }
 
     private void cadastrarCandidato(){
-        println "Funcionalidade em desenvolvimento..."
+        candidatoController.adicionarCandidato()
     }
 
     private void listarEmpresas(){
@@ -91,9 +73,7 @@ class MenuController {
     private void encerrarAplicacao(){
         println "Encerrando aplicação..."
         menuAtivo = false
-        if (!scanner.closed) {
-            scanner.close()
-        }
+        fecharScanner()
         System.exit(0);
     }
 }
