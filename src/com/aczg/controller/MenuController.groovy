@@ -22,7 +22,7 @@ class MenuController implements validadorEntrada{
             """.stripIndent()
 
             try {
-                String opcaoSelecionada = validarResposta("DICA: Digite um número de [1 a 5]: ")
+                String opcaoSelecionada = validarTexto("DICA: Digite um número de [1 a 5]: ")
 
                 switch (opcaoSelecionada) {
 
@@ -40,6 +40,7 @@ class MenuController implements validadorEntrada{
                         break
                     case '5':
                        encerrarAplicacao()
+                        break
                     default:
                         println "ALERTA: Entrada inválida. Tente novamente!"
                 }

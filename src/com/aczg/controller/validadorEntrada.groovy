@@ -4,10 +4,10 @@ trait validadorEntrada {
 
     public Scanner scanner = new Scanner(System.in)
 
-    String validarResposta(String mensagemInterativa) {
+    String validarTexto(String mensagemInterativa, Scanner entradaScanner = scanner) {
         while (true) {
             print "${mensagemInterativa}"
-            String resposta = scanner.nextLine()
+            String resposta = entradaScanner.nextLine()
             if (resposta && !resposta.trim().isEmpty()) {
                 return resposta
             }
@@ -15,17 +15,17 @@ trait validadorEntrada {
         }
     }
 
-    Integer validarInt(String mensagemInterativa) {
+    Integer validarInteiro(String mensagemInterativa, Scanner entradaScanner = scanner) {
         while (true) {
             print "${mensagemInterativa}"
             try {
-                int valor = Integer.parseInt(scanner.nextLine())
+                int valor = Integer.parseInt(entradaScanner.nextLine())
                 if (valor) {
                    return valor
                 }
                 println "\nValor inválido"
             } catch (NumberFormatException e) {
-                println "\nValor inválido! Digite um número válido."
+                println "\n${e.getMessage()} Valor inválido! Digite um número válido."
             }
 
         }
