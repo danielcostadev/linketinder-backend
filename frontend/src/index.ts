@@ -1,3 +1,4 @@
+import { EmpresaController } from './controller/empresa.controller';
 import { Formulario } from './service/formulario.service';
 
 // Centralização de interação com o DOM
@@ -9,8 +10,10 @@ var camposCadastro: { nome: string, mensagem: string }[];
 
 
 
-// Interagindo com formulário
+// Controladores de serviço
 const formulario = new Formulario();
+const empresaController = new EmpresaController();
+
 
 window.onload = () => {
     formulario.gerarListaPaisesEstados();
@@ -44,7 +47,9 @@ botaoAdicionar.onclick = function () {
             { nome: "idade", mensagem: "O campo Idade está vazio." },
             { nome: "estado", mensagem: "O campo Estado está vazio." },
             { nome: "cep", mensagem: "O campo CEP está vazio." },
-            { nome: "descricao", mensagem: "O campo Descrição está vazio." }
+            { nome: "descricao", mensagem: "O campo Descrição está vazio." },
+            { nome: "competencias", mensagem: "O campo Competencias está vazio." }
+
         ];
 
         frmCadastro = frmCandidato;
@@ -53,7 +58,8 @@ botaoAdicionar.onclick = function () {
     }
 
     if (formulario.validarEntradaDados(camposCadastro, frmCadastro)) {
-        alert("Estou Ok!")
+        const formData = new FormData(frmCadastro);
+        empresaController.adicionarEmpresa(formData);
     };
 
 };
