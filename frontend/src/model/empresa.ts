@@ -3,13 +3,13 @@ import { Pessoa } from './pessoa';
 export class Empresa extends Pessoa {
 
     protected cnpj: string;
-    protected pais: number;
+    protected pais: string;
 
     constructor(
         nome: string,
         email: string,
         cnpj: string,
-        pais: number,
+        pais: string,
         estado: string,
         cep: string,
         descricao: string,
