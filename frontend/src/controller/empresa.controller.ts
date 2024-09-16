@@ -1,20 +1,16 @@
-import { DadosDAO } from "../model/dadosDAO";
 import { Empresa } from "../model/empresa";
 import { EmpresaService } from "../service/empresa.service";
 
 export class EmpresaController {
 
     private empresaService = new EmpresaService();
-    private dadosDAO = new DadosDAO();
-
 
     public adicionarEmpresa(dadosFormulario: FormData): void {
 
-        const competencias = (dadosFormulario.get("competencias") as string)
-        .split(',')
-        .map(competencia => competencia.trim());
+        const id = this.empresaService.gerarId();
 
         const empresa = new Empresa(
+            id,
             dadosFormulario.get("nome") as string,
             dadosFormulario.get("email") as string,
             dadosFormulario.get("cnpj") as string,
@@ -22,10 +18,17 @@ export class EmpresaController {
             dadosFormulario.get("estado") as string,
             dadosFormulario.get("cep") as string,
             dadosFormulario.get("descricao") as string,
-            competencias,
+            (dadosFormulario.get("competencias") as string).split(",")
         );
-        this.empresaService.adicionarEmpresa(empresa, this.dadosDAO);
-        console.log("Empresa adicionada com sucesso!");
-        
+        this.empresaService.adicionarEmpresa(empresa);
+
     }
+
+    public excluirEmpresa(id: number): void {
+        this.empresaService.exlcuirEmpresa(id);
+    }
+
+
+
+
 }
