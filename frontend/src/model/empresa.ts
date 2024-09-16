@@ -6,6 +6,7 @@ export class Empresa extends Pessoa {
     protected pais: string;
 
     constructor(
+        id: number,
         nome: string,
         email: string,
         cnpj: string,
@@ -15,7 +16,8 @@ export class Empresa extends Pessoa {
         descricao: string,
         competencias: string[]
     ) {
-        super(nome, email, estado, cep, descricao, competencias);
+        super(id, nome, email, estado, cep, descricao, competencias);
+        this.id = id;
         this.cnpj = cnpj;
         this.pais = pais;
     }
@@ -23,15 +25,17 @@ export class Empresa extends Pessoa {
         return this.competencias;
     }
 
-    mostrarInformacoesMatch(): string | string[]{
-        return this.nome,
-               this.email,
-               this.cnpj,
-               this.pais,
-               this.estado,
-               this.cep,
-               this.descricao,
-               this.competencias
+    mostrarInformacoesMatch(): string | string[] {
+        return [
+            this.nome,
+            this.email,
+            this.cnpj,
+            this.pais,
+            this.estado,
+            this.cep,
+            this.descricao,
+            ...this.competencias
+        ];
     }
 
 }

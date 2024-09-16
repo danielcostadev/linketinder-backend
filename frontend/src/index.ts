@@ -3,6 +3,7 @@ import { Formulario } from './service/formulario.service';
 
 // Centralização de interação com o DOM
 var botaoAdicionar = document.getElementById("adicionar") as HTMLButtonElement;
+var botaoCancelar = document.getElementById("cancelar") as HTMLButtonElement;
 var frmEmpresa = document.getElementById("frmEmpresa") as HTMLFormElement;
 var frmCandidato = document.getElementById("frmCandidato") as HTMLFormElement;
 var frmCadastro: HTMLFormElement;

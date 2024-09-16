@@ -1,5 +1,6 @@
 export abstract class Pessoa {
 
+    public id: number;
     protected nome: string;
     protected email: string;
     protected estado: string;
@@ -8,6 +9,7 @@ export abstract class Pessoa {
     protected competencias: string[]
 
     constructor(
+        id: number,
         nome: string,
         email: string,
         estado: string,
@@ -15,6 +17,7 @@ export abstract class Pessoa {
         descricao: string,
         competencias: string[]
     ) {
+        this.id = id;
         this.nome = nome;
         this.email = email;
         this.estado = estado;
