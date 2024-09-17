@@ -25,7 +25,7 @@ export class CandidatoController {
 
     }
 
-    public excluirEmpresa(id: number): void {
+    public excluirCandidato(id: number): void {
         this.candidatoService.exlcuirCandidato(id);
     }
 
