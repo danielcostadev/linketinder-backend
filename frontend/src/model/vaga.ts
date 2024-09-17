@@ -5,33 +5,19 @@ import { Empresa } from './empresa';
 export class Vaga {
     protected codigo: number;
     protected candidato?: Candidato;
-    protected empresa: Empresa
+    protected empresa: Empresa;
+    protected competencias: string[]
 
     constructor(
         codigo: number,
         candidato: Candidato, 
-        empresa: Empresa 
+        empresa: Empresa, 
+        competencias: string[]
     ){
         this.codigo = codigo;
         this.candidato = candidato;
         this.empresa = empresa;
+        this.competencias = competencias;
     }
 
 }
-
-// function gerarCodigo(): number {
-
-//     let listaVagas: number = 1
-//     let idGlobal: number;
-
-//     if (listaVagas > 0) {
-//         // let ids = listaTarefas.map(tarefa => tarefa.id); // Extrair os IDs usando map
-//         // let maiorId = Math.max(...ids); // Pega o maior valor dentro doo array ... < é chamado de operador spread, separa todos os itens de um array 1 por 1
-//         idGlobal = listaVagas + 1;
-//     } else {
-//         idGlobal = 1;
-//     }
-
-//     return idGlobal;
-// }
-

@@ -3,22 +3,24 @@ import { Pessoa } from './pessoa';
 export class Candidato extends Pessoa {
 
     protected cpf: string;
-    protected idade: number;
+    protected idade: string;
     protected formacao: string;
 
     constructor(
+        id: number,
         nome: string,
         email: string,
         cpf: string,
-        idade: number,
+        idade: string,
         estado: string,
         cep: string,
         descricao: string,
-        competencias: string[],
-        formacao: string
+        formacao: string,
+        competencias: string[]
 
     ) {
-        super(nome, email, estado, cep, descricao, competencias);
+        super(id, nome, email, estado, cep, descricao, competencias);
+        this.id = id
         this.cpf = cpf
         this.idade = idade
         this.formacao = formacao
@@ -37,6 +39,7 @@ export class Candidato extends Pessoa {
                this.estado,
                this.cep,
                this.descricao,
+               this.formacao,
                this.competencias
         
     }
