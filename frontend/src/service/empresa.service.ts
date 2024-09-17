@@ -1,4 +1,4 @@
-import { DadosDAO } from "../model/dadosDAO";
+import { DadosDAO } from "../model/dados.DAO";
 import { Empresa } from "../model/empresa";
 
 export class EmpresaService {
@@ -9,11 +9,11 @@ export class EmpresaService {
     }
 
     public gerarId(): number {
-        let empresas = this.dadosDAO.obterDoLocalStorage("linketinderData");
+        let empresas = this.dadosDAO.obterEmpresaDoLocalStorage("dataEmpresa");
         console.log(empresas);
         if (empresas.length > 0) {
-            const ids = empresas.map((empresa: Empresa) => empresa.id);
-            const maiorId = Math.max(...ids);
+            const ids: number[] = empresas.map((empresa: Empresa) => empresa.id);
+            const maiorId: number = Math.max(...ids);
             return maiorId + 1;
         } else {
             return 1;
@@ -21,19 +21,19 @@ export class EmpresaService {
     }
 
     public adicionarEmpresa(empresa: Empresa): void {
-        let empresas: Empresa[] = this.dadosDAO.obterDoLocalStorage("linketinderData");
+        let empresas: Empresa[] = this.dadosDAO.obterEmpresaDoLocalStorage("dataEmpresa");
         empresas.push(empresa);
-        this.dadosDAO.salvarNoLocalStorage("linketinderData", empresas)
+        this.dadosDAO.salvarEmpresaNoLocalStorage("dataEmpresa", empresas)
         console.log("Empresa adicionada com sucesso!");
     }
 
     public exlcuirEmpresa(idEmpresa: number): void {
-        let empresas: Empresa[] = this.dadosDAO.obterDoLocalStorage("linketinderData");
+        let empresas: Empresa[] = this.dadosDAO.obterEmpresaDoLocalStorage("dataEmpresa");
         const index: number = empresas.findIndex(empresa => empresa.id === idEmpresa);
 
         if (index !== -1) {
             empresas.splice(index, 1);
-            this.dadosDAO.salvarNoLocalStorage("linketinderData", empresas)
+            this.dadosDAO.salvarEmpresaNoLocalStorage("dataEmpresa", empresas)
             console.log("Empresa removida com sucesso!");
 
         } else {

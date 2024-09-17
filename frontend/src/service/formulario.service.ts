@@ -1,31 +1,39 @@
-import { DadosPaisesEstados } from "../model/dadosPaisesEstados";
+// import { DadosPaisesEstados } from "../model/dadosPaisesEstados";
 
-const dadosPaisesEstados = new DadosPaisesEstados;
+import { Paises } from "../model/paises";
+import { Estados } from "../model/estados";
+
+// const dadosPaisesEstados = new DadosPaisesEstados;
+
+const dadosPaises = new Paises();
+const dadosEstados = new Estados();
 
 export class Formulario {
 
-    public gerarListaPaisesEstados(): void {
+    public gerarPaises(): void {
         const selectPais = document.getElementById("paises") as HTMLSelectElement;
+
+        if (selectPais) {
+            dadosPaises.getPaises().forEach(pais => {
+                const option = document.createElement("option");
+                option.value = pais.toLowerCase();
+                option.textContent = pais;
+                selectPais.appendChild(option);
+            });
+        }
+    }
+
+    public gerarEstados() {
         const selectEstado = document.getElementById("estado") as HTMLSelectElement;
 
-        if (!selectPais || !selectEstado) {
-            console.error("Elemento <select> não encontrado!");
-            return;
+        if (selectEstado) {
+            dadosEstados.getEstados().forEach(estado => {
+                const option = document.createElement("option");
+                option.value = estado.sigla;
+                option.textContent = estado.nome;
+                selectEstado.appendChild(option);
+            });
         }
-
-        dadosPaisesEstados.getPaises().forEach(pais => {
-            const option = document.createElement("option");
-            option.value = pais.toLowerCase();
-            option.textContent = pais;
-            selectPais.appendChild(option);
-        });
-
-        dadosPaisesEstados.getEstados().forEach(estado => {
-            const option = document.createElement("option");
-            option.value = estado.sigla;
-            option.textContent = estado.nome;
-            selectEstado.appendChild(option);
-        });
     }
 
     public validarEntradaDados(campos: { nome: string, mensagem: string }[], formulario: HTMLFormElement): boolean {
