@@ -1,13 +1,18 @@
 import { CandidatoController } from './controller/candidato.controller';
 import { EmpresaController } from './controller/empresa.controller';
+import { VagaController } from './controller/vaga.controller';
 import { Formulario } from './service/formulario.service';
+import { NavegacaoService } from './service/navegacao.service';
 
 // Centralização de interação com o DOM
 var botaoAdicionarEmpresa = document.getElementById("adicionarEmpresa") as HTMLButtonElement;
 var botaoAdicionarCandidato = document.getElementById("adicionarCandidato") as HTMLButtonElement;
-var botaoCancelar = document.getElementById("cancelar") as HTMLButtonElement;
+var botaoAdicionarVaga = document.getElementById("adicionarVaga") as HTMLButtonElement;
+var linkAdicionarVaga = document.getElementById("cadastrarVaga") as HTMLAnchorElement;
+var caixaFormularioCadastro = document.getElementById("caixa-branca-cadastro") as HTMLElement;
 var frmEmpresa = document.getElementById("frmEmpresa") as HTMLFormElement;
 var frmCandidato = document.getElementById("frmCandidato") as HTMLFormElement;
+var frmVaga = document.getElementById("frmVaga") as HTMLFormElement;
 var camposCadastro: { nome: string, mensagem: string }[];
 
 
@@ -15,14 +20,18 @@ var camposCadastro: { nome: string, mensagem: string }[];
 const formulario = new Formulario();
 const empresaController = new EmpresaController();
 const candidatoController = new CandidatoController();
+const navegacaoService = new NavegacaoService();
+const vagaController = new VagaController();
 
 
 window.onload = () => {
     
     formulario.gerarPaises();
     formulario.gerarEstados();   
+    navegacaoService.carregarEmpresa();
     
 };
+
 
 if(botaoAdicionarEmpresa){
     botaoAdicionarEmpresa.onclick = function () {
@@ -75,52 +84,30 @@ if(botaoAdicionarCandidato) {
 
 }
 
+if(botaoAdicionarVaga) {
+    botaoAdicionarVaga.onclick = function () {
+        if(frmVaga){
+            const camposCadastroVaga = [
+                { nome: "nome", mensagem: "O campo Nome está vazio." },
+                { nome: "descricao", mensagem: "O campo Descrição está vazio." },
+                { nome: "competencias", mensagem: "O campo Competencias está vazio." }
+            ];
+    
+            camposCadastro = camposCadastroVaga
+    
+            if (formulario.validarEntradaDados(camposCadastro, frmVaga)) {
+                console.log(frmVaga)
+                const formData: FormData = new FormData(frmVaga);
+                vagaController.adicionarVaga(formData);
+            };
+    
+        }
+    }
 
+}
 
-
-// botaoAdicionar.onclick = function () {
-
-//     if (frmEmpresa) {
-
-//         // Validação de dados
-//         const camposCadastroEmpresa = [
-//             { nome: "nome", mensagem: "O campo Nome está vazio." },
-//             { nome: "email", mensagem: "O campo E-mail está vazio." },
-//             { nome: "cnpj", mensagem: "O campo CNPJ está vazio." },
-//             { nome: "pais", mensagem: "O campo País está vazio." },
-//             { nome: "estado", mensagem: "O campo Estado está vazio." },
-//             { nome: "cep", mensagem: "O campo CEP está vazio." },
-//             { nome: "descricao", mensagem: "O campo Descrição está vazio." }
-//         ];
-
-//         frmCadastro = frmEmpresa;
-//         camposCadastro = camposCadastroEmpresa
-        
-
-//     } else {
-
-//         const camposCadastroCandidato = [
-//             { nome: "nome", mensagem: "O campo Nome está vazio." },
-//             { nome: "email", mensagem: "O campo E-mail está vazio." },
-//             { nome: "cpf", mensagem: "O campo CPF está vazio." },
-//             { nome: "idade", mensagem: "O campo Idade está vazio." },
-//             { nome: "estado", mensagem: "O campo Estado está vazio." },
-//             { nome: "cep", mensagem: "O campo CEP está vazio." },
-//             { nome: "descricao", mensagem: "O campo Descrição está vazio." },
-//             { nome: "competencias", mensagem: "O campo Competencias está vazio." }
-
-//         ];
-
-//         frmCadastro = frmCandidato;
-//         camposCadastro = camposCadastroCandidato
-
-//     }
-
-//     if (formulario.validarEntradaDados(camposCadastro, frmCadastro)) {
-//         console.log(frmCadastro)
-//         const formData: FormData = new FormData(frmCadastro);
-//         empresaController.adicionarEmpresa(formData);
-//         candidatoController.adicionarCandidato(formData);
-//     };
-
-//};
+if(linkAdicionarVaga){
+    linkAdicionarVaga.onclick = function () {
+        caixaFormularioCadastro.style.display = "block";
+    }
+}

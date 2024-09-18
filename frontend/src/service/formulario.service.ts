@@ -1,9 +1,6 @@
-// import { DadosPaisesEstados } from "../model/dadosPaisesEstados";
-
 import { Paises } from "../model/paises";
 import { Estados } from "../model/estados";
 
-// const dadosPaisesEstados = new DadosPaisesEstados;
 
 const dadosPaises = new Paises();
 const dadosEstados = new Estados();
