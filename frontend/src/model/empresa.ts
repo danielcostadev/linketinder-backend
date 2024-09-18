@@ -1,4 +1,5 @@
 import { Pessoa } from './pessoa';
+import { Vaga } from './vaga';
 
 export class Empresa extends Pessoa {
 
@@ -14,10 +15,11 @@ export class Empresa extends Pessoa {
         estado: string,
         cep: string,
         descricao: string,
-        competencias: string[]
+        competencias: string[],
+        vagas?: Vaga[]
     ) {
-        super(id, nome, email, estado, cep, descricao, competencias);
-        this.id = id;
+        super(id, nome, email, estado, cep, descricao, competencias,vagas);
+        this._id = id;
         this.cnpj = cnpj;
         this.pais = pais;
     }
@@ -36,6 +38,13 @@ export class Empresa extends Pessoa {
             this.descricao,
             ...this.competencias
         ];
+    }
+
+   public get id(): number {
+        return this._id;
+    }
+    public set id(value: number) {
+        this._id = value;
     }
 
 }

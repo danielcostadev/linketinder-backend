@@ -3,20 +3,21 @@ import { Empresa } from './empresa';
 
 
 export class Vaga {
-    protected codigo: number;
+    public codigo: number;
+    protected nome: string;
+    protected descricao: string;
     protected candidato?: Candidato;
-    protected empresa: Empresa;
     protected competencias: string[]
 
     constructor(
         codigo: number,
-        candidato: Candidato, 
-        empresa: Empresa, 
+        nome: string,
+        descricao: string,
         competencias: string[]
     ){
         this.codigo = codigo;
-        this.candidato = candidato;
-        this.empresa = empresa;
+        this.nome = nome;
+        this.descricao = descricao;
         this.competencias = competencias;
     }
 

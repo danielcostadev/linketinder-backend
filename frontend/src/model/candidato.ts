@@ -1,4 +1,5 @@
 import { Pessoa } from './pessoa';
+import { Vaga } from './vaga';
 
 export class Candidato extends Pessoa {
 
@@ -16,11 +17,12 @@ export class Candidato extends Pessoa {
         cep: string,
         descricao: string,
         formacao: string,
-        competencias: string[]
+        competencias: string[],
+        vagas?: Vaga[]
 
     ) {
-        super(id, nome, email, estado, cep, descricao, competencias);
-        this.id = id
+        super(id, nome, email, estado, cep, descricao, competencias,vagas);
+        this._id = id
         this.cpf = cpf
         this.idade = idade
         this.formacao = formacao
@@ -42,6 +44,13 @@ export class Candidato extends Pessoa {
                this.formacao,
                this.competencias
         
+    }
+
+    public get id(): number {
+        return this._id;
+    }
+    public set id(value: number) {
+        this._id = value;
     }
 
 }
