@@ -4,10 +4,10 @@ import { Empresa } from './empresa';
 
 export class Vaga {
     public codigo: number;
-    protected nome: string;
-    protected descricao: string;
-    protected candidato?: Candidato;
-    protected competencias: string[]
+    protected _nome: string;
+    protected _descricao: string;
+    protected _candidato?: Candidato;
+    protected _competencias: string[]
 
     constructor(
         codigo: number,
@@ -16,9 +16,33 @@ export class Vaga {
         competencias: string[]
     ){
         this.codigo = codigo;
-        this.nome = nome;
-        this.descricao = descricao;
-        this.competencias = competencias;
+        this._nome = nome;
+        this._descricao = descricao;
+        this._competencias = competencias;
     }
+
+    
+    public get nome() : string {
+        return this._nome;
+    }
+    public set nome(value : string) {
+        this._nome = value;
+    }
+
+    public get descricao() : string {
+        return this.descricao;
+    }
+    public set descricao(value : string) {
+        this._descricao = value;
+    }
+
+    public get competencias(): string[] {
+        return this._competencias;
+    }
+    public set competencias(value: string[]) {
+        this._competencias = value;
+    }
+    
+    
 
 }

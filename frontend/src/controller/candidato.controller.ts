@@ -2,7 +2,7 @@ import { Candidato } from "../model/candidato";
 import { CandidatoService } from "../service/candidato.service";
 
 // Centralização de interação com o DOM
-var tabelaItens = document.getElementById("tabela-itens") as HTMLTableSectionElement;
+var tabelaItensCandidato = document.getElementById("tabela-itens-candidato") as HTMLTableSectionElement;
 
 export class CandidatoController {
 
@@ -36,10 +36,10 @@ export class CandidatoController {
         const candidatos: Candidato[] = this.candidatoService.listarCandidatos();
 
         if(candidatos.length > 0) {
-            tabelaItens.innerHTML = "";
+            tabelaItensCandidato.innerHTML = "";
 
             candidatos.forEach((candidato, index) => {
-                var linha = tabelaItens.insertRow() as HTMLTableRowElement;
+                var linha = tabelaItensCandidato.insertRow() as HTMLTableRowElement;
                 var cellCompetencias = linha.insertCell(0) as HTMLTableCellElement;
                 var cellFormacao = linha.insertCell(1) as HTMLTableCellElement;
 

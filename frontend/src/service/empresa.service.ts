@@ -64,7 +64,10 @@ export class EmpresaService {
             if (!empresa.vagas) {
                 empresa.vagas = [];
             }
-            empresa.vagas.push(vaga);
+
+            const vagaTratada = this.dadosDAO.removerUnderscores(vaga);
+
+            empresa.vagas.push(vagaTratada);
             
             this.dadosDAO.salvarEmpresaNoLocalStorage("dataEmpresa", empresas);
             console.log("Vaga adicionada à empresa ");

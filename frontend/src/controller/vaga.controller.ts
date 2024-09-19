@@ -3,6 +3,8 @@ import { VagaService } from "../service/vaga.service";
 import { EmpresaService } from "../service/empresa.service";
 import { NavegacaoService } from "../service/navegacao.service";
 
+// Centralização de interação com o DOM
+var tabelaItensVaga = document.getElementById("tabela-itens-vaga") as HTMLTableSectionElement;
 
 export class VagaController {
     private vagaService = new VagaService();
@@ -25,5 +27,25 @@ export class VagaController {
         this.empresaService.adicionarVagaEmpresa(idEmpresaAtual, vaga)
         this.vagaService.adicionarVaga(vaga);
 
+    }
+    public excluirVaga(id: number): void {
+        this.vagaService.excluirVaga(id);
+    }
+
+    public listarVagas(): void {
+        const vagas: Vaga[] = this.vagaService.listarVagas();
+
+        if(vagas.length > 0) {
+            tabelaItensVaga.innerHTML = "";
+
+            vagas.forEach((vaga, index) => {
+                var linha = tabelaItensVaga.insertRow() as HTMLTableRowElement;
+                var cellNome = linha.insertCell(0) as HTMLTableCellElement;
+                var cellCompetencias = linha.insertCell(1) as HTMLTableCellElement;
+
+                cellNome.innerHTML = vaga.nome
+                cellCompetencias.innerHTML = Array.isArray(vaga.competencias) ? vaga.competencias.join(', ') : vaga.competencias;
+            });
+        }
     }
 }
