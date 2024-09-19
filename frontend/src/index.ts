@@ -25,17 +25,24 @@ const vagaController = new VagaController();
 
 
 window.onload = () => {
-    
+
+    const idEmpresaAtual = navegacaoService.obterIdDaUrl()
+
+    if (idEmpresaAtual > 0) {
+        empresaController.exibirEmpresa(idEmpresaAtual);
+        candidatoController.listarCandidatos();
+    }
+    vagaController.listarVagas();
+
     formulario.gerarPaises();
-    formulario.gerarEstados();   
-    navegacaoService.carregarEmpresa();
-    
+    formulario.gerarEstados();
+
 };
 
 
-if(botaoAdicionarEmpresa){
+if (botaoAdicionarEmpresa) {
     botaoAdicionarEmpresa.onclick = function () {
-        if(frmEmpresa){
+        if (frmEmpresa) {
             const camposCadastroEmpresa = [
                 { nome: "nome", mensagem: "O campo Nome está vazio." },
                 { nome: "email", mensagem: "O campo E-mail está vazio." },
@@ -45,9 +52,9 @@ if(botaoAdicionarEmpresa){
                 { nome: "cep", mensagem: "O campo CEP está vazio." },
                 { nome: "descricao", mensagem: "O campo Descrição está vazio." }
             ];
-    
+
             camposCadastro = camposCadastroEmpresa
-    
+
             if (formulario.validarEntradaDados(camposCadastro, frmEmpresa)) {
                 console.log(frmEmpresa)
                 const formData: FormData = new FormData(frmEmpresa);
@@ -57,9 +64,9 @@ if(botaoAdicionarEmpresa){
     }
 }
 
-if(botaoAdicionarCandidato) {
+if (botaoAdicionarCandidato) {
     botaoAdicionarCandidato.onclick = function () {
-        if(frmCandidato){
+        if (frmCandidato) {
             const camposCadastroCandidato = [
                 { nome: "nome", mensagem: "O campo Nome está vazio." },
                 { nome: "email", mensagem: "O campo E-mail está vazio." },
@@ -70,43 +77,43 @@ if(botaoAdicionarCandidato) {
                 { nome: "descricao", mensagem: "O campo Descrição está vazio." },
                 { nome: "competencias", mensagem: "O campo Competencias está vazio." }
             ];
-    
+
             camposCadastro = camposCadastroCandidato
-    
+
             if (formulario.validarEntradaDados(camposCadastro, frmCandidato)) {
                 console.log(frmCandidato)
                 const formData: FormData = new FormData(frmCandidato);
                 candidatoController.adicionarCandidato(formData);
             };
-    
+
         }
     }
 
 }
 
-if(botaoAdicionarVaga) {
+if (botaoAdicionarVaga) {
     botaoAdicionarVaga.onclick = function () {
-        if(frmVaga){
+        if (frmVaga) {
             const camposCadastroVaga = [
                 { nome: "nome", mensagem: "O campo Nome está vazio." },
                 { nome: "descricao", mensagem: "O campo Descrição está vazio." },
                 { nome: "competencias", mensagem: "O campo Competencias está vazio." }
             ];
-    
+
             camposCadastro = camposCadastroVaga
-    
+
             if (formulario.validarEntradaDados(camposCadastro, frmVaga)) {
                 console.log(frmVaga)
                 const formData: FormData = new FormData(frmVaga);
                 vagaController.adicionarVaga(formData);
             };
-    
+
         }
     }
 
 }
 
-if(linkAdicionarVaga){
+if (linkAdicionarVaga) {
     linkAdicionarVaga.onclick = function () {
         caixaFormularioCadastro.style.display = "block";
     }

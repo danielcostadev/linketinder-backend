@@ -10,7 +10,7 @@ public obterIdDaUrl(): number {
        return parseInt(id, 10)
     }
 
-    return 1
+    return 0
 
 }
 

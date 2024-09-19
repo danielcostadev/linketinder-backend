@@ -1,6 +1,11 @@
 import { Empresa } from "../model/empresa";
 import { EmpresaService } from "../service/empresa.service";
 
+// Centralização de interação com o DOM
+var nomeEmpresa = document.getElementById("nomeEmpresa") as HTMLElement;
+var cnpjEmpresa = document.getElementById("cnpjEmpresa") as HTMLElement;
+var descricaoEmpresa = document.getElementById("descricaoEmpresa") as HTMLElement;
+
 export class EmpresaController {
 
     private empresaService = new EmpresaService();
@@ -29,7 +34,15 @@ export class EmpresaController {
         this.empresaService.exlcuirEmpresa(id);
     }
 
+    public exibirEmpresa(idEmpresa: number): void {
+        const empresa = this.empresaService.obterEmpresa(idEmpresa);
 
-
+        if(empresa){
+            // Verifique se os campos existem antes de atribuir
+        nomeEmpresa.textContent = empresa.nome || 'Nome não disponível';
+        cnpjEmpresa.textContent = empresa.cnpj || 'CNPJ não disponível';
+        descricaoEmpresa.textContent = empresa.descricao || 'Descrição não disponível';
+        }
+    }
 
 }

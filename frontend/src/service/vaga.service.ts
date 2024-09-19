@@ -42,5 +42,11 @@ export class VagaService {
         }
     }
 
+    public listarVagas(): Vaga[] {
+        const vagas: Vaga[] = this.dadosDAO.obterVagaDoLocalStorage("dataVaga");
+        return vagas || [];
+
+    }
+
 
 }

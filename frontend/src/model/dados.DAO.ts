@@ -3,10 +3,24 @@ import { Empresa } from './empresa';
 import { Vaga } from './vaga';
 
 export class DadosDAO {
+    
+    public removerUnderscores(obj: any): any {
+        const novoObj: any = {};
+        for (const chave in obj) {
+            
+            const novaChave = chave.startsWith('_') ? chave.substring(1) : chave;
+            novoObj[novaChave] = obj[chave];
+        }
+        return novoObj;
+    }
+
     // Empresa
     public salvarEmpresaNoLocalStorage(chave: string, dados: Empresa[]): void {
         try {
-            localStorage.setItem(chave, JSON.stringify(dados));
+
+            const dadosTratados = dados.map(empresa => this.removerUnderscores(empresa));
+
+            localStorage.setItem(chave, JSON.stringify(dadosTratados));
         } catch (erro) {
             console.error("Erro ao salvar dados no localStorage:", erro);
             alert("Ocorreu um erro ao salvar os dados. Tente novamente mais tarde.");
@@ -26,7 +40,10 @@ export class DadosDAO {
     // Candidato
     public salvarCandidatoNoLocalStorage(chave: string, dados: Candidato[]): void {
         try {
-            localStorage.setItem(chave, JSON.stringify(dados));
+
+            const dadosTratados = dados.map(candidato => this.removerUnderscores(candidato));
+
+            localStorage.setItem(chave, JSON.stringify(dadosTratados));
         } catch (erro) {
             console.error("Erro ao salvar dados no localStorage:", erro);
             alert("Ocorreu um erro ao salvar os dados. Tente novamente mais tarde.");
@@ -46,7 +63,10 @@ export class DadosDAO {
     // Vaga
     public salvarVagaNoLocalStorage(chave: string, dados: Vaga[]): void {
         try {
-            localStorage.setItem(chave, JSON.stringify(dados));
+
+            const dadosTratados = dados.map(vaga => this.removerUnderscores(vaga));
+
+            localStorage.setItem(chave, JSON.stringify(dadosTratados));
         } catch (erro) {
             console.error("Erro ao salvar dados no localStorage:", erro);
             alert("Ocorreu um erro ao salvar os dados. Tente novamente mais tarde.");
