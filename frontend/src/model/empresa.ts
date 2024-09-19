@@ -4,7 +4,7 @@ import { Vaga } from './vaga';
 export class Empresa extends Pessoa {
 
     protected _cnpj: string;
-    protected pais: string;
+    protected _pais: string;
 
     constructor(
         id: number,
@@ -21,7 +21,7 @@ export class Empresa extends Pessoa {
         super(id, nome, email, estado, cep, descricao, competencias,vagas);
         this.id = id;
         this._cnpj = cnpj;
-        this.pais = pais;
+        this._pais = pais;
     }   
 
     public get cnpj() : string {
@@ -32,5 +32,12 @@ export class Empresa extends Pessoa {
         this._cnpj = value;
     }
     
+    public get pais() : string {
+        return this._pais;
+    }
+    
+    public set pais(value : string) {
+        this._pais = value;
+    }
 
 }

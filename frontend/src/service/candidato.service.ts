@@ -41,6 +41,19 @@ export class CandidatoService {
         }
     }
 
+    public obterCandidato(idCandidato: number): Candidato | undefined {
+        let candidatos: Candidato[] = this.dadosDAO.obterCandidatoDoLocalStorage("dataCandidato");
+        const candidato = candidatos.find(cand => cand.id === idCandidato);
+
+        if (candidato){
+            return candidato;
+        } else {
+            console.log("Candidato não encontrado na lista!");
+            return undefined;
+        }
+    }
+
+
     public listarCandidatos(): Candidato[] {
         const candidatos: Candidato[] = this.dadosDAO.obterCandidatoDoLocalStorage("dataCandidato");
         return candidatos || [];
