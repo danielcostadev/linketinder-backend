@@ -25,10 +25,16 @@ const vagaController = new VagaController();
 
 
 window.onload = () => {
+
+    const idEmpresaAtual = navegacaoService.obterIdDaUrl()
+
+    if(idEmpresaAtual != null){
+        empresaController.exibirEmpresa(idEmpresaAtual);
+        console.log(idEmpresaAtual)
+    }
     
     formulario.gerarPaises();
     formulario.gerarEstados();   
-    navegacaoService.carregarEmpresa();
     
 };
 

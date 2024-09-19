@@ -33,7 +33,7 @@ export class EmpresaService {
         let empresas: Empresa[] = this.dadosDAO.obterEmpresaDoLocalStorage("dataEmpresa");
         const index: number = empresas.findIndex(empresa => empresa.id === idEmpresa);
 
-        if (index !== -1) {
+        if (index !== -1) { 
             empresas.splice(index, 1);
             this.dadosDAO.salvarEmpresaNoLocalStorage("dataEmpresa", empresas);
             console.log("Empresa removida com sucesso!");

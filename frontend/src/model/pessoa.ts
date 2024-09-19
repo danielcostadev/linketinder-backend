@@ -2,14 +2,23 @@ import { Vaga } from "./vaga";
 
 export abstract class Pessoa {
 
-    protected _id: number;
-    protected nome: string;
-    protected email: string;
-    protected estado: string;
-    protected cep: string;
-    protected descricao: string;
-    protected competencias: string[];
-    protected _vagas?: Vaga[]
+    public id: number;
+
+    protected _nome: string;
+    
+    protected _email: string;
+    
+    protected _estado: string;
+    
+    protected _cep: string;
+    
+    protected _descricao: string;
+    
+    protected _competencias: string[];
+    
+    protected _vagas?: Vaga[] | undefined;
+    
+    
 
     constructor(
         id: number,
@@ -21,31 +30,60 @@ export abstract class Pessoa {
         competencias: string[],
         vagas?: Vaga[]
     ) {
-        this._id = id;
-        this.nome = nome;
-        this.email = email;
-        this.estado = estado;
-        this.cep = cep;
-        this.descricao = descricao;
-        this.competencias = competencias;
+        this.id = id;
+        this._nome = nome;
+        this._email = email;
+        this._estado = estado;
+        this._cep = cep;
+        this._descricao = descricao;
+        this._competencias = competencias;
         this._vagas = vagas;
     }
 
-    abstract mostrarInformacoes(): string | string[]
-    abstract mostrarInformacoesMatch(): string | string[]
-
-
-    public get id(): number {
-        return this._id;
+    public get nome(): string {
+        return this._nome;
     }
-    public set id(value: number) {
-        this._id = value;
+    public set nome(value: string) {
+        this._nome = value;
     }
 
+    public get email(): string {
+        return this._email;
+    }
+    public set email(value: string) {
+        this._email = value;
+    }
+    public get estado(): string {
+        return this._estado;
+    }
+    public set estado(value: string) {
+        this._estado = value;
+    }
+    public get cep(): string {
+        return this._cep;
+    }
+    public set cep(value: string) {
+        this._cep = value;
+    }
+    public get descricao(): string {
+        return this._descricao;
+    }
+    public set descricao(value: string) {
+        this._descricao = value;
+    }
+    public get competencias(): string[] {
+        return this._competencias;
+    }
+    public set competencias(value: string[]) {
+        this._competencias = value;
+    }
     public get vagas(): Vaga[] | undefined {
         return this._vagas;
     }
-    public set vagas(value: Vaga[]) {
+    public set vagas(value: Vaga[] | undefined) {
         this._vagas = value;
     }
+    
+
+
 }

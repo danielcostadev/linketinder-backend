@@ -5,7 +5,7 @@ export class Candidato extends Pessoa {
 
     protected cpf: string;
     protected idade: string;
-    protected formacao: string;
+    protected _formacao: string;
 
     constructor(
         id: number,
@@ -22,35 +22,22 @@ export class Candidato extends Pessoa {
 
     ) {
         super(id, nome, email, estado, cep, descricao, competencias,vagas);
-        this._id = id
+        this.id = id
         this.cpf = cpf
         this.idade = idade
-        this.formacao = formacao
+        this._formacao = formacao
     }
 
-    mostrarInformacoes(): string | string[]{
-        return this.competencias,
-               this.formacao
+    
+    public get formacao() : string {
+        return this._formacao
     }
 
-    mostrarInformacoesMatch(): string | string[]{
-        return this.nome,
-               this.email,
-               this.cpf,
-               this.idade,
-               this.estado,
-               this.cep,
-               this.descricao,
-               this.formacao,
-               this.competencias
-        
+    
+    public set formacao(value : string) {
+        this._formacao = value;
     }
-
-    public get id(): number {
-        return this._id;
-    }
-    public set id(value: number) {
-        this._id = value;
-    }
+    
+    
 
 }

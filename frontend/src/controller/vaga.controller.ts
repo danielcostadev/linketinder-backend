@@ -12,7 +12,6 @@ export class VagaController {
     public adicionarVaga(dadosFormulario: FormData): void {
 
         const codigo = this.vagaService.gerarCodigo();
-        const idEmpresa = this.empresaService.obterEmpresa
 
         const vaga = new Vaga(
             codigo,

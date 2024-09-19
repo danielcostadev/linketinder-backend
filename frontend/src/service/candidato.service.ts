@@ -24,7 +24,7 @@ export class CandidatoService {
         let candidatos: Candidato[] = this.dadosDAO.obterCandidatoDoLocalStorage("dataCandidato");
         candidatos.push(candidato);
         this.dadosDAO.salvarCandidatoNoLocalStorage("dataCandidato", candidatos)
-        console.log("Empresa adicionada com sucesso!");
+        console.log("Candidato adicionado com sucesso!");
     }
 
     public exlcuirCandidato(idCandidato: number): void {
@@ -34,11 +34,17 @@ export class CandidatoService {
         if (index !== -1) {
             candidatos.splice(index, 1);
             this.dadosDAO.salvarCandidatoNoLocalStorage("dataCandidato", candidatos)
-            console.log("Empresa removida com sucesso!");
+            console.log("Candidato removido com sucesso!");
 
         } else {
-            console.log("Empresa não encontrado na lista!");
+            console.log("Candidato não encontrado na lista!");
         }
+    }
+
+    public listarCandidatos(): Candidato[] {
+        const candidatos: Candidato[] = this.dadosDAO.obterCandidatoDoLocalStorage("dataCandidato");
+        return candidatos || [];
+
     }
 
 }

@@ -3,7 +3,7 @@ import { Vaga } from './vaga';
 
 export class Empresa extends Pessoa {
 
-    protected cnpj: string;
+    protected _cnpj: string;
     protected pais: string;
 
     constructor(
@@ -19,32 +19,18 @@ export class Empresa extends Pessoa {
         vagas?: Vaga[]
     ) {
         super(id, nome, email, estado, cep, descricao, competencias,vagas);
-        this._id = id;
-        this.cnpj = cnpj;
+        this.id = id;
+        this._cnpj = cnpj;
         this.pais = pais;
-    }
-    mostrarInformacoes(): string | string[] {
-        return this.competencias;
-    }
+    }   
 
-    mostrarInformacoesMatch(): string | string[] {
-        return [
-            this.nome,
-            this.email,
-            this.cnpj,
-            this.pais,
-            this.estado,
-            this.cep,
-            this.descricao,
-            ...this.competencias
-        ];
+    public get cnpj() : string {
+        return this._cnpj;
     }
-
-   public get id(): number {
-        return this._id;
+    
+    public set cnpj(value : string) {
+        this._cnpj = value;
     }
-    public set id(value: number) {
-        this._id = value;
-    }
+    
 
 }
