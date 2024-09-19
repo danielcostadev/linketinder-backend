@@ -1,4 +1,5 @@
 import { EmpresaService } from "../service/empresa.service";
+import { CandidatoService } from "./candidato.service";
 
 export class NavegacaoService {
 
@@ -14,7 +15,7 @@ public obterIdDaUrl(): number {
 
 }
 
-public carregarEmpresa() {
+public carregarEmpresa(): void {
     const idEmpresaAtual = this.obterIdDaUrl();
 
     if (idEmpresaAtual !== null) {
@@ -33,7 +34,25 @@ public carregarEmpresa() {
     }
 }
 
+public carregarCandidato(): void {
+    const idCandidatoAtual = this.obterIdDaUrl();
 
+    if (idCandidatoAtual !== null){
+        const  candidatoService = new CandidatoService();
+        
+        const candidato = candidatoService.obterCandidato(idCandidatoAtual);
+
+        if (candidato) {
+            console.log("Candidato Encontrado!");
+        } else {
+            console.log("Candidato não encontrado!")
+        }
+    } else {
+        console.log("ID do candidato não encontrado na URL");
+    }
+
+
+}
 }
 
 

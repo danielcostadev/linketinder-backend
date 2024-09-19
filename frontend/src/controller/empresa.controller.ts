@@ -38,7 +38,6 @@ export class EmpresaController {
         const empresa = this.empresaService.obterEmpresa(idEmpresa);
 
         if(empresa){
-            // Verifique se os campos existem antes de atribuir
         nomeEmpresa.textContent = empresa.nome || 'Nome não disponível';
         cnpjEmpresa.textContent = empresa.cnpj || 'CNPJ não disponível';
         descricaoEmpresa.textContent = empresa.descricao || 'Descrição não disponível';
@@ -46,3 +45,4 @@ export class EmpresaController {
     }
 
 }
+

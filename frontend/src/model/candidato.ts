@@ -3,8 +3,8 @@ import { Vaga } from './vaga';
 
 export class Candidato extends Pessoa {
 
-    protected cpf: string;
-    protected idade: string;
+    protected _cpf: string;
+    protected _idade: string;
     protected _formacao: string;
 
     constructor(
@@ -23,20 +23,36 @@ export class Candidato extends Pessoa {
     ) {
         super(id, nome, email, estado, cep, descricao, competencias,vagas);
         this.id = id
-        this.cpf = cpf
-        this.idade = idade
+        this._cpf = cpf
+        this._idade = idade
         this._formacao = formacao
     }
 
+    public get cpf() : string {
+        return this._cpf;
+    }
     
-    public get formacao() : string {
-        return this._formacao
+    public set cpf(value : string) {
+        this._cpf = value;
     }
 
+    public get idade() : string {
+        return this._idade;
+    }
     
+    public set idade(value : string) {
+        this._idade = value;
+    }
+
+    public get formacao() : string {
+        return this._formacao
+    }   
+
     public set formacao(value : string) {
         this._formacao = value;
     }
+
+    
     
     
 
