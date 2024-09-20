@@ -4,6 +4,7 @@ import { VagaController } from './controller/vaga.controller';
 import { Formulario } from './service/formulario.service';
 import { NavegacaoService } from './service/navegacao.service';
 
+
 // Centralização de interação com o DOM
 const botaoAdicionarEmpresa = document.getElementById("adicionarEmpresa") as HTMLButtonElement;
 const botaoAdicionarCandidato = document.getElementById("adicionarCandidato") as HTMLButtonElement;
@@ -35,6 +36,7 @@ window.onload = () => {
     if (empresaElemento && idEmpresaAtual > 0) {
         empresaController.exibirEmpresa(idEmpresaAtual);
         candidatoController.listarCandidatos();
+        candidatoController.contarCompetencias();
         console.log("Teste sou empresa")
     }
 
