@@ -60,4 +60,20 @@ export class CandidatoService {
 
     }
 
+    public contarCompetencias(candidatos: Candidato[]): Record<string, number> {
+        const contagem: Record<string, number> = {};
+    
+        candidatos.forEach(candidato => {
+            candidato.competencias.forEach(competencia => {
+                if (contagem[competencia]) {
+                    contagem[competencia]++;
+                } else {
+                    contagem[competencia] = 1;
+                }
+            });
+        });
+    
+        return contagem;
+    }
+
 }
