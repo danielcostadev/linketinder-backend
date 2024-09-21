@@ -1,10 +1,12 @@
 import { DadosDAO } from "../model/dados.DAO";
 import { Empresa } from "../model/empresa";
 import { Vaga } from "../model/vaga";
+import { VagaService } from "./vaga.service";
 
 export class EmpresaService {
 
     private dadosDAO: DadosDAO;
+    private vagasService = new VagaService();
 
     constructor() {
         this.dadosDAO = new DadosDAO();
@@ -29,11 +31,14 @@ export class EmpresaService {
         console.log("Empresa adicionada com sucesso!");
     }
 
-    exlcuirEmpresa(idEmpresa: number): void {
+    excluirEmpresa(idEmpresa: number): void {
         let empresas: Empresa[] = this.dadosDAO.obterEmpresaDoLocalStorage("dataEmpresa");
         const index: number = empresas.findIndex(empresa => empresa.id === idEmpresa);
 
         if (index !== -1) { 
+
+            this.vagasService.excluirVagasPorEmpresa(idEmpresa);
+
             empresas.splice(index, 1);
             this.dadosDAO.salvarEmpresaNoLocalStorage("dataEmpresa", empresas);
             console.log("Empresa removida com sucesso!");

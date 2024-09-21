@@ -1,6 +1,7 @@
 import { Empresa } from "../model/empresa";
 import { BotoesService } from "../service/botoes.service";
 import { EmpresaService } from "../service/empresa.service";
+import { VagaService } from "../service/vaga.service";
 
 // Centralização de interação com o DOM
 const tabelaItensEmpresa = document.getElementById("tabela-itens-empresa") as HTMLTableSectionElement;
@@ -34,7 +35,7 @@ export class EmpresaController {
     }
 
     public excluirEmpresa(id: number): void {
-        this.empresaService.exlcuirEmpresa(id);
+        this.empresaService.excluirEmpresa(id);
     }
 
     public exibirEmpresa(idEmpresa: number): void {
@@ -67,10 +68,23 @@ export class EmpresaController {
                 cellEmail.innerHTML = empresa.email;
                 cellOpcoes.appendChild(botaoContainer);
 
-                var botaoVer = botaoContainer.querySelector('.botao1') as HTMLButtonElement;
-                var botaoExcluir = botaoContainer.querySelector('.botao3') as HTMLButtonElement;
+                var botaoVer = botaoContainer.querySelector('.botao-ver') as HTMLButtonElement;
+                var botaoEditar = botaoContainer.querySelector('.botao-editar') as HTMLButtonElement
+                var botaoExcluir = botaoContainer.querySelector('.botao-excluir') as HTMLButtonElement;
+                
+
+                botaoVer.onclick = (() => {
+                    window.location.href = "perfil-empresa.html?id="+empresa.id;
+
+                });
+
+                botaoExcluir.onclick = (() => {
+                    this.excluirEmpresa(empresa.id);
+                    
+                });
 
             });
+
         }
     }
 

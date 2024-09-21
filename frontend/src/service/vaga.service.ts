@@ -42,6 +42,14 @@ export class VagaService {
         }
     }
 
+    public excluirVagasPorEmpresa(idEmpresa: number): void {
+
+        let vagas: Vaga[] = this.dadosDAO.obterVagaDoLocalStorage("dataVaga");
+        vagas = vagas.filter(vaga => vaga.idEmpresa !== idEmpresa);
+        this.dadosDAO.salvarVagaNoLocalStorage("dataVaga", vagas);
+
+    }
+
     public listarVagas(): Vaga[] {
         const vagas: Vaga[] = this.dadosDAO.obterVagaDoLocalStorage("dataVaga");
         return vagas || [];
