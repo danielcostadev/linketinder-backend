@@ -42,7 +42,7 @@ export class VagaController {
             tabelaItensVaga.innerHTML = "";
 
             vagas.forEach((vaga, index) => {
-                var botaoContainer = this.botoesService.criarBotaoContainer() as HTMLDivElement; 
+                var botaoContainer = this.botoesService.criarBotaoContainerLike() as HTMLDivElement; 
 
                 var linha = tabelaItensVaga.insertRow() as HTMLTableRowElement;
                 var cellNome = linha.insertCell(0) as HTMLTableCellElement;
@@ -54,9 +54,8 @@ export class VagaController {
                 cellOpcoes.appendChild(botaoContainer);
 
                 // Para que os botões funcionem, devemos atribuir eventos logo após serem adicionados
-                var botaoVer = botaoContainer.querySelector('.botao1');
-                // var botaoEditar = botaoContainer.querySelector('.botao2');
-                var botaoExcluir = botaoContainer.querySelector('.botao3');
+                var botaoCurtir = botaoContainer.querySelector('.botao-curtir');
+                var botaoRejeitar = botaoContainer.querySelector('.botao-rejeitar');
 
             });
         }
