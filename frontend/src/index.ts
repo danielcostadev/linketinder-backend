@@ -1,8 +1,12 @@
 import { CandidatoController } from './controller/candidato.controller';
 import { EmpresaController } from './controller/empresa.controller';
 import { VagaController } from './controller/vaga.controller';
-import { Formulario } from './service/formulario.service';
+import { CandidatoService } from './service/candidato.service';
+import { EmpresaService } from './service/empresa.service';
 import { NavegacaoService } from './service/navegacao.service';
+import { Formulario } from './service/formulario.service';
+
+
 
 
 // Centralização de interação com o DOM
@@ -10,6 +14,8 @@ const botaoAdicionarEmpresa = document.getElementById("adicionarEmpresa") as HTM
 const botaoAdicionarCandidato = document.getElementById("adicionarCandidato") as HTMLButtonElement;
 const botaoAdicionarVaga = document.getElementById("adicionarVaga") as HTMLButtonElement;
 const linkAdicionarVaga = document.getElementById("cadastrarVaga") as HTMLAnchorElement;
+const linkVerVagas = document.getElementById("link-vagas-index") as HTMLAnchorElement;
+const linkVerCandidatos = document.getElementById("link-candidatos-index") as HTMLAnchorElement;
 const caixaFormularioCadastro = document.getElementById("caixa-branca-cadastro") as HTMLElement;
 const frmEmpresa = document.getElementById("frmEmpresa") as HTMLFormElement;
 const frmCandidato = document.getElementById("frmCandidato") as HTMLFormElement;
@@ -21,15 +27,19 @@ const listaCandidatosElemento = document.querySelector("#listaCandidatos");
 const vagasElemento = document.querySelector("#vagas");
 const formularioElemento = document.querySelector("#formulario");
 
+
 // Controlador para validação dos dados nos formulários
 var camposCadastro: { nome: string, mensagem: string }[];
 
-// Controladores de serviço
-const formulario = new Formulario();
-const empresaController = new EmpresaController();
+// Controladores e serviços
 const candidatoController = new CandidatoController();
-const navegacaoService = new NavegacaoService();
+const empresaController = new EmpresaController();
 const vagaController = new VagaController();
+const candidatoService = new CandidatoService();
+const empresaService = new EmpresaService();
+const navegacaoService = new NavegacaoService();
+const formulario = new Formulario();
+
 
 
 window.onload = () => {
@@ -63,13 +73,13 @@ window.onload = () => {
 
     }
 
-    if (listaEmpresasElemento){
+    if (listaEmpresasElemento) {
         empresaController.listarEmpresas();
         console.log("Teste sou uma lista de empresas")
 
     }
 
-    if (listaCandidatosElemento){
+    if (listaCandidatosElemento) {
         candidatoController.listarCandidatosPublicos();
         console.log("Teste sou uma lista de candidatos")
 
@@ -150,8 +160,54 @@ if (botaoAdicionarVaga) {
 
 }
 
+function checarIdIndex(value: string): number | null {
+    let id: number | null = null;
+
+    while (id === null || isNaN(id) || id.toString().length > 4) {
+        const input: string | null = prompt(`Digite o seu ID de ${value} (até 4 dígitos)`);
+
+        if (input !== null) {
+            id = parseInt(input, 10);
+
+            if (isNaN(id)) {
+                alert("Por favor, insira um número válido.");
+            } else if (id.toString().length > 4) {
+                alert("O ID deve conter até 4 dígitos.");
+            }
+        } else {
+            alert("Você cancelou a operação.");
+            return null; // Se o usuário cancelar, retorna null
+        }
+    }
+
+    return id; // Retorna o ID válido
+}
+
 if (linkAdicionarVaga) {
     linkAdicionarVaga.onclick = function () {
         caixaFormularioCadastro.style.display = "block";
+    }
+}
+
+
+if (linkVerVagas) {
+    linkVerVagas.onclick = function () {
+        let id: number | null = checarIdIndex("Candidato");
+        if (id !== null && candidatoService.obterCandidato(id)) {
+            window.location.href = "perfil-candidato.html?id=" + id;
+        } else {
+            alert("Candidato não encontrado!")
+        }
+    }
+}
+
+if (linkVerCandidatos) {
+    linkVerCandidatos.onclick = function () {
+        let id: number | null = checarIdIndex("Empresa");
+        if (id !== null && empresaService.obterEmpresa(id)) {
+            window.location.href = "perfil-empresa.html?id=" + id;
+        } else {
+            alert("Emppresa não encontrada!")
+        }
     }
 }
