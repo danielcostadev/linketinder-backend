@@ -76,9 +76,19 @@ export class CandidatoController {
                 }
 
                 // Para que os botões funcionem, devemos atribuir eventos logo após serem adicionados
-                var botaoVer = botaoContainer.querySelector('.botao-ver');
-                var botaoEditar = botaoContainer.querySelector('.botao-editar');
-                var botaoExcluir = botaoContainer.querySelector('.botao-excluir');
+                var botaoVer = botaoContainer.querySelector('.botao-ver') as HTMLButtonElement;
+                var botaoEditar = botaoContainer.querySelector('.botao-editar') as HTMLButtonElement
+                var botaoExcluir = botaoContainer.querySelector('.botao-excluir') as HTMLButtonElement;
+
+                botaoVer.onclick = (() => {
+                    window.location.href = "perfil-candidato.html?id="+candidato.id;
+
+                });
+
+                botaoExcluir.onclick = (() => {
+                    this.excluirCandidato(candidato.id);
+                    
+                });
 
             });
         }
