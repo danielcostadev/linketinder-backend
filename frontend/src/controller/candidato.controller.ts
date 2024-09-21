@@ -73,22 +73,24 @@ export class CandidatoController {
                     cellEmail.innerHTML = candidato.email
                     cellOpcoes.appendChild(botaoContainer);
 
+                    // Para que os botões funcionem, devemos atribuir eventos logo após serem adicionados
+                    var botaoVer = botaoContainer.querySelector('.botao-ver') as HTMLButtonElement;
+                    var botaoEditar = botaoContainer.querySelector('.botao-editar') as HTMLButtonElement
+                    var botaoExcluir = botaoContainer.querySelector('.botao-excluir') as HTMLButtonElement;
+
+                    botaoVer.onclick = (() => {
+                        window.location.href = "perfil-candidato.html?id=" + candidato.id;
+
+                    });
+
+                    botaoExcluir.onclick = (() => {
+                        this.excluirCandidato(candidato.id);
+
+                    });
+
                 }
 
-                // Para que os botões funcionem, devemos atribuir eventos logo após serem adicionados
-                var botaoVer = botaoContainer.querySelector('.botao-ver') as HTMLButtonElement;
-                var botaoEditar = botaoContainer.querySelector('.botao-editar') as HTMLButtonElement
-                var botaoExcluir = botaoContainer.querySelector('.botao-excluir') as HTMLButtonElement;
 
-                botaoVer.onclick = (() => {
-                    window.location.href = "perfil-candidato.html?id="+candidato.id;
-
-                });
-
-                botaoExcluir.onclick = (() => {
-                    this.excluirCandidato(candidato.id);
-                    
-                });
 
             });
         }
@@ -111,7 +113,7 @@ export class CandidatoController {
             descricaoCandidato.textContent = candidato.descricao || 'Descrição não disponível';
         }
     }
-    
+
     public contarCompetencias(): void {
         // Chama o serviço para contar as competências dos candidatos
         const contagem = this.candidatoService.contarCompetencias(this.candidatoService.listarCandidatos());
@@ -146,9 +148,26 @@ export class CandidatoController {
                 labels: competencias, // Competências no eixo X
                 datasets: [{
                     label: 'Quantidade de Competências',
+                    barPercentage:0.9,
                     data: valores, // Quantidades no eixo Y
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
+                      ],
+                      borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                      ],
                     borderWidth: 1
                 }]
             },
@@ -157,8 +176,15 @@ export class CandidatoController {
 
                 scales: {
                     y: {
-                        beginAtZero: true // Começa o gráfico a partir de zero
-                    }
+                        
+                        beginAtZero: true, 
+
+                    },
+                    x: {
+                        ticks: {
+                            stepSize: 1, 
+                        }
+                    },
                 }
             }
         });
