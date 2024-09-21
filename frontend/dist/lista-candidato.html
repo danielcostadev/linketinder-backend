@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.ico">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Linketinder Projeto - ACZG 6.0</title>
+</head>
+
+<body>
+
+    <div id="listaCandidatos"></div>
+
+    <header id="topbar">
+        <h2>Linketinder - ACZG 6.0</h2>
+    </header>
+
+    <main id="principal">
+        <div class="caixa-branca">
+            <!-- Menu do topo -->
+            <nav class="menu-topo">
+                <ul id="topbar-list">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="cadastro-empresa.html">+ Nova Empresa</a></li>
+                    <li><a href="cadastro-candidato.html">+ Novo Candidato</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <section class="caixa-branca-perfil">
+            <h1>Candidatos Cadastrados</h1>
+            <!-- Exibição da lista de tarefas -->
+            <table id="tabela-vagas">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Opcoes</th>
+
+                    </tr>
+                <tbody id="tabela-itens-candidato">
+
+                </tbody>
+                <!-- Listagem de tarefas é feita de forma dinâmica -->
+
+                </thead>
+            </table>
+            <!-- Fim Exibição da lista de tarefas -->
+        </section>
+
+        
+
+    </main>
+
+
+    <footer id="rodape">
+
+        © Todos os direitos reservados - Desenvolvido por <span class="destacado">Daniel Costa</span>
+
+    </footer>
+    <script src="bundle.js"></script>
+</body>
+
+</html>

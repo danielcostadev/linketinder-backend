@@ -27,8 +27,8 @@ export class EmpresaService {
     adicionarEmpresa(empresa: Empresa): void {
         let empresas: Empresa[] = this.dadosDAO.obterEmpresaDoLocalStorage("dataEmpresa");
         empresas.push(empresa);
-        this.dadosDAO.salvarEmpresaNoLocalStorage("dataEmpresa", empresas)
-        console.log("Empresa adicionada com sucesso!");
+        this.dadosDAO.salvarEmpresaNoLocalStorage("dataEmpresa", empresas);
+        alert("Empresa adicionada com sucesso!");
     }
 
     excluirEmpresa(idEmpresa: number): void {
@@ -41,10 +41,10 @@ export class EmpresaService {
 
             empresas.splice(index, 1);
             this.dadosDAO.salvarEmpresaNoLocalStorage("dataEmpresa", empresas);
-            console.log("Empresa removida com sucesso!");
+            alert("Empresa removida com sucesso!");
 
         } else {
-            console.log("Empresa não encontrado na lista!");
+            alert("Empresa não encontrado na lista!");
         }
     }
 
@@ -114,9 +114,4 @@ export class EmpresaService {
             console.log("Empresa não encontrada!");
         }
     }
-
-
 }
-
-
-

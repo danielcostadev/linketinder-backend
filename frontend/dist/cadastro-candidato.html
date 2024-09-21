@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.ico">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Linketinder Projeto - ACZG 6.0</title>
+</head>
+
+<body>
+
+    <div id="formulario"></div>
+
+    <header id="topbar">
+        <h2>Linketinder - ACZG 6.0</h2>
+    </header>
+
+    <main id="principal">
+        <div class="caixa-branca">
+            <nav class="menu-topo">
+                <ul id="topbar-list">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="cadastro-empresa.html">+ Nova Empresa</a></li>
+                    <li><a href="cadastro-candidato.html">+ Novo Candidato</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <section id="caixa-branca-cadastro" class="caixa-branca-cadastro">
+
+            <div class="caixa-cadastro">
+
+                <h1>Adicionar novo Candidato</h1>
+                <form id="frmCandidato" name="frmCandidato">
+                    <div class="formularioCadastro">
+                        <label for="nome">Nome do Candidato: </label>
+                        <input type="text" name="nome" placeholder="Digite o nome do candidato" class="Caixa1">
+                    </div>
+
+                    <div class="formularioCadastro">
+                        <label for="email">Email Pessoal: </label>
+                        <input type="text" name="email" placeholder="Digite o e-mail do candidato" class="Caixa1">
+                    </div>
+
+                    <div class="formularioCadastro">
+                        <label for="cpf">Digite o CPF do candidato </label>
+                        <input type="text" name="cpf" maxlength="12" placeholder="Preencha o CPF do Candidato"
+                            class="Caixa1">
+                    </div>
+
+                    <div class="formularioCadastro">
+                        <label for="idade">Idade</label>
+                        <input type="text" name="idade" maxlength="3" placeholder="Informe a idade do Candidato"
+                            class="Caixa1">
+                    </div>
+
+                    <div class="formularioCadastro">
+                        <label for="estado">Estado (UF)</label>
+                        <select name="estado" id="estado">
+                            <option value="Selecione o estado" selected disabled>Selecione o estado</option>
+                        </select>
+                    </div>
+
+                    <div class="formularioCadastro">
+                        <label for="cep">Digite o CEP do candidato </label>
+                        <input type="text" name="cep" maxlength="9" placeholder="12345-678" class="Caixa1">
+                    </div>
+
+                    <div class="formularioCadastro">
+                        <label for="descricao">Descrição do Candidato: </label>
+                        <input type="text" name="descricao" placeholder="Informe uma breve descrição sobre o candidato"
+                            class="Caixa1">
+                    </div>
+
+                    <div class="formularioCadastro">
+                        <label for="formacao">Formação do Candidato</label>
+                        <select name="formacao" id="formacao">
+                            <option value="Selecione a formacao" selected disabled>Selecione a formação do Candidato
+                            </option>
+                            <option value="fundamental">Ensino Fundamental Completo</option>
+                            <option value="medio">Ensino Médio Completo</option>
+                            <option value="superior">Ensino Superior Completo</option>
+                            <option value="pos">Pós Graduação Completa</option>
+                        </select>
+                    </div>
+
+                    <div class="formularioCadastro">
+                        <label for="competencias">Competências do Candidato: </label>
+                        <input type="text" name="competencias"
+                            placeholder="Informe as competências esperadas, separadas por virgula" class="Caixa1">
+                    </div>
+
+                    <input type="button" id="adicionarCandidato" value="Adicionar" class="botao4">
+                    <input type="button" id="limparCandidato" value="Limpar" class="botao5">
+                    <input type="button" id="cancelarCandidato" value="Cancelar" class="botao6">
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer id="rodape">
+
+        © Todos os direitos reservados - Desenvolvido por <span class="destacado">Daniel Costa</span>
+
+    </footer>
+    <script src="bundle.js"></script>
+</body>
+
+</html>

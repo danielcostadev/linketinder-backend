@@ -52,8 +52,4 @@ export class Candidato extends Pessoa {
         this._formacao = value;
     }
 
-    
-    
-    
-
 }
