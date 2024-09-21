@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.ico">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Linketinder Projeto - ACZG 6.0</title>
+</head>
+
+<body>
+
+    <div id="empresa"></div>
+
+    <header id="topbar">
+        <h2>Linketinder - ACZG 6.0</h2>
+    </header>
+
+    <main id="principal">
+        <div class="caixa-branca">
+            <!-- Menu do topo -->
+            <nav class="menu-topo">
+                <ul id="topbar-list">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="cadastro-empresa.html">+ Nova Empresa</a></li>
+                    <li><a href="cadastro-candidato.html">+ Novo Candidato</a></li>
+                    <li><a href="#" id="cadastrarVaga">+ Cadastrar Vaga</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <section class="caixa-branca-perfil">
+            <h1>Perfil da Empresa</h1>
+            <p><strong>Nome:</strong> <span id="nomeEmpresa"></span></p>
+            <p><strong>CNPJ:</strong> <span id="cnpjEmpresa"></span></p>
+            <p><strong>Descrição:</strong> <span id="descricaoEmpresa"></span></p>
+        </section>
+
+        <!-- Cadastro -->
+        <section id="caixa-branca-cadastro" class="caixa-branca-cadastro" style="display: none;">
+
+            <div class="caixa-cadastro">
+
+                <h1>Adicionar nova Vaga</h1>
+                <form id="frmVaga" name="frmVaga">
+                    <div class="formularioCadastro">
+                        <label for="nome">Nome da vaga: </label>
+                        <input type="text" name="nome" placeholder="Digite o nome da vaga"
+                            class="Caixa1">
+                    </div>
+
+                    <div class="formularioCadastro">
+                        <label for="descricao">Descrição da vaga: </label>
+                        <input type="text" name="descricao" placeholder="Informe uma breve descrição sobre a vaga"
+                            class="Caixa1">
+                    </div>
+
+                    <div class="formularioCadastro">
+                        <label for="competencias">Competências Esperadas: </label>
+                        <input type="text" name="competencias" placeholder="Informe as competencias esperadas, separads por virgula"
+                            class="Caixa1">
+                    </div>
+                    
+
+                    <input type="button" id="adicionarVaga" value="Adicionar" class="botao4">
+                    <input type="button" id="limparVaga" value="Limpar" class="botao5">
+                    <input type="button" id="cancelarVaga" value="Cancelar" class="botao6">
+
+                </form>
+
+            </div>
+
+        </section>
+
+        <!-- Fim Cadastro de nova tarefa -->
+
+        <section class="caixa-branca-perfil">
+            <h1>Candidatos Cadastrados</h1>
+            <!-- Exibição da lista de tarefas -->
+            <table id="tabela-vagas">
+                <thead>
+                    <tr>
+                        <th>Competências</th>
+                        <th>Formação</th>
+                        <th>Opções</th>
+
+                    </tr>
+                <tbody id="tabela-itens-candidato">
+
+                </tbody>
+                <!-- Listagem de tarefas é feita de forma dinâmica -->
+
+                </thead>
+            </table>
+            <!-- Fim Exibição da lista de tarefas -->
+        </section>
+
+        <section class="caixa-branca-tarefas">
+
+            <canvas id="competenciasChart" width="400" height="200"></canvas>
+
+        </section>
+        
+
+    </main>
+
+
+    <footer id="rodape">
+
+        © Todos os direitos reservados - Desenvolvido por <span class="destacado">Daniel Costa</span>
+
+    </footer>
+    <script src="bundle.js"></script>
+</body>
+
+</html>

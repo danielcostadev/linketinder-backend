@@ -1,6 +1,4 @@
 import { Candidato } from './candidato';
-import { Empresa } from './empresa';
-
 
 export class Vaga {
     public codigo: number;

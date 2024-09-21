@@ -1,7 +1,6 @@
 import { Empresa } from "../model/empresa";
 import { BotoesService } from "../service/botoes.service";
 import { EmpresaService } from "../service/empresa.service";
-import { VagaService } from "../service/vaga.service";
 
 // Centralização de interação com o DOM
 const tabelaItensEmpresa = document.getElementById("tabela-itens-empresa") as HTMLTableSectionElement;
@@ -28,7 +27,7 @@ export class EmpresaController {
             dadosFormulario.get("cep") as string,
             dadosFormulario.get("descricao") as string,
             (dadosFormulario.get("competencias") as string).split(","),
-            
+
         );
         this.empresaService.adicionarEmpresa(empresa);
 
@@ -41,17 +40,18 @@ export class EmpresaController {
     public exibirEmpresa(idEmpresa: number): void {
         const empresa = this.empresaService.obterEmpresa(idEmpresa);
 
-        if(empresa){
-        nomeEmpresa.textContent = empresa.nome || 'Nome não disponível';
-        cnpjEmpresa.textContent = empresa.cnpj || 'CNPJ não disponível';
-        descricaoEmpresa.textContent = empresa.descricao || 'Descrição não disponível';
+        if (empresa) {
+            nomeEmpresa.textContent = empresa.nome || 'Nome não disponível';
+            cnpjEmpresa.textContent = empresa.cnpj || 'CNPJ não disponível';
+            descricaoEmpresa.textContent = empresa.descricao || 'Descrição não disponível';
         }
     }
 
+    // Listagem disponível apenas para o acesso via págind do super-user
     public listarEmpresas(): void {
         const empresas: Empresa[] = this.empresaService.listarEmpresa();
 
-        if (empresas.length > 0){
+        if (empresas.length >= 0) {
             tabelaItensEmpresa.innerHTML = "";
 
             empresas.forEach((empresa, index) => {
@@ -71,16 +71,20 @@ export class EmpresaController {
                 var botaoVer = botaoContainer.querySelector('.botao-ver') as HTMLButtonElement;
                 var botaoEditar = botaoContainer.querySelector('.botao-editar') as HTMLButtonElement
                 var botaoExcluir = botaoContainer.querySelector('.botao-excluir') as HTMLButtonElement;
-                
+
 
                 botaoVer.onclick = (() => {
-                    window.location.href = "perfil-empresa.html?id="+empresa.id;
+                    window.location.href = "perfil-empresa.html?id=" + empresa.id;
 
                 });
 
                 botaoExcluir.onclick = (() => {
-                    this.excluirEmpresa(empresa.id);
-                    
+                    let confirmacao: boolean = confirm(`Tem certeza que deseja excluir o candidato com id: ${empresa.id} ?`);
+                    if (confirmacao) {
+                        this.excluirEmpresa(empresa.id);
+                        this.listarEmpresas();
+                    }
+
                 });
 
             });

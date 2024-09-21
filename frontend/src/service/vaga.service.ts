@@ -25,7 +25,7 @@ export class VagaService {
         let vagas: Vaga[] = this.dadosDAO.obterVagaDoLocalStorage("dataVaga");
         vagas.push(vaga);
         this.dadosDAO.salvarVagaNoLocalStorage("dataVaga", vagas);
-        console.log("Vaga adicionada com sucesso!");
+        alert("Vaga adicionada com sucesso!");
     }
 
     public excluirVaga(idVaga: number): void {
@@ -35,10 +35,10 @@ export class VagaService {
         if (index !== -1) {
             vagas.splice(index, 1);
             this.dadosDAO.salvarVagaNoLocalStorage("dataVaga", vagas);
-            console.log("Vaga removida com sucesso!")
+            alert("Vaga removida com sucesso!");
 
         } else {
-            console.log("Vaga não encontrado na lista!");
+            alert("Vaga não encontrado na lista!");
         }
     }
 
@@ -47,6 +47,7 @@ export class VagaService {
         let vagas: Vaga[] = this.dadosDAO.obterVagaDoLocalStorage("dataVaga");
         vagas = vagas.filter(vaga => vaga.idEmpresa !== idEmpresa);
         this.dadosDAO.salvarVagaNoLocalStorage("dataVaga", vagas);
+        console.log("Vagas associadas a empresa removidas com sucesso!")
 
     }
 
@@ -55,6 +56,4 @@ export class VagaService {
         return vagas || [];
 
     }
-
-
 }

@@ -1,3 +1,4 @@
+
 import { Candidato } from "../model/candidato";
 import { BotoesService } from "../service/botoes.service";
 import { CandidatoService } from "../service/candidato.service";
@@ -41,7 +42,7 @@ export class CandidatoController {
     private listarCandidatos(isAnonimo: boolean): void {
         const candidatos: Candidato[] = this.candidatoService.listarCandidatos();
 
-        if (candidatos.length > 0) {
+        if (candidatos.length >= 0) {
             tabelaItensCandidato.innerHTML = "";
 
             candidatos.forEach((candidato, index) => {
@@ -60,7 +61,7 @@ export class CandidatoController {
                     cellOpcoes.appendChild(botaoContainer);
 
                 } else {
-
+                    // Listagem disponível apenas para acesso via página super-user
                     var botaoContainer = this.botoesService.criarBotaoContainerReadUpdateDelete() as HTMLDivElement;
 
                     var cellId = linha.insertCell(0) as HTMLTableCellElement;
@@ -84,14 +85,14 @@ export class CandidatoController {
                     });
 
                     botaoExcluir.onclick = (() => {
-                        this.excluirCandidato(candidato.id);
+                        let confirmacao: boolean = confirm(`Tem certeza que deseja excluir o candidato com id: ${candidato.id} ?`);
+                        if (confirmacao) {
+                            this.excluirCandidato(candidato.id);
+                            this.listarCandidatosPublicos();
+                        }
 
                     });
-
                 }
-
-
-
             });
         }
     }
@@ -148,7 +149,7 @@ export class CandidatoController {
                 labels: competencias, // Competências no eixo X
                 datasets: [{
                     label: 'Quantidade de Competências',
-                    barPercentage:0.9,
+                    barPercentage: 0.9,
                     data: valores, // Quantidades no eixo Y
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
@@ -158,8 +159,8 @@ export class CandidatoController {
                         'rgba(54, 162, 235, 0.2)',
                         'rgba(153, 102, 255, 0.2)',
                         'rgba(201, 203, 207, 0.2)'
-                      ],
-                      borderColor: [
+                    ],
+                    borderColor: [
                         'rgb(255, 99, 132)',
                         'rgb(255, 159, 64)',
                         'rgb(255, 205, 86)',
@@ -167,7 +168,7 @@ export class CandidatoController {
                         'rgb(54, 162, 235)',
                         'rgb(153, 102, 255)',
                         'rgb(201, 203, 207)'
-                      ],
+                    ],
                     borderWidth: 1
                 }]
             },
@@ -176,13 +177,13 @@ export class CandidatoController {
 
                 scales: {
                     y: {
-                        
-                        beginAtZero: true, 
+
+                        beginAtZero: true,
 
                     },
                     x: {
                         ticks: {
-                            stepSize: 1, 
+                            stepSize: 1,
                         }
                     },
                 }

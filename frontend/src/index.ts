@@ -7,12 +7,16 @@ import { NavegacaoService } from './service/navegacao.service';
 import { Formulario } from './service/formulario.service';
 
 
-
-
 // Centralização de interação com o DOM
 const botaoAdicionarEmpresa = document.getElementById("adicionarEmpresa") as HTMLButtonElement;
 const botaoAdicionarCandidato = document.getElementById("adicionarCandidato") as HTMLButtonElement;
 const botaoAdicionarVaga = document.getElementById("adicionarVaga") as HTMLButtonElement;
+const botaoLimparEmpresa = document.getElementById("limparEmpresa") as HTMLButtonElement;
+const botaoLimparCandidato = document.getElementById("limparCandidato") as HTMLButtonElement;
+const botaoLimparVaga = document.getElementById("limparVaga") as HTMLButtonElement;
+const botaoCancelarEmpresa = document.getElementById("cancelarEmpresa") as HTMLButtonElement;
+const botaoCancelarCandidato = document.getElementById("cancelarCandidato") as HTMLButtonElement;
+const botaoCancelarVaga = document.getElementById("cancelarVaga") as HTMLButtonElement;
 const linkAdicionarVaga = document.getElementById("cadastrarVaga") as HTMLAnchorElement;
 const linkVerVagas = document.getElementById("link-vagas-index") as HTMLAnchorElement;
 const linkVerCandidatos = document.getElementById("link-candidatos-index") as HTMLAnchorElement;
@@ -41,7 +45,7 @@ const navegacaoService = new NavegacaoService();
 const formulario = new Formulario();
 
 
-
+// Carrega as funcionalidades de acordo com o tipo de página
 window.onload = () => {
     const idEmpresaAtual = navegacaoService.obterIdDaUrl();
     const idCandidatoAtual = navegacaoService.obterIdDaUrl();
@@ -106,6 +110,8 @@ if (botaoAdicionarEmpresa) {
                 console.log(frmEmpresa)
                 const formData: FormData = new FormData(frmEmpresa);
                 empresaController.adicionarEmpresa(formData);
+                frmEmpresa.reset;
+                window.location.href = "index.html?";
             };
         }
     }
@@ -131,6 +137,8 @@ if (botaoAdicionarCandidato) {
                 console.log(frmCandidato)
                 const formData: FormData = new FormData(frmCandidato);
                 candidatoController.adicionarCandidato(formData);
+                frmCandidato.reset;
+                window.location.href = "index.html?";
             };
 
         }
@@ -148,17 +156,53 @@ if (botaoAdicionarVaga) {
             ];
 
             camposCadastro = camposCadastroVaga
+            const id = navegacaoService.obterIdDaUrl();
 
             if (formulario.validarEntradaDados(camposCadastro, frmVaga)) {
                 console.log(frmVaga)
                 const formData: FormData = new FormData(frmVaga);
                 vagaController.adicionarVaga(formData);
+                frmVaga.reset;
+                window.location.href = "perfil-empresa.html?id=" + id;
             };
 
         }
     }
 
 }
+
+function adicionarEventoLimpar(botao: HTMLElement | null, formulario: HTMLFormElement | null) {
+    if (botao && formulario) {
+        botao.onclick = function () {
+            let confirmacao: boolean = confirm("Tem certeza que deseja limpar o formulário?");
+            if (confirmacao) {
+                formulario.reset();
+            }
+        }
+    }
+}
+
+adicionarEventoLimpar(botaoLimparEmpresa, frmEmpresa);
+adicionarEventoLimpar(botaoLimparCandidato, frmCandidato);
+adicionarEventoLimpar(botaoLimparVaga, frmVaga);
+
+
+
+function adicionarEventoCancelar(botao: HTMLElement | null) {
+    if (botao) {
+        botao.onclick = function () {
+            let confirmacao: boolean = confirm("Tem certeza que deseja cancelar?");
+            if(confirmacao){
+                window.location.href = "index.html?";
+            }
+        }
+    }
+}
+
+adicionarEventoCancelar(botaoCancelarEmpresa);
+adicionarEventoCancelar(botaoCancelarCandidato);
+adicionarEventoCancelar(botaoCancelarVaga);
+
 
 function checarIdIndex(value: string): number | null {
     let id: number | null = null;
@@ -176,11 +220,11 @@ function checarIdIndex(value: string): number | null {
             }
         } else {
             alert("Você cancelou a operação.");
-            return null; // Se o usuário cancelar, retorna null
+            return null;
         }
     }
 
-    return id; // Retorna o ID válido
+    return id;
 }
 
 if (linkAdicionarVaga) {
@@ -189,13 +233,14 @@ if (linkAdicionarVaga) {
     }
 }
 
+// Index
 
 if (linkVerVagas) {
     linkVerVagas.onclick = function () {
         let id: number | null = checarIdIndex("Candidato");
         if (id !== null && candidatoService.obterCandidato(id)) {
             window.location.href = "perfil-candidato.html?id=" + id;
-        } else {
+        } else if (id !== null) {
             alert("Candidato não encontrado!")
         }
     }
@@ -206,8 +251,8 @@ if (linkVerCandidatos) {
         let id: number | null = checarIdIndex("Empresa");
         if (id !== null && empresaService.obterEmpresa(id)) {
             window.location.href = "perfil-empresa.html?id=" + id;
-        } else {
-            alert("Emppresa não encontrada!")
+        } else if (id !== null) {
+            alert("Empresa não encontrada!")
         }
     }
 }

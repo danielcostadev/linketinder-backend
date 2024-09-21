@@ -9,7 +9,7 @@ export class BotoesService {
             const botao: HTMLButtonElement = document.createElement("button");
             botao.className = classeBotao;
 
-            // Adiciona o SVG ao botão (ajustado para usar texto vazio no exemplo)
+            // Adiciona o SVG ao botão (ajustado para usar texto vazio no momento)
             botao.appendChild(document.createTextNode(" "));
 
             return botao;
