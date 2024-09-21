@@ -17,15 +17,16 @@ export class VagaController {
     public adicionarVaga(dadosFormulario: FormData): void {
 
         const codigo = this.vagaService.gerarCodigo();
+        const idEmpresaAtual = this.navegacaoService.obterIdDaUrl();
+
 
         const vaga = new Vaga(
             codigo,
+            idEmpresaAtual,
             dadosFormulario.get("nome") as string,
             dadosFormulario.get("descricao") as string,
             (dadosFormulario.get("competencias") as string).split(",")
         );
-
-       const idEmpresaAtual = this.navegacaoService.obterIdDaUrl();
 
         this.empresaService.adicionarVagaEmpresa(idEmpresaAtual, vaga)
         this.vagaService.adicionarVaga(vaga);

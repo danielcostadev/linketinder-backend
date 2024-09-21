@@ -101,8 +101,7 @@ export class CandidatoController {
             descricaoCandidato.textContent = candidato.descricao || 'Descrição não disponível';
         }
     }
-
-
+    
     public contarCompetencias(): void {
         // Chama o serviço para contar as competências dos candidatos
         const contagem = this.candidatoService.contarCompetencias(this.candidatoService.listarCandidatos());

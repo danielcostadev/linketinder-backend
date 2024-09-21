@@ -3,56 +3,57 @@ import { CandidatoService } from "./candidato.service";
 
 export class NavegacaoService {
 
-public obterIdDaUrl(): number {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get("id");
-    
-    if (id){
-       return parseInt(id, 10)
-    }
+    public obterIdDaUrl(): number {
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get("id");
 
-    return 0
-
-}
-
-public carregarEmpresa(): void {
-    const idEmpresaAtual = this.obterIdDaUrl();
-
-    if (idEmpresaAtual !== null) {
-        const empresaService = new EmpresaService();
-
-        const empresa = empresaService.obterEmpresa(idEmpresaAtual);
-
-        if (empresa) {
-            console.log("Empresa encontrada:");
-           
-        } else {
-            console.log("Empresa não encontrada!");
+        if (id) {
+            return parseInt(id, 10)
         }
-    } else {
-        console.log("ID da empresa não encontrado na URL.");
+
+        return 0
+
     }
-}
 
-public carregarCandidato(): void {
-    const idCandidatoAtual = this.obterIdDaUrl();
+    public carregarEmpresa(): void {
+        const idEmpresaAtual = this.obterIdDaUrl();
 
-    if (idCandidatoAtual !== null){
-        const  candidatoService = new CandidatoService();
-        
-        const candidato = candidatoService.obterCandidato(idCandidatoAtual);
+        if (idEmpresaAtual !== null) {
+            const empresaService = new EmpresaService();
 
-        if (candidato) {
-            console.log("Candidato Encontrado!");
+            const empresa = empresaService.obterEmpresa(idEmpresaAtual);
+
+            if (empresa) {
+                console.log("Empresa encontrada:");
+
+            } else {
+                console.log("Empresa não encontrada!");
+            }
         } else {
-            console.log("Candidato não encontrado!")
+            console.log("ID da empresa não encontrado na URL.");
         }
-    } else {
-        console.log("ID do candidato não encontrado na URL");
     }
 
+    public carregarCandidato(): void {
+        const idCandidatoAtual = this.obterIdDaUrl();
 
-}
+        if (idCandidatoAtual !== null) {
+            const candidatoService = new CandidatoService();
+
+            const candidato = candidatoService.obterCandidato(idCandidatoAtual);
+
+            if (candidato) {
+                console.log("Candidato Encontrado!");
+            } else {
+                console.log("Candidato não encontrado!")
+            }
+        } else {
+            console.log("ID do candidato não encontrado na URL");
+        }
+
+
+    }
+
 }
 
 

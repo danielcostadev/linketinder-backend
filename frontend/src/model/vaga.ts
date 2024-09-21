@@ -4,6 +4,7 @@ import { Empresa } from './empresa';
 
 export class Vaga {
     public codigo: number;
+    protected _idEmpresa: number;
     protected _nome: string;
     protected _descricao: string;
     protected _candidato?: Candidato;
@@ -11,16 +12,24 @@ export class Vaga {
 
     constructor(
         codigo: number,
+        idEmpresa: number,
         nome: string,
         descricao: string,
         competencias: string[]
     ){
         this.codigo = codigo;
+        this._idEmpresa = idEmpresa;
         this._nome = nome;
         this._descricao = descricao;
         this._competencias = competencias;
     }
 
+    public get idEmpresa() : number {
+        return this._idEmpresa;
+    }
+    public set idEmpresa(value : number) {
+        this._idEmpresa = value;
+    }
     
     public get nome() : string {
         return this._nome;
