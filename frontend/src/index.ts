@@ -16,9 +16,12 @@ const frmCandidato = document.getElementById("frmCandidato") as HTMLFormElement;
 const frmVaga = document.getElementById("frmVaga") as HTMLFormElement;
 const empresaElemento = document.querySelector("#empresa");
 const candidatoElemento = document.querySelector("#candidato");
+const listaEmpresasElemento = document.querySelector("#listaEmpresas");
+const listaCandidatosElemento = document.querySelector("#listaCandidatos");
 const vagasElemento = document.querySelector("#vagas");
 const formularioElemento = document.querySelector("#formulario");
 
+// Controlador para validação dos dados nos formulários
 var camposCadastro: { nome: string, mensagem: string }[];
 
 // Controladores de serviço
@@ -35,7 +38,7 @@ window.onload = () => {
 
     if (empresaElemento && idEmpresaAtual > 0) {
         empresaController.exibirEmpresa(idEmpresaAtual);
-        candidatoController.listarCandidatos();
+        candidatoController.listarCandidatosAnonimos();
         candidatoController.contarCompetencias();
         console.log("Teste sou empresa")
     }
@@ -57,6 +60,18 @@ window.onload = () => {
         formulario.gerarPaises();
         formulario.gerarEstados();
         console.log("Teste sou form")
+
+    }
+
+    if (listaEmpresasElemento){
+        empresaController.listarEmpresas();
+        console.log("Teste sou uma lista de empresas")
+
+    }
+
+    if (listaCandidatosElemento){
+        candidatoController.listarCandidatosPublicos();
+        console.log("Teste sou uma lista de candidatos")
 
     }
 };

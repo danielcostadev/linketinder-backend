@@ -55,6 +55,11 @@ export class EmpresaService {
         }
     }
 
+    public listarEmpresa(): Empresa[] {
+        const empresas: Empresa[] = this.dadosDAO.obterEmpresaDoLocalStorage("dataEmpresa");
+        return empresas || [];
+    }
+
     adicionarVagaEmpresa(idEmpresa: number, vaga: Vaga): void {
         let empresas: Empresa[] = this.dadosDAO.obterEmpresaDoLocalStorage("dataEmpresa");
         const empresa = empresas.find(emp => emp.id === idEmpresa);

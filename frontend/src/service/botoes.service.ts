@@ -1,30 +1,50 @@
-export class BotoesService { 
-    public criarBotaoContainer(): HTMLDivElement {
+export class BotoesService {
+    public criarBotaoContainerReadUpdateDelete(): HTMLDivElement {
         // Cria o div com a classe 'botao-container'
-        const divContainer: HTMLDivElement = document.createElement("div");
-        divContainer.className = "botao-container";
-    
+        const divBotaoContainerRUD: HTMLDivElement = document.createElement("div");
+        divBotaoContainerRUD.className = "botao-container-read-update-delete";
+
         // Função auxiliar para criar botões com SVG
         function criarBotao(classeBotao: string): HTMLButtonElement {
             const botao: HTMLButtonElement = document.createElement("button");
             botao.className = classeBotao;
-    
+
             // Adiciona o SVG ao botão (ajustado para usar texto vazio no exemplo)
             botao.appendChild(document.createTextNode(" "));
-    
+
             return botao;
         }
-    
-        // Criar os três botões (No caso do Linketinder apenas 2)
-        const botaoCurtir: HTMLButtonElement = criarBotao("botao1");
-        // const botaoEditar: HTMLButtonElement = criarBotao("botao2");
-        const botaoRejeitar: HTMLButtonElement = criarBotao("botao3");
-    
+
+        const botaoVer: HTMLButtonElement = criarBotao("botao-ver");
+        const botaoEditar: HTMLButtonElement = criarBotao("botao-editar");
+        const botaoExcluir: HTMLButtonElement = criarBotao("botao-excluir");
+
         // Adiciona os botões ao container
-        divContainer.appendChild(botaoCurtir);
-        // divContainer.appendChild(botaoEditar);
-        divContainer.appendChild(botaoRejeitar);
-    
-        return divContainer;
+        divBotaoContainerRUD.appendChild(botaoVer);
+        divBotaoContainerRUD.appendChild(botaoEditar);
+        divBotaoContainerRUD.appendChild(botaoExcluir);
+
+        return divBotaoContainerRUD;
     }
+
+    public criarBotaoContainerLike(): HTMLDivElement {
+        const divBotaoContainerLike: HTMLDivElement = document.createElement("div");
+        divBotaoContainerLike.className = "botao-container-curtir-reijeitar";
+
+        function criarBotao(classeBotao: string): HTMLButtonElement {
+            const botao: HTMLButtonElement = document.createElement("button");
+            botao.className = classeBotao;
+            botao.appendChild(document.createTextNode(" "));
+            return botao;
+        }
+
+        const botaoCurtir: HTMLButtonElement = criarBotao("botao-curtir");
+        const botaoRejeitar: HTMLButtonElement = criarBotao("botao-rejeitar");
+
+        divBotaoContainerLike.appendChild(botaoCurtir);
+        divBotaoContainerLike.appendChild(botaoRejeitar);
+
+        return divBotaoContainerLike;
+    }
+
 }

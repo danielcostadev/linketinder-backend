@@ -1,14 +1,17 @@
 import { Empresa } from "../model/empresa";
+import { BotoesService } from "../service/botoes.service";
 import { EmpresaService } from "../service/empresa.service";
 
 // Centralização de interação com o DOM
-var nomeEmpresa = document.getElementById("nomeEmpresa") as HTMLElement;
-var cnpjEmpresa = document.getElementById("cnpjEmpresa") as HTMLElement;
-var descricaoEmpresa = document.getElementById("descricaoEmpresa") as HTMLElement;
+const tabelaItensEmpresa = document.getElementById("tabela-itens-empresa") as HTMLTableSectionElement;
+const nomeEmpresa = document.getElementById("nomeEmpresa") as HTMLElement;
+const cnpjEmpresa = document.getElementById("cnpjEmpresa") as HTMLElement;
+const descricaoEmpresa = document.getElementById("descricaoEmpresa") as HTMLElement;
 
 export class EmpresaController {
 
     private empresaService = new EmpresaService();
+    private botoesService = new BotoesService();
 
     public adicionarEmpresa(dadosFormulario: FormData): void {
 
@@ -41,6 +44,33 @@ export class EmpresaController {
         nomeEmpresa.textContent = empresa.nome || 'Nome não disponível';
         cnpjEmpresa.textContent = empresa.cnpj || 'CNPJ não disponível';
         descricaoEmpresa.textContent = empresa.descricao || 'Descrição não disponível';
+        }
+    }
+
+    public listarEmpresas(): void {
+        const empresas: Empresa[] = this.empresaService.listarEmpresa();
+
+        if (empresas.length > 0){
+            tabelaItensEmpresa.innerHTML = "";
+
+            empresas.forEach((empresa, index) => {
+                var botaoContainer = this.botoesService.criarBotaoContainerReadUpdateDelete() as HTMLDivElement;
+                var linha = tabelaItensEmpresa.insertRow() as HTMLTableRowElement;
+
+                var cellId = linha.insertCell(0) as HTMLTableCellElement;
+                var cellNome = linha.insertCell(1) as HTMLTableCellElement;
+                var cellEmail = linha.insertCell(2) as HTMLTableCellElement;
+                var cellOpcoes = linha.insertCell(3) as HTMLTableCellElement;
+
+                cellId.innerHTML = empresa.id.toString();
+                cellNome.innerHTML = empresa.nome;
+                cellEmail.innerHTML = empresa.email;
+                cellOpcoes.appendChild(botaoContainer);
+
+                var botaoVer = botaoContainer.querySelector('.botao1') as HTMLButtonElement;
+                var botaoExcluir = botaoContainer.querySelector('.botao3') as HTMLButtonElement;
+
+            });
         }
     }
 
