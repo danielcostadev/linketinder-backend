@@ -2,12 +2,63 @@
 
 Linketinder é uma aplicação Groovy que permite a interação entre candidatos e empresas, e promete revolucionar o método como são realizadas as contratações de novos colaboradores, esta aplicação está sendo desenvolvida como um dos projetos do ACZG 6.0.
 
+# Versão TypeScript (FrontEnd)
+
 ## Funcionalidades
 
-- **Adicionar Empresa**: Crie novas tarefas especificando nome, descrição, data de término, prioridade, categoria e status.
-- **Adicionar Candidato**: Modifique as informações das tarefas existentes para mantê-las atualizadas.
-- **Listar Empresas**: Remova tarefas que não são mais necessárias.
-- **Listar Candidatos**: Ordene as tarefas por prioridade, categoria ou status.
+- **Adicionar Empresa**: Formulário HTML para cadastro de empresas
+- **Adicionar Candidato**: Formulário HTML para cadastro de candidatos
+- **Listar Empresas**: Listagem de empresas cadastradas (Disponível apenas para a visão do SUPER USER)
+- **Listar Candidatos**: Listagem de candidatos de forma anônima no perfil de cada empresa, exibição de quantidade de candidados por competência em forma de gráfico.
+- **Listar Vagas**: Listagem de Vagas disponíveis no perfil de cada candidato, o candidato não consegue visualizar o nome da empresa, apenas das vagas.
+- **Validação de Dados**: Validação de entrada de dados dos formulários HTML
+
+## Tecnologias Utilizadas
+
+- **HTML5**: Linguagem de marcação de texto
+- **CSS3**: Linguagem de estilização de folhas de estilo em cascata
+- **JavaScript**: Linguagem de programação interatividade
+- **LOCAL STORAGE**: Armazenamento interno do navegador. (Não é indicado para armazenar dados sensíveis, é apagado ao limpar dados.)
+- **VISUAL STUDIO CODE**: Ambiente de Desenvolvimento Integrado (IDE) utilizado.
+
+## Minhas breves considerações
+
+> O projeto LinkeTinder traz consigo uma ideia bastante promissora quando a contração de novos colaboradores, através da "Contratação às cegas" [Funcionalidade que será incluida no decorrer do desenvolimento].
+> 
+> No desevolvimento desse projeto pude aprimorar ainda mais meus conhecimentos em POO e organização de projeto seguindo os ritos básicos do padrão MVC, também pude melhorar a escrita do código. 
+> Com o poder da tipagem do TypeScript o código é revisado e tratando em tempo de desenvolvimento, o que ajuda a prevenir bugs futuros e deixa o código mais organizado, através do Mode Module.
+> Nessa nova versão do projeto utilizei o conceito Webpack para o gerenciamento de módulos, separei a lógica e organizei os aquivos seguindo o padrão MVC, esse projeto foi bastante desafiado, pois foi o meu primeiro contato com a linguagem.
+> Durante o desenvolvimento aprendi com os erros, e pude adiquirir conhecimento quanto ao modo como a linguagem funciona, e suas particularidades. Como o nome já deixa evidente, TypeScript é bastante exigente quanto a tipagem das funções, atributos.
+
+
+## COMO FUNCIONA?
+### Tela Principal
+Na página principal existe um menu principal com links para cadastro de candidatos ou empresas, logo abaixo são exibidas duas imagens representando vagas e candidatos.
+- Onde é possível escolher entre encontrar vagas ou candidatos, ao clicar um prompt é aberto solicitnado ao usuário que informe o respectivo ID, nesse momento é feita uma validação para verificar se o ID está associado a alguma empresa ou candidato, se verdadeiro o usuário é redirecionado para o respectivo perfil.
+### Cadastrar Candidato/Empresa
+- Um formulário é exibido tanto para cadastro de empresas quanto para candidatos, são feitas validações, em caso positivo os dados salvos no localStorage
+### Listar Candidatos/Empresas
+- Uma lista com informações recuperadas do localStorage é exibida para o respectivo usuário.
+
+## Estrutura do Projeto
+
+### O projeto está organizado da seguinte forma:
+
+- **Controller**: Contém as classes e os métodos responsáveis por gerenciar a manipulação da view e comunicação com a camada Service
+- **Service**: Contém as classes responsáveis pela lógica do négócio e realiza chamadas a classe DAO que se comunica com o localStorage
+- **Model**: Define as classes principais do domínio, como `Pessoa, Canditado e Empresa`.
+- **View(DIST)**: Contém os arquivos HTML, CSS, JS principal.
+
+==========================================================
+
+# Versão Groovy (BackEnd)
+
+## Funcionalidades
+
+- **Adicionar Empresa**: Capacidade de criar empresas
+- **Adicionar Candidato**: Capacidade de criar candidatos
+- **Listar Empresas**: Listagem de tarefas
+- **Listar Candidatos**: Listagem de candidatos
 - **Validação de Dados**: Entrada de dados validada para garantir a integridade das informações.
 
 ## Tecnologias Utilizadas
