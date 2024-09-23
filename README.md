@@ -2,7 +2,7 @@
 
 Linketinder é uma aplicação Groovy que permite a interação entre candidatos e empresas, e promete revolucionar o método como são realizadas as contratações de novos colaboradores, esta aplicação está sendo desenvolvida como um dos projetos do ACZG 6.0.
 
-# Versão TypeScript (FrontEnd)
+# Versão TypeScript (FrontEnd) versão atual 2.14.0
 
 ## Funcionalidades
 
@@ -11,7 +11,7 @@ Linketinder é uma aplicação Groovy que permite a interação entre candidatos
 - **Listar Empresas**: Listagem de empresas cadastradas (Disponível apenas para a visão do SUPER USER)
 - **Listar Candidatos**: Listagem de candidatos de forma anônima no perfil de cada empresa, exibição de quantidade de candidados por competência em forma de gráfico.
 - **Listar Vagas**: Listagem de Vagas disponíveis no perfil de cada candidato, o candidato não consegue visualizar o nome da empresa, apenas das vagas.
-- **Validação de Dados**: Validação de entrada de dados dos formulários HTML
+- **Validação de Dados**: Validação de entrada de dados dos formulários HTML, a partir da versão 2.14.0 foi implementada a validação com Regex.
 
 ## Tecnologias Utilizadas
 
