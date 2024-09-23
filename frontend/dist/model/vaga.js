@@ -1,9 +1,16 @@
 export class Vaga {
-    constructor(codigo, nome, descricao, competencias) {
+    constructor(codigo, idEmpresa, nome, descricao, competencias) {
         this.codigo = codigo;
+        this._idEmpresa = idEmpresa;
         this._nome = nome;
         this._descricao = descricao;
         this._competencias = competencias;
+    }
+    get idEmpresa() {
+        return this._idEmpresa;
+    }
+    set idEmpresa(value) {
+        this._idEmpresa = value;
     }
     get nome() {
         return this._nome;

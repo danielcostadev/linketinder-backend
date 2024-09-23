@@ -27,6 +27,7 @@ export class EmpresaController {
             dadosFormulario.get("cep") as string,
             dadosFormulario.get("descricao") as string,
             (dadosFormulario.get("competencias") as string).split(","),
+            (dadosFormulario.get("tags") as string).split(",")
 
         );
         this.empresaService.adicionarEmpresa(empresa);

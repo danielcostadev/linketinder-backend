@@ -1,5 +1,5 @@
 export class Pessoa {
-    constructor(id, nome, email, estado, cep, descricao, competencias, vagas) {
+    constructor(id, nome, email, estado, cep, descricao, competencias, tags, vagas) {
         this.id = id;
         this._nome = nome;
         this._email = email;
@@ -7,6 +7,7 @@ export class Pessoa {
         this._cep = cep;
         this._descricao = descricao;
         this._competencias = competencias;
+        this._tags = tags;
         this._vagas = vagas;
     }
     get nome() {
@@ -44,6 +45,12 @@ export class Pessoa {
     }
     set competencias(value) {
         this._competencias = value;
+    }
+    get tags() {
+        return this._tags;
+    }
+    set tags(value) {
+        this._tags = value;
     }
     get vagas() {
         return this._vagas;
