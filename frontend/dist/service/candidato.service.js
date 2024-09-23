@@ -19,7 +19,7 @@ export class CandidatoService {
         let candidatos = this.dadosDAO.obterCandidatoDoLocalStorage("dataCandidato");
         candidatos.push(candidato);
         this.dadosDAO.salvarCandidatoNoLocalStorage("dataCandidato", candidatos);
-        console.log("Candidato adicionado com sucesso!");
+        alert("Candidato adicionado com sucesso!");
     }
     exlcuirCandidato(idCandidato) {
         let candidatos = this.dadosDAO.obterCandidatoDoLocalStorage("dataCandidato");
@@ -27,10 +27,10 @@ export class CandidatoService {
         if (index !== -1) {
             candidatos.splice(index, 1);
             this.dadosDAO.salvarCandidatoNoLocalStorage("dataCandidato", candidatos);
-            console.log("Candidato removido com sucesso!");
+            alert("Candidato removido com sucesso!");
         }
         else {
-            console.log("Candidato não encontrado na lista!");
+            alert("Candidato não encontrado na lista!");
         }
     }
     obterCandidato(idCandidato) {
@@ -52,11 +52,12 @@ export class CandidatoService {
         const contagem = {};
         candidatos.forEach(candidato => {
             candidato.competencias.forEach(competencia => {
-                if (contagem[competencia]) {
-                    contagem[competencia]++;
+                const competenciasLower = competencia.toLowerCase().trim();
+                if (contagem[competenciasLower]) {
+                    contagem[competenciasLower]++;
                 }
                 else {
-                    contagem[competencia] = 1;
+                    contagem[competenciasLower] = 1;
                 }
             });
         });

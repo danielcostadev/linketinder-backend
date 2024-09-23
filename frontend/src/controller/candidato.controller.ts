@@ -23,13 +23,16 @@ export class CandidatoController {
             id,
             dadosFormulario.get("nome") as string,
             dadosFormulario.get("email") as string,
+            dadosFormulario.get("telefone") as string,
+            dadosFormulario.get("linkedin") as string,
             dadosFormulario.get("cpf") as string,
             dadosFormulario.get("idade") as string,
             dadosFormulario.get("estado") as string,
             dadosFormulario.get("cep") as string,
             dadosFormulario.get("descricao") as string,
             dadosFormulario.get("formacao") as string,
-            (dadosFormulario.get("competencias") as string).split(",")
+            (dadosFormulario.get("competencias") as string).split(","),
+            (dadosFormulario.get("tags") as string).split(",")
         );
         this.candidatoService.adicionarCandidato(candidato);
 

@@ -14,8 +14,8 @@ export class VagaController {
     }
     adicionarVaga(dadosFormulario) {
         const codigo = this.vagaService.gerarCodigo();
-        const vaga = new Vaga(codigo, dadosFormulario.get("nome"), dadosFormulario.get("descricao"), dadosFormulario.get("competencias").split(","));
         const idEmpresaAtual = this.navegacaoService.obterIdDaUrl();
+        const vaga = new Vaga(codigo, idEmpresaAtual, dadosFormulario.get("nome"), dadosFormulario.get("descricao"), dadosFormulario.get("competencias").split(","));
         this.empresaService.adicionarVagaEmpresa(idEmpresaAtual, vaga);
         this.vagaService.adicionarVaga(vaga);
     }
@@ -27,7 +27,7 @@ export class VagaController {
         if (vagas.length > 0) {
             tabelaItensVaga.innerHTML = "";
             vagas.forEach((vaga, index) => {
-                var botaoContainer = this.botoesService.criarBotaoContainer();
+                var botaoContainer = this.botoesService.criarBotaoContainerLike();
                 var linha = tabelaItensVaga.insertRow();
                 var cellNome = linha.insertCell(0);
                 var cellCompetencias = linha.insertCell(1);
@@ -36,9 +36,8 @@ export class VagaController {
                 cellCompetencias.innerHTML = Array.isArray(vaga.competencias) ? vaga.competencias.join(', ') : vaga.competencias;
                 cellOpcoes.appendChild(botaoContainer);
                 // Para que os botões funcionem, devemos atribuir eventos logo após serem adicionados
-                var botaoVer = botaoContainer.querySelector('.botao1');
-                // var botaoEditar = botaoContainer.querySelector('.botao2');
-                var botaoExcluir = botaoContainer.querySelector('.botao3');
+                var botaoCurtir = botaoContainer.querySelector('.botao-curtir');
+                var botaoRejeitar = botaoContainer.querySelector('.botao-rejeitar');
             });
         }
     }

@@ -15,10 +15,11 @@ export abstract class Pessoa {
     protected _descricao: string;
     
     protected _competencias: string[];
+
+    protected _tags: string[];
     
     protected _vagas?: Vaga[] | undefined;
-    
-    
+
 
     constructor(
         id: number,
@@ -28,6 +29,7 @@ export abstract class Pessoa {
         cep: string,
         descricao: string,
         competencias: string[],
+        tags: string[],
         vagas?: Vaga[]
     ) {
         this.id = id;
@@ -37,6 +39,7 @@ export abstract class Pessoa {
         this._cep = cep;
         this._descricao = descricao;
         this._competencias = competencias;
+        this._tags = tags;
         this._vagas = vagas;
     }
 
@@ -77,13 +80,16 @@ export abstract class Pessoa {
     public set competencias(value: string[]) {
         this._competencias = value;
     }
+    public get tags() : string[] {
+        return this._tags;
+    }
+    public set tags(value : string[]) {
+        this._tags = value;
+    }
     public get vagas(): Vaga[] | undefined {
         return this._vagas;
     }
     public set vagas(value: Vaga[] | undefined) {
         this._vagas = value;
     }
-    
-
-
 }

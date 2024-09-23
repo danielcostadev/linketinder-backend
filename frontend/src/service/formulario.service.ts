@@ -33,7 +33,7 @@ export class Formulario {
         }
     }
 
-    public validarEntradaDados(campos: { nome: string, mensagem: string }[], formulario: HTMLFormElement): boolean {
+    public validarEntradaDados(campos: { nome: string, mensagem: string, tipo?: string }[], formulario: HTMLFormElement): boolean {
 
         for (const campo of campos) {
 
@@ -50,6 +50,53 @@ export class Formulario {
                 elemento.focus();
                 return false;
             }
+
+            if (campo.tipo) {
+                let regex: RegExp | null = null;
+
+                switch (campo.tipo) {
+                    case 'nome':
+                        regex = /^(?:[A-Za-zÀ-ÿ]+(?:\s+[A-Za-zÀ-ÿ]+)+)$/;
+                        break;
+                    case 'email':
+                        regex = /^[a-zA-Z0-9._%+-]+@\w+\.\w{2,}(?:\.[a-z]{2})?$/;
+                        break;
+                    case 'telefone':
+                        regex = /^\(\d{2}\)\s?\d{4,5}-\d{4}$/;
+                        break;
+                    case 'linkedin':
+                        regex = /^https:\/\/[a-z]{2,3}\.linkedin\.com\/in\/[A-Za-z0-9._-]{1,30}$/;
+                        break;
+                    case 'cpf':
+                        regex = /^(?:\d{11}|\d{3}\.\d{3}\.\d{3}-\d{2})$/;
+                        break;
+                    case 'cnpj':
+                        regex = /^(?:\d{14}|\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2})$/;
+                        break;
+                    case 'idade':
+                        regex = /^(?:1[6-9]|[2-5][0-9]|6[0-5])$/;
+                        break;
+                    case 'cep':
+                        regex = /^(?:\d{8}|\d{5}-\d{3})$/;
+                        break;
+                    case 'descricao':
+                        regex = /^[\w\W\s]{10,500}$/;
+                        break;
+                    case 'competencias':
+                        regex = /^(?:[a-zA-ZÀ-ÿ\s]+,){2,}[a-zA-ZÀ-ÿ\s]+$/;
+                        break;
+                    case 'tags':
+                        regex = /^(?:[a-zA-ZÀ-ÿ\s]+,){2,}[a-zA-ZÀ-ÿ\s]+$/
+
+                }
+
+                if (regex && !regex.test(valor)) {
+                    alert(`O campo ${campo.nome} está inválido!`)
+                    elemento.focus();
+                    return false
+                }
+            }
+
         }
         return true;
     };
