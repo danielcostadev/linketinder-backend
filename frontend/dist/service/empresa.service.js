@@ -1,6 +1,8 @@
 import { DadosDAO } from "../model/dados.DAO";
+import { VagaService } from "./vaga.service";
 export class EmpresaService {
     constructor() {
+        this.vagasService = new VagaService();
         this.dadosDAO = new DadosDAO();
     }
     gerarId() {
@@ -19,18 +21,19 @@ export class EmpresaService {
         let empresas = this.dadosDAO.obterEmpresaDoLocalStorage("dataEmpresa");
         empresas.push(empresa);
         this.dadosDAO.salvarEmpresaNoLocalStorage("dataEmpresa", empresas);
-        console.log("Empresa adicionada com sucesso!");
+        alert("Empresa adicionada com sucesso!");
     }
-    exlcuirEmpresa(idEmpresa) {
+    excluirEmpresa(idEmpresa) {
         let empresas = this.dadosDAO.obterEmpresaDoLocalStorage("dataEmpresa");
         const index = empresas.findIndex(empresa => empresa.id === idEmpresa);
         if (index !== -1) {
+            this.vagasService.excluirVagasPorEmpresa(idEmpresa);
             empresas.splice(index, 1);
             this.dadosDAO.salvarEmpresaNoLocalStorage("dataEmpresa", empresas);
-            console.log("Empresa removida com sucesso!");
+            alert("Empresa removida com sucesso!");
         }
         else {
-            console.log("Empresa não encontrado na lista!");
+            alert("Empresa não encontrado na lista!");
         }
     }
     obterEmpresa(idEmpresa) {
@@ -43,6 +46,10 @@ export class EmpresaService {
             console.log("Empresa não encontrada na lista!");
             return undefined;
         }
+    }
+    listarEmpresa() {
+        const empresas = this.dadosDAO.obterEmpresaDoLocalStorage("dataEmpresa");
+        return empresas || [];
     }
     adicionarVagaEmpresa(idEmpresa, vaga) {
         let empresas = this.dadosDAO.obterEmpresaDoLocalStorage("dataEmpresa");

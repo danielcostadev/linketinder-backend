@@ -18,7 +18,7 @@ class EmpresaRepository {
         empresasCadastradas
     }
 
-    void cadastrarNovaEmpresas(Empresa novaEmpresa){
+    void cadastrarNovaEmpresa(Empresa novaEmpresa){
         empresasCadastradas.add(novaEmpresa)
     }
 

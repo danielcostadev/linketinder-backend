@@ -39,23 +39,33 @@
                 <form id="frmCandidato" name="frmCandidato">
                     <div class="formularioCadastro">
                         <label for="nome">Nome do Candidato: </label>
-                        <input type="text" name="nome" placeholder="Digite o nome do candidato" class="Caixa1">
+                        <input type="text" name="nome" placeholder="Jonh Doe" class="Caixa1">
                     </div>
 
                     <div class="formularioCadastro">
                         <label for="email">Email Pessoal: </label>
-                        <input type="text" name="email" placeholder="Digite o e-mail do candidato" class="Caixa1">
+                        <input type="text" name="email" placeholder="email@email.com" class="Caixa1">
+                    </div>
+
+                    <div class="formularioCadastro">
+                        <label for="telefone">Telefone: </label>
+                        <input type="text" name="telefone" placeholder="(11) 99999-9999" class="Caixa1">
+                    </div>
+
+                    <div class="formularioCadastro">
+                        <label for="linkedin">perfil do Linkedin: </label>
+                        <input type="text" name="linkedin" value="https://www.linkedin.com/in/" placeholder="https://www.linkedin.com/in/" class="Caixa1">
                     </div>
 
                     <div class="formularioCadastro">
                         <label for="cpf">Digite o CPF do candidato </label>
-                        <input type="text" name="cpf" maxlength="12" placeholder="Preencha o CPF do Candidato"
+                        <input type="text" name="cpf" maxlength="12" placeholder="123.456.789-10"
                             class="Caixa1">
                     </div>
 
                     <div class="formularioCadastro">
                         <label for="idade">Idade</label>
-                        <input type="text" name="idade" maxlength="3" placeholder="Informe a idade do Candidato"
+                        <input type="text" name="idade" maxlength="3" placeholder="(Ex: 31) Digite apenas números"
                             class="Caixa1">
                     </div>
 
@@ -92,7 +102,13 @@
                     <div class="formularioCadastro">
                         <label for="competencias">Competências do Candidato: </label>
                         <input type="text" name="competencias"
-                            placeholder="Informe as competências esperadas, separadas por virgula" class="Caixa1">
+                            placeholder="Informe pelo menos 3 competências que você possui, separadas por virgula" class="Caixa1">
+                    </div>
+
+                    <div class="formularioCadastro">
+                        <label for="tags">Tags: </label>
+                        <input type="text" name="tags"
+                            placeholder="Digite pelo menos 3 tags que te definem, separadas por virgula" class="Caixa1">
                     </div>
 
                     <input type="button" id="adicionarCandidato" value="Adicionar" class="botao4">

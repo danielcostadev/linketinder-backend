@@ -95,13 +95,14 @@ if (botaoAdicionarEmpresa) {
     botaoAdicionarEmpresa.onclick = function () {
         if (frmEmpresa) {
             const camposCadastroEmpresa = [
-                { nome: "nome", mensagem: "O campo Nome está vazio." },
-                { nome: "email", mensagem: "O campo E-mail está vazio." },
-                { nome: "cnpj", mensagem: "O campo CNPJ está vazio." },
+                { nome: "nome", mensagem: "O campo Nome está vazio.", tipo: "nome" },
+                { nome: "email", mensagem: "O campo E-mail está vazio.", tipo: "email" },
+                { nome: "cnpj", mensagem: "O campo CNPJ está vazio.", tipo: "cnpj" },
                 { nome: "pais", mensagem: "O campo País está vazio." },
                 { nome: "estado", mensagem: "O campo Estado está vazio." },
-                { nome: "cep", mensagem: "O campo CEP está vazio." },
-                { nome: "descricao", mensagem: "O campo Descrição está vazio." }
+                { nome: "cep", mensagem: "O campo CEP está vazio.", tipo: "cep" },
+                { nome: "descricao", mensagem: "O campo Descrição está vazio.", tipo: "descricao" },
+                { nome: "tags", mensagem: "O campo tags está vazio.", tipo: "tags" }
             ];
 
             camposCadastro = camposCadastroEmpresa
@@ -121,14 +122,17 @@ if (botaoAdicionarCandidato) {
     botaoAdicionarCandidato.onclick = function () {
         if (frmCandidato) {
             const camposCadastroCandidato = [
-                { nome: "nome", mensagem: "O campo Nome está vazio." },
-                { nome: "email", mensagem: "O campo E-mail está vazio." },
-                { nome: "cpf", mensagem: "O campo CPF está vazio." },
-                { nome: "idade", mensagem: "O campo Idade está vazio." },
-                { nome: "estado", mensagem: "O campo Estado está vazio." },
-                { nome: "cep", mensagem: "O campo CEP está vazio." },
-                { nome: "descricao", mensagem: "O campo Descrição está vazio." },
-                { nome: "competencias", mensagem: "O campo Competencias está vazio." }
+                { nome: "nome", mensagem: "O campo Nome está vazio.", tipo: "nome"},
+                { nome: "email", mensagem: "O campo E-mail está vazio.", tipo: "email" },
+                { nome: "telefone", mensagem: "O campo Telefone está vazio.", tipo: "telefone"  },
+                { nome: "linkedin", mensagem: "O campo Linkedin está vazio.", tipo: "linkedin" },
+                { nome: "cpf", mensagem: "O campo CPF está vazio.", tipo: "cpf" },
+                { nome: "idade", mensagem: "O campo Idade está vazio.", tipo: "idade" },
+                { nome: "estado", mensagem: "O campo Estado está vazio.", },
+                { nome: "cep", mensagem: "O campo CEP está vazio.", tipo: "cep" },
+                { nome: "descricao", mensagem: "O campo Descrição está vazio.", tipo: "descricao" },
+                { nome: "competencias", mensagem: "O campo Competencias está vazio.", tipo: "competencias" },
+                { nome: "tags", mensagem: "O campo tags está vazio.", tipo: "tags" }
             ];
 
             camposCadastro = camposCadastroCandidato
@@ -150,9 +154,9 @@ if (botaoAdicionarVaga) {
     botaoAdicionarVaga.onclick = function () {
         if (frmVaga) {
             const camposCadastroVaga = [
-                { nome: "nome", mensagem: "O campo Nome está vazio." },
-                { nome: "descricao", mensagem: "O campo Descrição está vazio." },
-                { nome: "competencias", mensagem: "O campo Competencias está vazio." }
+                { nome: "nome", mensagem: "O campo Nome está vazio.", tipo: "nome" },
+                { nome: "descricao", mensagem: "O campo Descrição está vazio.", tipo: "descricao" },
+                { nome: "competencias", mensagem: "O campo Competencias está vazio.", tipo: "competencias" }
             ];
 
             camposCadastro = camposCadastroVaga

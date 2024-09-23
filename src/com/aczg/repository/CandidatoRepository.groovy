@@ -15,10 +15,10 @@ class CandidatoRepository {
     private List<Candidato> candidatosCadastrados = candidatosPreCadastrados.collect {it}
 
     List<Candidato> obterCandidatosCadastrados(){
-        candidatosCadastrados
+        return candidatosCadastrados
     }
 
     void cadastrarNovoCandidato(Candidato novoCandidato){
-        candidatosCadastrados.add(novoCandidato)
+        candidatosCadastrados << novoCandidato
     }
 }
