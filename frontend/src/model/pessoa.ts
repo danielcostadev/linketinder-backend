@@ -17,6 +17,8 @@ export abstract class Pessoa {
     protected _competencias: string[];
 
     protected _tags: string[];
+
+    protected _senha: string;
     
     protected _vagas?: Vaga[] | undefined;
 
@@ -30,6 +32,7 @@ export abstract class Pessoa {
         descricao: string,
         competencias: string[],
         tags: string[],
+        senha: string,
         vagas?: Vaga[]
     ) {
         this.id = id;
@@ -40,6 +43,7 @@ export abstract class Pessoa {
         this._descricao = descricao;
         this._competencias = competencias;
         this._tags = tags;
+        this._senha = senha;
         this._vagas = vagas;
     }
 
@@ -85,6 +89,12 @@ export abstract class Pessoa {
     }
     public set tags(value : string[]) {
         this._tags = value;
+    }
+    public get senha() : string {
+        return this._senha;
+    }
+    public set senha(value : string) {
+        this._senha = value;
     }
     public get vagas(): Vaga[] | undefined {
         return this._vagas;

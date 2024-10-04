@@ -2,6 +2,79 @@
 
 Linketinder é uma aplicação Groovy que permite a interação entre candidatos e empresas, e promete revolucionar o método como são realizadas as contratações de novos colaboradores, esta aplicação está sendo desenvolvida como um dos projetos do ACZG 6.0.
 
+## Modelagem de Dados e SQL
+
+<details><summary>Clique para ler a Documentação</summary>
+
+## Tecnologias Utilizadas
+
+- **POSTGRESQL**: Banco de dados utilizado para comportar os dados (Versão: 17.0)
+- **PGADMIN**: SGBD (Sistema de gerenciamento de Banco de dados do Postgres). Utilizei principalmente para elaboração do Diagrama de Entidade e Relacionamento, e para execução dos scripts SQL
+
+# Modelagem de Dados Linketinder
+
+A partir dessa estrutura e da implementação em código, o sistema será capaz de permitir que empresas publiquem vagas, candidatos possam curtir essas vagas e empresas possam curtir candidatos diretamente. Segue abaixo uma explicação de cada entidade e suas relações.
+
+## Entidades Principais
+**Candidatos (candidatos)**
+
+Armazena as informações pessoais dos candidatos, como nome, sobrenome, email, telefone, CPF, formação e uma breve descrição.
+Os candidatos podem curtir vagas específicas, mas não podem curtir empresas diretamente.
+
+**Empresas (empresas)**
+
+Armazena as informações das empresas, como nome, CNPJ, email, endereço e uma descrição.
+As empresas podem curtir diretamente os perfis de candidatos, demonstrando interesse.
+
+**Vagas (vagas)**
+
+Representa as oportunidades de emprego criadas pelas empresas, com detalhes como nome da vaga, descrição e local.
+Os candidatos podem curtir as vagas, e essa interação é armazenada na tabela de curtidas.
+
+## Relacionamentos
+
+**Candidatos - Competências (candidato_competencias)**
+
+Relação de muitos para muitos (N) entre candidatos e competências. Cada candidato pode ter várias competências, e uma competência pode ser compartilhada por vários candidatos.
+
+**Vagas - Competências (vaga_competencia)**
+
+Relação de muitos para muitos (N) entre vagas e competências. Cada vaga pode requerer várias competências, e uma competência pode ser exigida por várias vagas.
+
+**Curtidas de Candidatos em Vagas (curtida_candidato_vaga)**
+
+Relaciona candidatos e vagas em uma relação de muitos para muitos (N).
+Armazena as curtidas feitas por candidatos em vagas específicas, sem qualquer interação direta com as empresas.
+
+**Curtidas de Empresas em Candidatos (curtida_empresa_candidato)**
+
+Relaciona empresas e candidatos em uma relação de muitos para muitos (N).
+As empresas podem visualizar e curtir os candidatos diretamente, demonstrando interesse por perfis específicos.
+
+**Matches (matches)**
+
+Armazena os matches entre empresas e candidatos, quando ambos demonstram interesse.
+Um match ocorre quando um candidato curte uma vaga e a empresa responsável pela vaga curte o candidato.
+
+## Fluxo de Curtidas
+
+**Candidatos curtem vagas:** Os candidatos não interagem diretamente com as empresas. Eles podem curtir apenas as vagas publicadas pelas empresas.
+
+**Empresas curtem candidatos:** As empresas têm a capacidade de curtir diretamente o perfil dos candidatos, sem a necessidade de uma interação inicial por parte do candidato.
+
+## Minhas considerações
+
+Esta modelagem permite uma dinâmica de match semelhante a aplicativos de relacionamento (No caso especificamente o Tinder), onde tanto candidatos quanto empresas podem demonstrar interesse uns nos outros.
+
+A estrutura de curtidas mediada pelas vagas permite que candidatos interajam apenas com as oportunidades de emprego, enquanto as empresas podem interagir diretamente com os perfis de candidatos.
+</details>
+
+- **Link:** [Clique aqui para baixar o arquivo SQL](https://github.com/danielcostadev/Linketinder-Project/raw/master/linketinder-db.sql)
+
+## Diagrama do Banco de Dados
+
+![Diagrama de Entidade e Relacionamento do Linketinder](linketinder-DER.png)
+
 # Versão TypeScript (FrontEnd) versão atual 2.14.0
 
 ## Funcionalidades
