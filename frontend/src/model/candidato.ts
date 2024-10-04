@@ -31,7 +31,7 @@ export class Candidato extends Pessoa {
     ) {
         super(id, nome, email, estado, cep, descricao, competencias, tags, senha, vagas);
         this.id = id
-        this._sobrenome = sobrenomex'x
+        this._sobrenome = sobrenome
         this._cpf = cpf
         this._dataNascimento = dataNascimento
         this._formacao = formacao
