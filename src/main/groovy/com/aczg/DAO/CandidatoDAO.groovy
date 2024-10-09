@@ -87,7 +87,7 @@ class CandidatoDAO {
             ])
 
         } catch (Exception e) {
-        println "Erro ao cadastrar candidatos: ${e.message}"
+        println "Erro ao cadastrar candidato: ${e.message}"
         } finally {
         conexaoDAO.close()
         }

@@ -6,6 +6,10 @@ class EmpresaController implements validadorEntrada{
 
     EmpresaService empresaService
 
+    EmpresaController(EmpresaService empresaService){
+        this.empresaService = empresaService
+    }
+
     void adicionarEmpresa(){
 
         String nome = validarTexto("Digite o NOME da empresa: ")

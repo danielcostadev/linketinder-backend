@@ -54,7 +54,31 @@ class EmpresaDAO {
 
     void createEmpresa(Empresa empresa) {
 
+        Sql sql = conexaoDAO.getSql()
 
+        try {
+
+            String query = '''
+        INSERT INTO empresas (nome,email,estado,cnpj,pais,cep,descricao,senha)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        '''
+
+            sql.execute(query, [
+                    empresa.nome,
+                    empresa.email,
+                    empresa.estado,
+                    empresa.cnpj,
+                    empresa.pais,
+                    empresa.cep,
+                    empresa.descricao,
+                    empresa.senha
+            ])
+
+        } catch (Exception e) {
+            println "Erro ao cadastrar empresa: ${e.message}"
+        } finally {
+            conexaoDAO.close()
+        }
 
     }
 

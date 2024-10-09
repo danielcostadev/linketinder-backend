@@ -15,6 +15,10 @@ class CandidatoService {
 
     void cadastrarCandidato(String nome, String sobrenome, String email, String telefone, String linkedin, String cpf, Date dataNascimento, String estado, String cep, String descricao, String formacao, String senha){
 
+        /*if(candidatoDAO.existeCandidato(cpf)){
+            println("O candidato '${nome}' já existe.");
+        }*/
+
         Candidato candidato = new Candidato(nome,sobrenome,email,telefone,linkedin,cpf,dataNascimento,estado,cep,descricao,formacao,senha)
         candidatoDAO.createCandidato(candidato)
     }

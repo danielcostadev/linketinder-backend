@@ -13,9 +13,9 @@ class EmpresaService {
 
     void cadastrarEmpresa(String nome, String email, String estado, String cnpj, String pais, String cep, String descricao, String senha){
 
-        if(EmpresaDAO.existeEmpresa(nome)){
+        /*if(EmpresaDAO.existeEmpresa(cnpj)){
             println("A empresa '${nome}' já existe.");
-        }
+        }*/
 
         Empresa empresa = new Empresa(nome,email,estado,cnpj,pais,cep,descricao,senha)
         empresaDAO.createEmpresa(empresa)
