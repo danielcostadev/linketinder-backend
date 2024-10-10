@@ -42,7 +42,27 @@ class VagaDAO {
         return empresas
     }
 
-    void createVaga(Vaga vaga) {
+    Long insertVaga(String nomeVaga, String nomeDescricao, String nomeLocal, Long empresaId) {
+
+        Sql sql = conexaoDAO.getSql()
+
+        try {
+
+            String queryVagas = '''
+            INSERT INTO vagas (nome, descricao, local, empresa_id)
+            VALUES (?, ? , ?, ?)
+            RETURNING id
+        '''
+            Long vagaId = sql.firstRow(queryVagas, [nomeVaga, nomeDescricao, nomeLocal, empresaId]).id
+
+            return vagaId
+
+           // println "Vaga '${nomeVaga}' cadastrada com sucesso"
+
+        } catch (Exception e) {
+            println "Erro ao cadastrar vaga: ${e.message}"
+
+        }
 
 
 

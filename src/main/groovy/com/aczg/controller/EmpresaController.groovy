@@ -22,8 +22,13 @@ class EmpresaController implements validadorEntrada{
         String senha = validarTexto("Digite a SENHA da empresa: ")
 
         try {
-            empresaService.cadastrarEmpresa(nome,email,estado,cnpj,pais,cep,descricao,senha)
+            Long empresaId = empresaService.cadastrarEmpresa(nome,email,estado,cnpj,pais,cep,descricao,senha)
             println("Empresa '${nome}' cadastrada com sucesso!");
+
+            if(empresaId != null){
+                adicionarVaga(empresaId)
+            }
+
         } catch (Exception e) {
             println("Erro ao cadastrar empresa '${nome}': ${e.message}");
         }
@@ -31,5 +36,38 @@ class EmpresaController implements validadorEntrada{
     }
 
 
+    void adicionarVaga(Long empresaId){
 
+        String nome = validarTexto("Digite o TITULO da vaga: ")
+        String descricao = validarTexto("Digite a DESCRIÇÃO da vaga: ")
+        String local = validarTexto("Digite o LOCAL da vaga: ")
+
+        try {
+            Long vagaId = empresaService.cadastrarVaga(nome,descricao,local,empresaId)
+            println("Vaga '${nome}' cadastrada com sucesso!");
+
+            if (vagaId != null){
+                adicionarCompetencia(vagaId)
+            }
+
+        } catch (Exception e) {
+            println("Erro ao cadastrar vaga '${nome}': ${e.message}");
+        }
+    }
+
+
+    void adicionarCompetencia(Long vagaId){
+
+        String competencias = validarTexto("Digite as competências separadas por vírgula: ");
+        List<String> listaCompetencias = competencias.split(",\\s*");
+
+        try {
+            empresaService.cadastrarCompetenciaVaga(listaCompetencias, vagaId)
+            println("Competencia '${nome}' cadastrada com sucesso!");
+
+        } catch (Exception e) {
+
+        }
+
+    }
 }

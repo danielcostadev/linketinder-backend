@@ -39,33 +39,42 @@ class CompetenciaDAO {
         return candidatos
     }
 
-    void insertCompetencia(String nomeCompetencia, Long candidatoId) {
+    void insertCompetencia(String nomeCompetencia, Long candidatoId = null, Long vagaId = null) {
 
         Sql sql = conexaoDAO.getSql()
 
         try {
-
             String queryCompetencia = '''
-                INSERT INTO competencias (nome)
-                VALUES (?)
-                RETURNING id
-            '''
-
+            INSERT INTO competencias (nome)
+            VALUES (?)
+            RETURNING id
+        '''
             Long competenciaId = sql.firstRow(queryCompetencia, [nomeCompetencia]).id
 
-            String queryAssociacao = '''
+            if (candidatoId != null) {
+                String queryAssociacaoCandidato = '''
                 INSERT INTO candidato_competencias (candidato_id, competencia_id)
                 VALUES (?, ?)
             '''
+                sql.execute(queryAssociacaoCandidato, [candidatoId, competenciaId])
+                println "Competência '${nomeCompetencia}' cadastrada e associada ao candidato ID: ${candidatoId}"
 
-            sql.execute(queryAssociacao, [candidatoId, competenciaId])
-
-            println "Competência '${nomeCompetencia}' cadastrada e associada ao candidato ID: ${candidatoId}"
+            } else if (vagaId != null) {
+                String queryAssociacaoVaga = '''
+                INSERT INTO vaga_competencia (vaga_id, competencia_id)
+                VALUES (?, ?)
+            '''
+                sql.execute(queryAssociacaoVaga, [vagaId, competenciaId])
+                println "Competência '${nomeCompetencia}' cadastrada e associada à vaga ID: ${vagaId}"
+            } else {
+                throw new IllegalArgumentException("Nenhum candidatoId ou vagaId fornecido.")
+            }
 
         } catch (Exception e) {
-            println "Erro ao cadastrar competências: ${e.message}"
+            println "Erro ao cadastrar dados: ${e.message}"
         }
     }
+
 
 
     void updateCompetencia(Competencia competencia) {

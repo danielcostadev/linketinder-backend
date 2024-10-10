@@ -26,7 +26,7 @@ class CandidatoService {
 
         try {
             Candidato candidato = new Candidato(nome,sobrenome,email,telefone,linkedin,cpf,dataNascimento,estado,cep,descricao,formacao,senha)
-            Long candidatoId = candidatoDAO.inserirCandidato(candidato)
+            Long candidatoId = candidatoDAO.insertCandidato(candidato)
 
             competencias.each { nomeCompetencia ->
                 Competencia novaCompetencia = new Competencia(nomeCompetencia)

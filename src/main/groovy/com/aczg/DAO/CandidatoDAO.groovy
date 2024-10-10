@@ -60,7 +60,7 @@ class CandidatoDAO {
         return candidatos
     }
 
-    Long inserirCandidato(Candidato candidato) {
+    Long insertCandidato(Candidato candidato) {
 
         Sql sql = conexaoDAO.getSql()
 

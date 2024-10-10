@@ -1,10 +1,10 @@
 package com.aczg.controller
 
-import com.aczg.service.VagaService
+import com.aczg.service.EmpresaService
 
 class VagaController implements validadorEntrada{
 
-    VagaService vagaService
+    EmpresaService empresaService
 
     void adicionarVaga(){
 
@@ -13,7 +13,7 @@ class VagaController implements validadorEntrada{
         String local = validarTexto("Digite o LOCAL da vaga: ")
 
         try {
-            vagaService.cadastrarVaga(nome,descricao,local)
+            empresaService.cadastrarVaga(nome,descricao,local)
             println("Vaga '${nome}' cadastrada com sucesso!");
         } catch (Exception e) {
             println("Erro ao cadastrar vaga '${nome}': ${e.message}");
