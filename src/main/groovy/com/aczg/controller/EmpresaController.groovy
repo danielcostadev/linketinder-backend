@@ -1,5 +1,7 @@
 package com.aczg.controller
 
+import com.aczg.model.Empresa
+import com.aczg.model.Vaga
 import com.aczg.service.EmpresaService
 
 class EmpresaController implements validadorEntrada{
@@ -25,7 +27,7 @@ class EmpresaController implements validadorEntrada{
             Long empresaId = empresaService.cadastrarEmpresa(nome,email,estado,cnpj,pais,cep,descricao,senha)
             println("Empresa '${nome}' cadastrada com sucesso!");
 
-            if(empresaId != null){
+            if(empresaId){
                 adicionarVaga(empresaId)
             }
 
@@ -34,7 +36,6 @@ class EmpresaController implements validadorEntrada{
         }
 
     }
-
 
     void adicionarVaga(Long empresaId){
 
@@ -46,7 +47,7 @@ class EmpresaController implements validadorEntrada{
             Long vagaId = empresaService.cadastrarVaga(nome,descricao,local,empresaId)
             println("Vaga '${nome}' cadastrada com sucesso!");
 
-            if (vagaId != null){
+            if (vagaId){
                 adicionarCompetencia(vagaId)
             }
 
@@ -55,19 +56,31 @@ class EmpresaController implements validadorEntrada{
         }
     }
 
-
     void adicionarCompetencia(Long vagaId){
 
         String competencias = validarTexto("Digite as competências separadas por vírgula: ");
         List<String> listaCompetencias = competencias.split(",\\s*");
 
         try {
-            empresaService.cadastrarCompetenciaVaga(listaCompetencias, vagaId)
+            empresaService.cadastrarCompetencia(listaCompetencias, vagaId)
             println("Competencia '${nome}' cadastrada com sucesso!");
 
         } catch (Exception e) {
 
         }
+    }
 
+    void exibirEmpresa(){
+        List<Empresa> empresas = getEmpresaService().mostrarEmpresas()
+        empresas.each { empresa ->
+            println "Descrição: ${empresa.getDescricao()}, Estado: ${empresa.getEstado()}"
+        }
+    }
+
+    void exibirVaga(){
+        List<Vaga> vagas = getEmpresaService().mostrarVagas()
+        vagas.each { vaga ->
+            println "Nome: ${vaga.getNome()}, Descrição: ${vaga.getDescricao()}, Local: ${vaga.getLocal()}"
+        }
     }
 }

@@ -32,11 +32,9 @@ class CompetenciaDAO {
             }
         } catch (Exception e) {
             println "Erro ao buscar competencia: ${e.message}"
-        } finally {
-            conexaoDAO.close()
         }
 
-        return candidatos
+        return competencias
     }
 
     void insertCompetencia(String nomeCompetencia, Long candidatoId = null, Long vagaId = null) {
@@ -51,7 +49,7 @@ class CompetenciaDAO {
         '''
             Long competenciaId = sql.firstRow(queryCompetencia, [nomeCompetencia]).id
 
-            if (candidatoId != null) {
+            if (candidatoId) {
                 String queryAssociacaoCandidato = '''
                 INSERT INTO candidato_competencias (candidato_id, competencia_id)
                 VALUES (?, ?)
@@ -59,7 +57,7 @@ class CompetenciaDAO {
                 sql.execute(queryAssociacaoCandidato, [candidatoId, competenciaId])
                 println "Competência '${nomeCompetencia}' cadastrada e associada ao candidato ID: ${candidatoId}"
 
-            } else if (vagaId != null) {
+            } else if (vagaId) {
                 String queryAssociacaoVaga = '''
                 INSERT INTO vaga_competencia (vaga_id, competencia_id)
                 VALUES (?, ?)
@@ -74,8 +72,6 @@ class CompetenciaDAO {
             println "Erro ao cadastrar dados: ${e.message}"
         }
     }
-
-
 
     void updateCompetencia(Competencia competencia) {
 

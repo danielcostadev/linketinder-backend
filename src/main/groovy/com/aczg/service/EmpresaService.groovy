@@ -4,6 +4,7 @@ import com.aczg.DAO.CompetenciaDAO
 import com.aczg.DAO.ConexaoDAO
 import com.aczg.DAO.EmpresaDAO
 import com.aczg.DAO.VagaDAO
+import com.aczg.model.Candidato
 import com.aczg.model.Competencia
 import com.aczg.model.Empresa
 import com.aczg.model.Vaga
@@ -21,7 +22,6 @@ class EmpresaService {
         this.vagaDAO = vagaDAO
         this.competenciaDAO = competenciaDAO
     }
-
 
     Long cadastrarEmpresa(String nome, String email, String estado, String cnpj, String pais, String cep, String descricao, String senha){
 
@@ -56,8 +56,7 @@ class EmpresaService {
         }
     }
 
-
-    void cadastrarCompetenciaVaga(List<String> competencias, Long vagaId){
+    void cadastrarCompetencia(List<String> competencias, Long vagaId){
 
         try {
 
@@ -69,6 +68,14 @@ class EmpresaService {
         } catch (Exception e) {
             println "Erro ao cadastrar competências: ${e.message}"
         }
+    }
+
+    List<Empresa> mostrarEmpresas(){
+        return getEmpresaDAO().readEmpresas()
+    }
+
+    List<Vaga> mostrarVagas(){
+        return getVagaDAO().readVagas()
     }
 
 }

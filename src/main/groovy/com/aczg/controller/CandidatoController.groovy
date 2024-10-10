@@ -1,5 +1,7 @@
 package com.aczg.controller
 
+import com.aczg.model.Candidato
+import com.aczg.model.Competencia
 import com.aczg.service.CandidatoService
 
 import java.sql.Date
@@ -25,16 +27,48 @@ class CandidatoController implements validadorEntrada{
         String descricao = validarTexto("Digite uma breve descrição do candidato: ")
         String formacao = validarTexto("Digite a FORMAÇÃO do candidato: ")
         String senha = validarTexto("Digite a SENHA do candidato: ")
-        String competencias = validarTexto("Digite as competências separadas por vírgula: ");
-        List<String> listaCompetencias = competencias.split(",\\s*");
 
         try {
-            candidatoService.cadastrarCandidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha, listaCompetencias)
+            Long candidatoId = candidatoService.cadastrarCandidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha)
             println("Candidato '${nome}' cadastrado com sucesso!");
+
+            if (candidatoId){
+                adicionarCompetencia(candidatoId)
+            }
 
         } catch (Exception e) {
             println("Erro ao cadastrar dados': ${e.message}");
         }
     }
+
+    void adicionarCompetencia(Long candidatoId){
+
+        String competencias = validarTexto("Digite as competências separadas por vírgula: ");
+        List<String> listaCompetencias = competencias.split(",\\s*");
+
+        try {
+            candidatoService.cadastrarCompetencia(listaCompetencias, candidatoId)
+            println("Competencia '${nome}' cadastrada com sucesso!");
+
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    void exibirCandidado(){
+        List<Candidato> candidatos = getCandidatoService().mostrarCandidados()
+        candidatos.each { candidato ->
+            println "Formação ${candidato.getFormacao()}, Descrição: ${candidato.getDescricao()}"
+        }
+    }
+
+    void exibirCompetencias(){
+        List<Competencia> competencias = getCandidatoService().mostrarCompetencias()
+        competencias.each { competencia ->
+            println "Nome ${competencia.getNome()}"
+        }
+    }
+
 
 }

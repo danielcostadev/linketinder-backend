@@ -15,7 +15,7 @@ class VagaDAO {
         try {
 
             String query = '''
-                SELECT nome, descricao, local
+                SELECT nome, descricao, local, empresa_id
                 FROM vagas
             '''
 
@@ -24,22 +24,22 @@ class VagaDAO {
                 String nome = row['nome']
                 String descricao = row['descricao']
                 String local = row['local']
+                Long empresaId = row['empresa_id']
 
                 Vaga vaga = new Vaga(
                         nome,
                         descricao,
-                        local
+                        local,
+                        empresaId
                 )
 
                 vagas << vaga
             }
         } catch (Exception e) {
             println "Erro ao buscar vagas: ${e.message}"
-        } finally {
-            conexaoDAO.close()
         }
 
-        return empresas
+        return vagas
     }
 
     Long insertVaga(String nomeVaga, String nomeDescricao, String nomeLocal, Long empresaId) {
@@ -61,11 +61,8 @@ class VagaDAO {
 
         } catch (Exception e) {
             println "Erro ao cadastrar vaga: ${e.message}"
-
+            return null
         }
-
-
-
     }
 
     void updateVaga(Vaga vaga) {

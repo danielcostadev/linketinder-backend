@@ -30,26 +30,39 @@ class Menu implements validadorEntrada{
         while (menuAtivo){
             print """
             ================== MENU PRINCIPAL ==================
-            1 - Cadastrar Empresa
-            2 - Cadastrar Candidato
-            3 - Listar Empresas
-            4 - Listar Candidatos
-            5 - Encerrar Aplicação
+            1  - Cadastrar Empresa
+            2  - Cadastrar Candidato
+            3  - Mostrar Empresas
+            4  - Mostrar Candidatos
+            5  - Mostrar Vagas
+            6  - Mostrar Competências
+            7  - Editar Empresa
+            8  - Editar Candidato
+            9  - Deletar Empresa
+            10 - Deletar Candidato
+            11 - Deletar Vaga
+            12 - Deletar Competência
+            0 - Encerrar Aplicação
             ====================================================            
             """.stripIndent()
 
             try{
-                String opcaoSelecionada = validarTexto("Digite um número entre 1 e 5:")
+                String opcaoSelecionada = validarTexto("Digite um número entre 1 e 12: ")
 
                 switch (opcaoSelecionada){
 
-                    case '1':
-                        cadastrarEmpresa()
-                        break
-                    case '2':
-                        cadastrarCandidato()
-                        break
-
+                    case '1': cadastrarEmpresa(); break
+                    case '2': cadastrarCandidato(); break
+                    case '3': mostrarEmpresas(); break
+                    case '4': mostrarCandidatos(); break
+                    case '5': mostrarVagas(); break
+                    case '6': mostrarCompetencias(); break
+                    case '7': editarEmpresa(); break
+                    case '8': editarCandidato(); break
+                    case '9': deletarEmpresa(); break
+                    case '10': deletarCandidato(); break
+                    case '11': deletarVaga(); break
+                    case '12': deletarCompetencia(); break
                 }
 
             } catch (Exception e) {
@@ -59,10 +72,22 @@ class Menu implements validadorEntrada{
     }
 
     private void cadastrarEmpresa(){
-        empresaController.adicionarEmpresa()
+        getEmpresaController().adicionarEmpresa()
     }
     private void cadastrarCandidato(){
-        candidatoController.adicionarCandidato()
+        getCandidatoController().adicionarCandidato()
+    }
+    private void mostrarEmpresas(){
+        getEmpresaController().exibirEmpresa()
+    }
+    private void mostrarCandidatos(){
+        getCandidatoController().exibirCandidado()
+    }
+    private void mostrarVagas(){
+        getEmpresaController().exibirVaga()
+    }
+    private void mostrarCompetencias(){
+        getCandidatoController().exibirCompetencias()
     }
 
 

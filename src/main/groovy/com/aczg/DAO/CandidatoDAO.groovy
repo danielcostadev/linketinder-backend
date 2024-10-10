@@ -15,7 +15,7 @@ class CandidatoDAO {
         try {
 
             String query = '''
-                SELECT nome, sobrenome, email, telefone, linkedin, cpf, data_nascimento, estado, cep, descricao, formacao
+                SELECT nome, sobrenome, email, telefone, linkedin, cpf, data_nascimento, estado, cep, descricao, formacao, senha
                 FROM candidatos
             '''
 
@@ -27,12 +27,12 @@ class CandidatoDAO {
                 String telefone = row['telefone']
                 String linkedin = row['linkedin']
                 String cpf = row['cpf']
-                String dataNascimento = row['data_nascimento'] as Date
+                Date dataNascimento = row['data_nascimento']
                 String estado = row['estado']
                 String cep = row['cep']
                 String descricao = row['descricao']
                 String formacao = row['formacao']
-                String senha = null
+                String senha = row['senha']
 
                 Candidato candidato = new Candidato(
                         nome,
@@ -53,8 +53,6 @@ class CandidatoDAO {
             }
         } catch (Exception e) {
             println "Erro ao buscar candidatos: ${e.message}"
-        } finally {
-            conexaoDAO.close()
         }
 
         return candidatos

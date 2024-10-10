@@ -45,8 +45,6 @@ class EmpresaDAO {
             }
         } catch (Exception e) {
             println "Erro ao buscar empresas: ${e.message}"
-        } finally {
-            conexaoDAO.close()
         }
 
         return empresas
@@ -79,10 +77,8 @@ class EmpresaDAO {
 
         } catch (Exception e) {
             println "Erro ao cadastrar empresa: ${e.message}"
-        } finally {
-            conexaoDAO.close()
+            return null
         }
-
     }
 
     void updateEmpresa(Empresa empresa) {
