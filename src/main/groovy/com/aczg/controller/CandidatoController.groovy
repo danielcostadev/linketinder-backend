@@ -25,12 +25,15 @@ class CandidatoController implements validadorEntrada{
         String descricao = validarTexto("Digite uma breve descrição do candidato: ")
         String formacao = validarTexto("Digite a FORMAÇÃO do candidato: ")
         String senha = validarTexto("Digite a SENHA do candidato: ")
+        String competencias = validarTexto("Digite as competências separadas por vírgula: ");
+        List<String> listaCompetencias = competencias.split(",\\s*");
 
         try {
-            candidatoService.cadastrarCandidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha)
+            candidatoService.cadastrarCandidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha, listaCompetencias)
             println("Candidato '${nome}' cadastrado com sucesso!");
+
         } catch (Exception e) {
-            println("Erro ao cadastrar candidato '${nome}': ${e.message}");
+            println("Erro ao cadastrar dados': ${e.message}");
         }
     }
 

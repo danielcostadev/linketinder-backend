@@ -60,18 +60,19 @@ class CandidatoDAO {
         return candidatos
     }
 
-    void createCandidato(Candidato candidato) {
+    Long inserirCandidato(Candidato candidato) {
 
         Sql sql = conexaoDAO.getSql()
 
         try {
 
-            String query = '''
+            String queryCandidato = '''
         INSERT INTO candidatos (nome, sobrenome, data_nascimento, email, telefone, linkedin, cpf, estado, cep, descricao, formacao, senha)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        RETURNING id
         '''
 
-            sql.execute(query, [
+            Long candidatoId = sql.firstRow(queryCandidato, [
                     candidato.nome,
                     candidato.sobrenome,
                     candidato.dataNascimento,
@@ -84,12 +85,12 @@ class CandidatoDAO {
                     candidato.descricao,
                     candidato.formacao,
                     candidato.senha
-            ])
+            ]).id
+
+            return candidatoId
 
         } catch (Exception e) {
         println "Erro ao cadastrar candidato: ${e.message}"
-        } finally {
-        conexaoDAO.close()
         }
 
     }

@@ -5,6 +5,8 @@ import groovy.sql.Sql
 
 class CompetenciaDAO {
 
+    private ConexaoDAO conexaoDAO = new ConexaoDAO()
+
     List<Competencia> readCompetencias() {
         List<Competencia> competencias = []
 
@@ -37,11 +39,34 @@ class CompetenciaDAO {
         return candidatos
     }
 
-    void createCompetencia(Competencia competencia) {
+    void insertCompetencia(String nomeCompetencia, Long candidatoId) {
 
+        Sql sql = conexaoDAO.getSql()
 
+        try {
 
+            String queryCompetencia = '''
+                INSERT INTO competencias (nome)
+                VALUES (?)
+                RETURNING id
+            '''
+
+            Long competenciaId = sql.firstRow(queryCompetencia, [nomeCompetencia]).id
+
+            String queryAssociacao = '''
+                INSERT INTO candidato_competencias (candidato_id, competencia_id)
+                VALUES (?, ?)
+            '''
+
+            sql.execute(queryAssociacao, [candidatoId, competenciaId])
+
+            println "Competência '${nomeCompetencia}' cadastrada e associada ao candidato ID: ${candidatoId}"
+
+        } catch (Exception e) {
+            println "Erro ao cadastrar competências: ${e.message}"
+        }
     }
+
 
     void updateCompetencia(Competencia competencia) {
 

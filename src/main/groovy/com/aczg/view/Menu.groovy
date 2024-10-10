@@ -1,8 +1,10 @@
 package com.aczg.view
 
 import com.aczg.DAO.CandidatoDAO
+import com.aczg.DAO.CompetenciaDAO
 import com.aczg.DAO.EmpresaDAO
 import com.aczg.controller.CandidatoController
+
 import com.aczg.controller.EmpresaController
 import com.aczg.controller.validadorEntrada
 import com.aczg.service.CandidatoService
@@ -11,11 +13,13 @@ import com.aczg.service.EmpresaService
 class Menu implements validadorEntrada{
 
     CandidatoDAO candidatoDAO = new CandidatoDAO()
-    CandidatoService candidatoService = new CandidatoService(candidatoDAO)
-    CandidatoController candidatoController = new CandidatoController(candidatoService)
-
+    CompetenciaDAO competenciaDAO = new CompetenciaDAO()
     EmpresaDAO empresaDAO = new EmpresaDAO()
+
+    CandidatoService candidatoService = new CandidatoService(candidatoDAO, competenciaDAO)
     EmpresaService empresaService = new EmpresaService(empresaDAO)
+
+    CandidatoController candidatoController = new CandidatoController(candidatoService)
     EmpresaController empresaController = new EmpresaController(empresaService)
 
     Boolean menuAtivo = true
