@@ -5,6 +5,7 @@ import com.aczg.DAO.CompetenciaDAO
 import com.aczg.DAO.ConexaoDAO
 import com.aczg.model.Candidato
 import com.aczg.model.Competencia
+import com.aczg.model.Empresa
 import groovy.sql.Sql
 
 import java.sql.Date
@@ -62,6 +63,11 @@ class CandidatoService {
         return getCompetenciaDAO().readCompetencias()
 
     }
+
+    void atualizarCandidato(Candidato candidato){
+        getCandidatoDAO().updateCandidato(candidato)
+    }
+
 
 }
 

@@ -2,6 +2,7 @@ package com.aczg.model
 
 abstract class Pessoa {
 
+    Long id
     String nome
     String email
     String estado
@@ -10,6 +11,7 @@ abstract class Pessoa {
     String senha
 
     Pessoa(String nome, String email, String estado, String cep, String descricao, String senha) {
+        this.id = id
         this.nome = nome
         this.email = email
         this.estado = estado

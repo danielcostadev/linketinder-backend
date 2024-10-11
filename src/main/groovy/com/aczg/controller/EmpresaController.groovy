@@ -15,7 +15,7 @@ class EmpresaController implements validadorEntrada{
     void adicionarEmpresa(){
 
         String nome = validarTexto("Digite o NOME da empresa: ")
-        String email = validarTexto("Digite o EMAIL pessoal da empresa: ")
+        String email = validarTexto("Digite o EMAIL da empresa: ")
         String estado = validarTexto("Digite o estado da empresa: ")
         String cnpj = validarTexto("Digite o CNPJ da empresa: ")
         String pais = validarTexto("Digite o PAÍS da empresa: ")
@@ -24,7 +24,7 @@ class EmpresaController implements validadorEntrada{
         String senha = validarTexto("Digite a SENHA da empresa: ")
 
         try {
-            Long empresaId = empresaService.cadastrarEmpresa(nome,email,estado,cnpj,pais,cep,descricao,senha)
+            Long empresaId = getEmpresaService().cadastrarEmpresa(nome,email,estado,cnpj,pais,cep,descricao,senha)
             println("Empresa '${nome}' cadastrada com sucesso!");
 
             if(empresaId){
@@ -63,10 +63,10 @@ class EmpresaController implements validadorEntrada{
 
         try {
             empresaService.cadastrarCompetencia(listaCompetencias, vagaId)
-            println("Competencia '${nome}' cadastrada com sucesso!");
+            println("Competencia cadastrada com sucesso!");
 
         } catch (Exception e) {
-
+            println("Erro ao cadastrar dados': ${e.message}");
         }
     }
 
@@ -81,6 +81,42 @@ class EmpresaController implements validadorEntrada{
         List<Vaga> vagas = getEmpresaService().mostrarVagas()
         vagas.each { vaga ->
             println "Nome: ${vaga.getNome()}, Descrição: ${vaga.getDescricao()}, Local: ${vaga.getLocal()}"
+        }
+    }
+
+    void atualizarEmpresa() {
+        Long empresaId = validarInteiro("Digite o ID da empresa que deseja editar: ")
+
+        try {
+            if (getEmpresaService().getEmpresaDAO().empresaExiste(empresaId)) {
+                editarEmpresa(empresaId)
+            } else {
+                println "Erro: A empresa com ID '${empresaId}' não existe."
+            }
+        } catch (Exception e) {
+            println "Erro: ${e.message}"
+        }
+    }
+
+    private void editarEmpresa(Long empresaId){
+
+        String newNome = validarTexto("Digite o NOME da empresa: ")
+        String newEmail = validarTexto("Digite o EMAIL da empresa: ")
+        String newEstado = validarTexto("Digite o estado da empresa: ")
+        String newCnpj = validarTexto("Digite o CNPJ da empresa: ")
+        String newPais = validarTexto("Digite o PAÍS da empresa: ")
+        String newCep = validarTexto("Digite o CEP da empresa: ")
+        String newDescricao = validarTexto("Digite uma breve descrição da empresa: ")
+        String newSenha = validarTexto("Digite a SENHA da empresa: ")
+
+        Empresa empresaAtualizada = new Empresa(newNome,newEmail,newEstado,newCnpj,newPais,newCep,newDescricao,newSenha)
+        empresaAtualizada.id = empresaId
+
+        try {
+            getEmpresaService().atualizarEmpresa(empresaAtualizada)
+            println "empresa atualizada com sucesso!"
+        } catch (Exception e) {
+            println "Erro ao atualizar empresa: ${e.message}"
         }
     }
 }

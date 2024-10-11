@@ -89,7 +89,12 @@ class Menu implements validadorEntrada{
     private void mostrarCompetencias(){
         getCandidatoController().exibirCompetencias()
     }
-
+    private void editarEmpresa(){
+        getEmpresaController().atualizarEmpresa()
+    }
+    private void editarCandidato(){
+        getCandidatoController().atualizarCandidato()
+    }
 
 
 }

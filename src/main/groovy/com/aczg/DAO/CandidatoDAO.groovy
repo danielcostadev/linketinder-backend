@@ -7,10 +7,10 @@ class CandidatoDAO {
 
     private ConexaoDAO conexaoDAO = new ConexaoDAO()
 
+    Sql sql = conexaoDAO.getSql()
+
     List<Candidato> readCandidados() {
         List<Candidato> candidatos = []
-
-        Sql sql = conexaoDAO.getSql()
 
         try {
 
@@ -60,8 +60,6 @@ class CandidatoDAO {
 
     Long insertCandidato(Candidato candidato) {
 
-        Sql sql = conexaoDAO.getSql()
-
         try {
 
             String queryCandidato = '''
@@ -95,8 +93,32 @@ class CandidatoDAO {
 
     void updateCandidato(Candidato candidato) {
 
+        String queryUpdateCandidato = '''
+        UPDATE candidatos
+        SET nome = ?, sobrenome = ?, email = ?, telefone = ?, linkedin = ?, cpf = ?, data_nascimento = ?, estado = ?,
+        cep = ?, descricao = ?, formacao = ?, senha = ?
+        WHERE id = ?
+        '''
 
-
+        try {
+            sql.execute(queryUpdateCandidato, [
+                    candidato.nome,
+                    candidato.sobrenome,
+                    candidato.email,
+                    candidato.telefone,
+                    candidato.linkedin,
+                    candidato.cpf,
+                    candidato.dataNascimento,
+                    candidato.estado,
+                    candidato.cep,
+                    candidato.descricao,
+                    candidato.formacao,
+                    candidato.senha,
+                    candidato.id
+            ])
+        } catch (Exception e) {
+            println "Erro ao atualizar candidato: ${e.message}"
+        }
     }
 
     void deleteCandidato(Candidato candidato) {
@@ -105,11 +127,10 @@ class CandidatoDAO {
 
     }
 
-    boolean existeCandidato(String nome) {
-
-        // fazer um select no cpf para verificar se já existe
-
-        return true
+    boolean candidatoExiste(Long candidatoId) {
+        String query = 'SELECT COUNT(*) FROM candidatos WHERE id = ?'
+        def count = sql.firstRow(query, [candidatoId])?.count ?: 0
+        return count > 0
     }
 
 

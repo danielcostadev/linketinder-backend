@@ -7,10 +7,10 @@ class EmpresaDAO {
 
     private ConexaoDAO conexaoDAO = new ConexaoDAO()
 
+    Sql sql = conexaoDAO.getSql()
+
     List<Empresa> readEmpresas() {
         List<Empresa> empresas = []
-
-        Sql sql = conexaoDAO.getSql()
 
         try {
 
@@ -52,8 +52,6 @@ class EmpresaDAO {
 
     Long insertEmpresa(Empresa empresa) {
 
-        Sql sql = conexaoDAO.getSql()
-
         try {
 
             String queryEmpresa = '''
@@ -83,8 +81,27 @@ class EmpresaDAO {
 
     void updateEmpresa(Empresa empresa) {
 
+        String queryUpdateEmpresa = '''
+        UPDATE empresas
+        SET nome = ?, email = ?, estado = ?, cnpj = ?, pais = ?, cep = ?, descricao = ?, senha = ?
+        WHERE id = ?
+        '''
 
-
+        try {
+            sql.execute(queryUpdateEmpresa, [
+                    empresa.nome,
+                    empresa.email,
+                    empresa.estado,
+                    empresa.cnpj,
+                    empresa.pais,
+                    empresa.cep,
+                    empresa.descricao,
+                    empresa.senha,
+                    empresa.id
+            ])
+        } catch (Exception e) {
+            println "Erro ao atualizar empresa: ${e.message}"
+        }
     }
 
     void deleteEmpresa(Empresa empresa) {
@@ -93,11 +110,9 @@ class EmpresaDAO {
 
     }
 
-    boolean existeEmpresa(String nome) {
-
-        // fazer um select no cnpj para verificar se já existe
-
-        return true
+    boolean empresaExiste(Long empresaId) {
+        String query = 'SELECT COUNT(*) FROM empresas WHERE id = ?'
+        def count = sql.firstRow(query, [empresaId])?.count ?: 0
+        return count > 0
     }
-
 }

@@ -41,7 +41,6 @@ class EmpresaService {
         }
     }
 
-
     Long cadastrarVaga(String nome, String descricao, String local, Long empresaId) {
 
         try {
@@ -76,6 +75,10 @@ class EmpresaService {
 
     List<Vaga> mostrarVagas(){
         return getVagaDAO().readVagas()
+    }
+
+    void atualizarEmpresa(Empresa empresa){
+        getEmpresaDAO().updateEmpresa(empresa)
     }
 
 }
