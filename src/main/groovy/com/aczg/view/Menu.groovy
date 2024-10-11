@@ -26,32 +26,34 @@ class Menu implements validadorEntrada{
 
     Boolean menuAtivo = true
 
+    private void exibirMenu(String tipo, List<String> opcoes, Closure<?> acoes, Closure<?> onVoltar) {
+        while (menuAtivo) {
+            print "================== MENU ${tipo.toUpperCase()} ==================\n"
+            print "${opcoes.join('\n')}"
+            print "\n0  - Voltar\n"
+            52.times { print "="}
+            println("")
+
+            try {
+                String opcao = validarTexto("Digite o número correspondente a opção desejada: ")
+
+                switch (opcao) {
+                    case '0': onVoltar.call(); break
+                    default: acoes.call(opcao); break
+                }
+            } catch (Exception e) {
+                println "Erro ao ler a entrada: ${e.message}"
+            }
+        }
+    }
+
     void menuPrincipal(){
         while (menuAtivo){
-            /*print """
-            ================== MENU PRINCIPAL ==================
-            1  -
-            2  -
-            3  -
-            4  -
-            5  - Mostrar Vagas
-            6  - Mostrar Competências
-            7  -
-            8  -
-            9  -
-            10 -
-            11 - Deletar Vaga
-            12 - Deletar Competência
-            0 - Encerrar Aplicação
-            ====================================================            
-            """.stripIndent()*/
-
             print """
             ================== MENU PRINCIPAL ==================
             1  - Gerenciar Empresas
             2  - Gerenciar Candidatos
-
-            0 - Encerrar Aplicação
+            0  - Encerrar Aplicação
             ====================================================            
             """.stripIndent()
 
@@ -74,154 +76,110 @@ class Menu implements validadorEntrada{
     }
 
     private void menuGerenciarEmpresas(){
-        while (menuAtivo){
-            print """
-            =================== MENU EMPRESA ===================
-            1  - Cadastrar Empresa
-            2  - Listar Empresas
-            3  - Editar Empresa
-            4  - Remover Empresa
-            5  - Gerenciar Vagas
+        List<String> opcoes = [
+                "1  - Cadastrar Empresa",
+                "2  - Listar Empresas",
+                "3  - Editar Empresa",
+                "4  - Remover Empresa",
+                "5  - Gerenciar Vagas"
+        ]
 
-            0 - Voltar
-            ====================================================            
-            """.stripIndent()
-
-            try {
-                String menuEmpresaOpcao = validarTexto("Digite o número correspondente a opção desejada: ")
-
-                switch (menuEmpresaOpcao){
-
-                    case '1': cadastrarEmpresa(); break
-                    case '2': mostrarEmpresas(); break
-                    case '3': editarEmpresa(); break
-                    case '4': deletarEmpresa(); break
-                    case '5': menuGerenciarVagas(); break
-                    case '0': menuPrincipal(); break
-                    default: println "Entrada inválida"; break
-
-                }
-            } catch (Exception e) {
-                println "Erro ao ler a entrada: ${e.message}"
+        exibirMenu("Empresa", opcoes, { String opcao ->
+            switch (opcao) {
+                case '1': cadastrarEmpresa(); break
+                case '2': listarEmpresas(); break
+                case '3': editarEmpresa(); break
+                case '4': deletarEmpresa(); break
+                case '5': menuGerenciarVagas(); break
+                default: println "Entrada inválida"; break
             }
-        }
+        }, { menuPrincipal() })
     }
     private void menuGerenciarCandidatos(){
-        while (menuAtivo){
-            print """
-            ================== MENU CANDIDATO ==================
-            1  - Cadastrar Candidato
-            2  - Listar Candidatos
-            3  - Editar Candidato
-            4  - Remover Candidato
-            5  - Gerenciar Competências
+        List<String> opcoes = [
+                "1  - Cadastrar Candidato",
+                "2  - Listar Candidatos",
+                "3  - Editar Candidato",
+                "4  - Remover Candidato",
+                "5  - Gerenciar Competências"
+        ]
 
-            0 - Voltar
-            ====================================================            
-            """.stripIndent()
-
-            try {
-                String menuCandidatoOpcao = validarTexto("Digite o número correspondente a opção desejada: ")
-
-                switch (menuCandidatoOpcao){
-
-                    case '1': cadastrarCandidato(); break
-                    case '2': mostrarCandidatos(); break
-                    case '3': editarCandidato(); break
-                    case '4': deletarCandidato(); break
-                    case '5': menuGerenciarCompetencias(); break
-                    case '0': menuPrincipal(); break
-                    default: println "Entrada inválida"; break
-
-                }
-            } catch (Exception e) {
-                println "Erro ao ler a entrada: ${e.message}"
+        exibirMenu("Candidato", opcoes, { String opcao ->
+            switch (opcao) {
+                case '1': cadastrarCandidato(); break
+                case '2': listarCandidatos(); break
+                case '3': editarCandidato(); break
+                case '4': deletarCandidato(); break
+                case '5': menuGerenciarCompetencias(); break
+                default: println "Entrada inválida"; break
             }
-        }
+        }, { menuPrincipal() })
     }
     private void menuGerenciarVagas(){
-        while (menuAtivo){
-            print """
-            ================== MENU VAGA ==================
-            1  - Listar Vagas
-            2  - Editar Vaga
-            3  - Remover Vaga
+        List<String> opcoes = [
+                "1  - Listar Vagas",
+                "2  - Editar Vaga",
+                "2  - Remover Vaga"
+        ]
 
-            0 - Voltar
-            ====================================================            
-            """.stripIndent()
-
-            try {
-                String menuVagaOpcao = validarTexto("Digite o número correspondente a opção desejada: ")
-
-                switch (menuVagaOpcao){
-
-                    case '1': mostrarVagas(); break
-                    case '2': editarVaga(); break
-                    case '3': deletarVaga(); break
-                    case '0': menuGerenciarEmpresas(); break
-                    default: println "Entrada inválida"; break
-
-                }
-            } catch (Exception e) {
-                println "Erro ao ler a entrada: ${e.message}"
+        exibirMenu("Vaga", opcoes, { String opcao ->
+            switch (opcao) {
+                case '1': listarVagas(); break
+                case '2': editarVaga(); break
+                case '3': deletarVaga(); break
+                default: println "Entrada inválida"; break
             }
-        }
+        }, { menuGerenciarEmpresas() })
     }
     private void menuGerenciarCompetencias(){
-        while (menuAtivo){
-            print """
-            ================== MENU VAGA ==================
-            1  - Listar Competencias
-            2  - Editar Competencia
-            3  - Remover Competencia
+        List<String> opcoes = [
+                "1  - Listar Competências",
+                "2  - Editar Competência",
+                "2  - Remover Competência"
+        ]
 
-            0 - Voltar
-            ====================================================            
-            """.stripIndent()
-
-            try {
-                String menuCompetenciasOpcao = validarTexto("Digite o número correspondente a opção desejada: ")
-
-                switch (menuCompetenciasOpcao){
-
-                    case '1': mostrarCompetencias(); break
-                    case '2': editarCompetencia(); break
-                    case '3': deletarCompetencia(); break
-                    case '0': menuGerenciarCandidatos(); break
-                    default: println "Entrada inválida"; break
-
-                }
-            } catch (Exception e) {
-                println "Erro ao ler a entrada: ${e.message}"
+        exibirMenu("Competência", opcoes, { String opcao ->
+            switch (opcao) {
+                case '1': listarCompetencias(); break
+                case '2': editarCompetencia(); break
+                case '3': deletarCompetencia(); break
+                default: println "Entrada inválida"; break
             }
-        }
+        }, { menuGerenciarCandidatos() })
     }
+
 
     private void cadastrarEmpresa(){
         getEmpresaController().adicionarEmpresa()
     }
-    private void cadastrarCandidato(){
-        getCandidatoController().adicionarCandidato()
-    }
-    private void mostrarEmpresas(){
+    private void listarEmpresas(){
         getEmpresaController().exibirEmpresa()
-    }
-    private void mostrarCandidatos(){
-        getCandidatoController().exibirCandidado()
-    }
-    private void mostrarVagas(){
-        getEmpresaController().exibirVaga()
-    }
-    private void mostrarCompetencias(){
-        getCandidatoController().exibirCompetencias()
     }
     private void editarEmpresa(){
         getEmpresaController().atualizarEmpresa()
     }
+
+    private void cadastrarCandidato(){
+        getCandidatoController().adicionarCandidato()
+    }
+    private void listarCandidatos(){
+        getCandidatoController().exibirCandidado()
+    }
     private void editarCandidato(){
         getCandidatoController().atualizarCandidato()
     }
+
+    private void listarVagas(){
+        getEmpresaController().exibirVaga()
+    }
+    private void editarVaga(){getEmpresaController().atualizarVaga()}
+
+    private void listarCompetencias(){
+        getCandidatoController().exibirCompetencias()
+    }
+    private void editarCompetencia(){getEmpresaController().atualizarCompetencia()}
+
+
 
     private void encerrarAplicacao(){
         println "Encerrando aplicação..."

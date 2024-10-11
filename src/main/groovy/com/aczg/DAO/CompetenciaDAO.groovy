@@ -7,10 +7,10 @@ class CompetenciaDAO {
 
     private ConexaoDAO conexaoDAO = new ConexaoDAO()
 
+    Sql sql = conexaoDAO.getSql()
+
     List<Competencia> readCompetencias() {
         List<Competencia> competencias = []
-
-        Sql sql = conexaoDAO.getSql()
 
         try {
 
@@ -38,8 +38,6 @@ class CompetenciaDAO {
     }
 
     void insertCompetencia(String nomeCompetencia, Long candidatoId = null, Long vagaId = null) {
-
-        Sql sql = conexaoDAO.getSql()
 
         try {
             String queryCompetencia = '''
@@ -75,7 +73,20 @@ class CompetenciaDAO {
 
     void updateCompetencia(Competencia competencia) {
 
+        String queryUpdateCompetencia = '''
+        UPDATE competencias
+        SET nome = ?
+        WHERE id = ?
+        '''
 
+        try {
+            sql.execute(queryUpdateCompetencia, [
+                    competencia.nome,
+                    competencia.id
+            ])
+        } catch (Exception e) {
+            println "Erro ao atualizar competência: ${e.message}"
+        }
 
     }
 
@@ -85,10 +96,10 @@ class CompetenciaDAO {
 
     }
 
-    boolean existeCompetencia(String nome) {
-
-
-        return true
+    boolean competenciaExiste(Long competenciaId) {
+        String query = 'SELECT COUNT(*) FROM competencias WHERE id = ?'
+        def count = sql.firstRow(query, [competenciaId])?.count ?: 0
+        return count > 0
     }
 
 

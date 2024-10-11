@@ -7,15 +7,15 @@ class VagaDAO {
 
     private ConexaoDAO conexaoDAO = new ConexaoDAO()
 
+    Sql sql = conexaoDAO.getSql()
+
     List<Vaga> readVagas() {
         List<Vaga> vagas = []
-
-        Sql sql = conexaoDAO.getSql()
 
         try {
 
             String query = '''
-                SELECT nome, descricao, local, empresa_id
+                SELECT nome, descricao, local
                 FROM vagas
             '''
 
@@ -24,13 +24,11 @@ class VagaDAO {
                 String nome = row['nome']
                 String descricao = row['descricao']
                 String local = row['local']
-                Long empresaId = row['empresa_id']
 
                 Vaga vaga = new Vaga(
                         nome,
                         descricao,
-                        local,
-                        empresaId
+                        local
                 )
 
                 vagas << vaga
@@ -43,8 +41,6 @@ class VagaDAO {
     }
 
     Long insertVaga(String nomeVaga, String nomeDescricao, String nomeLocal, Long empresaId) {
-
-        Sql sql = conexaoDAO.getSql()
 
         try {
 

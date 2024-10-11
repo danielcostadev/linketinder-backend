@@ -23,6 +23,7 @@ class EmpresaService {
         this.competenciaDAO = competenciaDAO
     }
 
+
     Long cadastrarEmpresa(String nome, String email, String estado, String cnpj, String pais, String cep, String descricao, String senha){
 
         Sql sql = conexaoDAO.getSql()
@@ -44,7 +45,7 @@ class EmpresaService {
     Long cadastrarVaga(String nome, String descricao, String local, Long empresaId) {
 
         try {
-            Vaga vaga = new Vaga(nome, descricao, local, empresaId)
+            Vaga vaga = new Vaga(nome, descricao, local)
             Long vagaId = vagaDAO.insertVaga(vaga.nome, vaga.descricao, vaga.local, empresaId)
             println "Vaga '${nome}' cadastrada para a empresa ID: ${empresaId}"
 
@@ -70,6 +71,7 @@ class EmpresaService {
         }
     }
 
+
     List<Empresa> mostrarEmpresas(){
         return getEmpresaDAO().readEmpresas()
     }
@@ -78,12 +80,33 @@ class EmpresaService {
         return getVagaDAO().readVagas()
     }
 
+
     void atualizarEmpresa(Empresa empresa){
         getEmpresaDAO().updateEmpresa(empresa)
     }
+
     void atualizarVaga(Vaga vaga){
         getVagaDAO().updateVaga(vaga)
     }
+
+    void atualizarCompetencia(Competencia competencia){
+        getCompetenciaDAO().updateCompetencia(competencia)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
