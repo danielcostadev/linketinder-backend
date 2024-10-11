@@ -104,9 +104,25 @@ class EmpresaDAO {
         }
     }
 
-    void deleteEmpresa(Empresa empresa) {
+    void deleteEmpresa(Long empresaId) {
 
+        String queryDeleteEmpresa = '''
+        DELETE FROM empresas 
+        WHERE id = ? 
+        '''
 
+        try {
+            int rowsAffected = sql.executeUpdate(queryDeleteEmpresa, [empresaId])
+
+            if(rowsAffected == 0){
+                println "Nenhuma empresa encontrada com o ID ${empresaId}."
+            } else {
+                println "Empresa com ID ${empresaId} removida com sucesso."
+            }
+
+        } catch (Exception e) {
+            println "Erro ao tentar remover empresa: ${e.message}"
+        }
 
     }
 

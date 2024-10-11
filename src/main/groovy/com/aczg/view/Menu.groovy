@@ -148,7 +148,6 @@ class Menu implements validadorEntrada{
         }, { menuGerenciarCandidatos() })
     }
 
-
     private void cadastrarEmpresa(){
         getEmpresaController().adicionarEmpresa()
     }
@@ -157,6 +156,9 @@ class Menu implements validadorEntrada{
     }
     private void editarEmpresa(){
         getEmpresaController().atualizarEmpresa()
+    }
+    private void deletarEmpresa(){
+        getEmpresaController().deletarEmpresa()
     }
 
     private void cadastrarCandidato(){

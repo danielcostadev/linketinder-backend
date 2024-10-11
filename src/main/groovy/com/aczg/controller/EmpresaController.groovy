@@ -5,13 +5,68 @@ import com.aczg.model.Empresa
 import com.aczg.model.Vaga
 import com.aczg.service.EmpresaService
 
-class EmpresaController implements validadorEntrada{
+class EmpresaController implements validadorEntrada, EntidadeTrait{
 
     EmpresaService empresaService
 
     EmpresaController(EmpresaService empresaService){
         this.empresaService = empresaService
     }
+
+    void atualizarEmpresa() {
+        Long empresaId = validarInteiro("Digite o ID da empresa que deseja editar: ")
+        manipularEntidade(empresaId, "Empresa",
+                { id -> getEmpresaService().getEmpresaDAO().empresaExiste(id) },
+                { id -> editarEmpresa(id) },
+                "atualizada"
+        )
+    }
+
+    void deletarEmpresa() {
+        Long empresaId = validarInteiro("Digite o ID da empresa que deseja deletar: ")
+        manipularEntidade(empresaId, "Empresa",
+                { id -> getEmpresaService().getEmpresaDAO().empresaExiste(id) },
+                { id -> getEmpresaService().deletarEmpresa(id) },
+                "deletada"
+        )
+    }
+
+    void atualizarVaga() {
+        Long vagaId = validarInteiro("Digite o ID da vaga que deseja editar: ")
+        manipularEntidade(vagaId, "Vaga",
+                { id -> getEmpresaService().getVagaDAO().vagaExiste(id) },
+                { id -> editarVaga(id) },
+                "atualizada"
+        )
+    }
+
+    void deletarVaga() {
+        Long vagaId = validarInteiro("Digite o ID da vaga que deseja deletar: ")
+        manipularEntidade(vagaId, "Vaga",
+                { id -> getEmpresaService().getVagaDAO().vagaExiste(id) },
+                { id -> getEmpresaService().deletarVaga(id) },
+                "deletada"
+        )
+    }
+
+    void atualizarCompetencia() {
+        Long competenciaId = validarInteiro("Digite o ID da competência que deseja editar: ")
+        manipularEntidade(competenciaId, "Competência",
+                { id -> getEmpresaService().getCompetenciaDAO().competenciaExiste(id) },
+                { id -> editarCompetencia(id) },
+                "atualizada"
+        )
+    }
+
+    void deletarCompetencia() {
+        Long competenciaId = validarInteiro("Digite o ID da competência que deseja deletar: ")
+        manipularEntidade(competenciaId, "Competência",
+                { id -> getEmpresaService().getCompetenciaDAO().competenciaExiste(id) },
+                { id -> getEmpresaService().deletarCompetencia(id) },
+                "deletada"
+        )
+    }
+
 
     void adicionarEmpresa(){
 
@@ -87,19 +142,6 @@ class EmpresaController implements validadorEntrada{
     }
 
 
-    void atualizarEmpresa() {
-        Long empresaId = validarInteiro("Digite o ID da empresa que deseja editar: ")
-
-        try {
-            if (getEmpresaService().getEmpresaDAO().empresaExiste(empresaId)) {
-                editarEmpresa(empresaId)
-            } else {
-                println "Erro: A empresa com ID '${empresaId}' não existe."
-            }
-        } catch (Exception e) {
-            println "Erro: ${e.message}"
-        }
-    }
 
     private void editarEmpresa(Long empresaId){
 
@@ -124,20 +166,6 @@ class EmpresaController implements validadorEntrada{
         }
     }
 
-    void atualizarVaga(){
-        Long vagaId = validarInteiro("Digite o ID da vaga que deseja editar: ")
-
-        try {
-            if (getEmpresaService().getVagaDAO().vagaExiste(vagaId)) {
-                editarVaga(vagaId)
-            } else {
-                println "Erro: A vaga com ID '${vagaId}' não existe."
-            }
-        } catch (Exception e) {
-            println "Erro: ${e.message}"
-        }
-    }
-
     private void editarVaga(Long vagaId){
         String newNome = validarTexto("Digite o NOME da vaga: ")
         String newDescricao = validarTexto("Digite o DESCRIÇÃO da vaga: ")
@@ -154,20 +182,6 @@ class EmpresaController implements validadorEntrada{
         }
     }
 
-    void atualizarCompetencia(){
-        Long competenciaId = validarInteiro("Digite o ID da competência que deseja editar: ")
-
-        try {
-            if (getEmpresaService().getCompetenciaDAO().competenciaExiste(competenciaId)) {
-                editarCompetencia(competenciaId)
-            } else {
-                println "Erro: A competência com ID '${competenciaId}' não existe."
-            }
-        } catch (Exception e) {
-            println "Erro: ${e.message}"
-        }
-    }
-
     private void editarCompetencia(Long competenciaId){
         String newNome = validarTexto("Digite o NOME da competência: ")
 
@@ -181,6 +195,7 @@ class EmpresaController implements validadorEntrada{
             println "Erro ao atualizar vaga: ${e.message}"
         }
     }
+
 
 
 }

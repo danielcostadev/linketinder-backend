@@ -7,7 +7,7 @@ import com.aczg.service.CandidatoService
 
 import java.sql.Date
 
-class CandidatoController implements validadorEntrada{
+class CandidatoController implements validadorEntrada, EntidadeTrait{
 
     CandidatoService candidatoService
 
@@ -73,16 +73,11 @@ class CandidatoController implements validadorEntrada{
 
     void atualizarCandidato() {
         Long candidatoId = validarInteiro("Digite o ID do candidato que deseja editar: ")
-
-        try {
-            if (getCandidatoService().getCandidatoDAO().candidatoExiste(candidatoId)) {
-                editarCandidato(candidatoId)
-            } else {
-                println "Erro: O Candidato com ID '${candidatoId}' não existe."
-            }
-        } catch (Exception e) {
-            println "Erro: ${e.message}"
-        }
+        manipularEntidade(candidatoId, "Candidato",
+                { id -> getCandidatoService().getCandidatoDAO().candidatoExiste(id) },
+                { id -> editarCandidato(id) },
+                "atualizada"
+        )
     }
 
     private void editarCandidato(Long candidatoId){
