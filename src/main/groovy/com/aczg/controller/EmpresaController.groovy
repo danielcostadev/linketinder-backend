@@ -115,8 +115,39 @@ class EmpresaController implements validadorEntrada{
         try {
             getEmpresaService().atualizarEmpresa(empresaAtualizada)
             println "empresa atualizada com sucesso!"
+
         } catch (Exception e) {
             println "Erro ao atualizar empresa: ${e.message}"
+        }
+    }
+
+    void atualizarVaga(){
+        Long vagaId = validarInteiro("Digite o ID da vaga que deseja editar: ")
+
+        try {
+            if (getEmpresaService().getVagaDAO().vagaExiste(vagaId)) {
+                editarVaga(vagaId)
+            } else {
+                println "Erro: A vaga com ID '${empresaId}' não existe."
+            }
+        } catch (Exception e) {
+            println "Erro: ${e.message}"
+        }
+    }
+
+    private void editarVaga(Long vagaId, Long empresaId){
+        String newNome = validarTexto("Digite o NOME da vaga: ")
+        String newDescricao = validarTexto("Digite o DESCRIÇÃO da vaga: ")
+        String newLocal = validarTexto("Digite o LOCAL da vaga: ")
+
+        Vaga vagaAtualizada = new Vaga(newNome,newDescricao,newLocal,empresaId)
+        vagaAtualizada.id = vagaId
+
+        try {
+            getEmpresaService().atualizarVaga(vagaAtualizada)
+            println "vaga atualizada com sucesso!"
+        } catch (Exception e) {
+            println "Erro ao atualizar vaga: ${e.message}"
         }
     }
 }

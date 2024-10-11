@@ -67,7 +67,22 @@ class VagaDAO {
 
     void updateVaga(Vaga vaga) {
 
+        String queryUpdateVaga = '''
+        UPDATE vagas
+        SET nome = ?, descricao = ?, local = ?
+        WHERE id = ?
+        '''
 
+        try {
+            sql.execute(queryUpdateVaga, [
+                    vaga.nome,
+                    vaga.descricao,
+                    vaga.local,
+                    vaga.id,
+            ])
+        } catch (Exception e) {
+            println "Erro ao atualizar vaga: ${e.message}"
+        }
 
     }
 
@@ -75,5 +90,11 @@ class VagaDAO {
 
 
 
+    }
+
+    boolean vagaExiste(Long vagaId) {
+        String query = 'SELECT COUNT(*) FROM vagas WHERE id = ?'
+        def count = sql.firstRow(query, [vagaId])?.count ?: 0
+        return count > 0
     }
 }

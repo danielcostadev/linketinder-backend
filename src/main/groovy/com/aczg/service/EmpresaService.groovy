@@ -44,14 +44,15 @@ class EmpresaService {
     Long cadastrarVaga(String nome, String descricao, String local, Long empresaId) {
 
         try {
-            Vaga novaVaga = new Vaga(nome, descricao, local, empresaId)
-            Long vagaId = vagaDAO.insertVaga(novaVaga.nome, novaVaga.descricao, novaVaga.local, empresaId)
+            Vaga vaga = new Vaga(nome, descricao, local, empresaId)
+            Long vagaId = vagaDAO.insertVaga(vaga.nome, vaga.descricao, vaga.local, empresaId)
             println "Vaga '${nome}' cadastrada para a empresa ID: ${empresaId}"
 
             return vagaId
 
         } catch (Exception e) {
             println "Erro ao cadastrar vaga: ${e.message}"
+            return null
         }
     }
 
@@ -80,5 +81,10 @@ class EmpresaService {
     void atualizarEmpresa(Empresa empresa){
         getEmpresaDAO().updateEmpresa(empresa)
     }
+    void atualizarVaga(Vaga vaga){
+        getVagaDAO().updateVaga(vaga)
+    }
+
+
 
 }
