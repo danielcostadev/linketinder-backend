@@ -93,9 +93,20 @@ class EmpresaService {
         getCompetenciaDAO().updateCompetencia(competencia)
     }
 
+
     void deletarEmpresa(Long empresaId) {
         getEmpresaDAO().deleteEmpresa(empresaId)
     }
+
+    void deletarVaga(Long vagaId){
+        getVagaDAO().deleteVaga(vagaId)
+    }
+
+    void deletarCompetencia(Long competenciaId){
+        getCompetenciaDAO().deleteCompetencia(competenciaId)
+    }
+
+
 
 
 }

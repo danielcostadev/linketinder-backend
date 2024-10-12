@@ -119,7 +119,7 @@ class Menu implements validadorEntrada{
         List<String> opcoes = [
                 "1  - Listar Vagas",
                 "2  - Editar Vaga",
-                "2  - Remover Vaga"
+                "3  - Remover Vaga"
         ]
 
         exibirMenu("Vaga", opcoes, { String opcao ->
@@ -135,7 +135,7 @@ class Menu implements validadorEntrada{
         List<String> opcoes = [
                 "1  - Listar Competências",
                 "2  - Editar Competência",
-                "2  - Remover Competência"
+                "3  - Remover Competência"
         ]
 
         exibirMenu("Competência", opcoes, { String opcao ->
@@ -170,16 +170,25 @@ class Menu implements validadorEntrada{
     private void editarCandidato(){
         getCandidatoController().atualizarCandidato()
     }
+    private void deletarCandidato(){
+        getCandidatoController().deletarCandidato()
+    }
 
     private void listarVagas(){
         getEmpresaController().exibirVaga()
     }
     private void editarVaga(){getEmpresaController().atualizarVaga()}
+    private void deletarVaga(){
+        getEmpresaController().deletarVaga()
+    }
 
     private void listarCompetencias(){
         getCandidatoController().exibirCompetencias()
     }
     private void editarCompetencia(){getEmpresaController().atualizarCompetencia()}
+    private void deletarCompetencia(){
+        getEmpresaController().deletarCompetencia()
+    }
 
 
 

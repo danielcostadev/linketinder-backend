@@ -86,7 +86,8 @@ class CandidatoDAO {
             return candidatoId
 
         } catch (Exception e) {
-        println "Erro ao cadastrar candidato: ${e.message}"
+            println "Erro ao cadastrar candidato: ${e.message}"
+            return null
         }
 
     }
@@ -121,9 +122,25 @@ class CandidatoDAO {
         }
     }
 
-    void deleteCandidato(Candidato candidato) {
+    void deleteCandidato(Long candidatoId) {
 
+        String queryDeleteCandidato = '''
+        DELETE FROM candidatos 
+        WHERE id = ? 
+        '''
 
+        try {
+            int rowsAffected = sql.executeUpdate(queryDeleteCandidato, [candidatoId])
+
+            if(rowsAffected == 0){
+                println "Nenhum candidato encontrada com o ID ${candidatoId}."
+            } else {
+                println "Candidato com ID ${candidatoId} removido com sucesso."
+            }
+
+        } catch (Exception e) {
+            println "Erro ao tentar remover candidato: ${e.message}"
+        }
 
     }
 
@@ -132,6 +149,7 @@ class CandidatoDAO {
         def count = sql.firstRow(query, [candidatoId])?.count ?: 0
         return count > 0
     }
+
 
 
 }

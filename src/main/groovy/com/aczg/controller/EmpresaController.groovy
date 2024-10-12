@@ -13,60 +13,6 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
         this.empresaService = empresaService
     }
 
-    void atualizarEmpresa() {
-        Long empresaId = validarInteiro("Digite o ID da empresa que deseja editar: ")
-        manipularEntidade(empresaId, "Empresa",
-                { id -> getEmpresaService().getEmpresaDAO().empresaExiste(id) },
-                { id -> editarEmpresa(id) },
-                "atualizada"
-        )
-    }
-
-    void deletarEmpresa() {
-        Long empresaId = validarInteiro("Digite o ID da empresa que deseja deletar: ")
-        manipularEntidade(empresaId, "Empresa",
-                { id -> getEmpresaService().getEmpresaDAO().empresaExiste(id) },
-                { id -> getEmpresaService().deletarEmpresa(id) },
-                "deletada"
-        )
-    }
-
-    void atualizarVaga() {
-        Long vagaId = validarInteiro("Digite o ID da vaga que deseja editar: ")
-        manipularEntidade(vagaId, "Vaga",
-                { id -> getEmpresaService().getVagaDAO().vagaExiste(id) },
-                { id -> editarVaga(id) },
-                "atualizada"
-        )
-    }
-
-    void deletarVaga() {
-        Long vagaId = validarInteiro("Digite o ID da vaga que deseja deletar: ")
-        manipularEntidade(vagaId, "Vaga",
-                { id -> getEmpresaService().getVagaDAO().vagaExiste(id) },
-                { id -> getEmpresaService().deletarVaga(id) },
-                "deletada"
-        )
-    }
-
-    void atualizarCompetencia() {
-        Long competenciaId = validarInteiro("Digite o ID da competência que deseja editar: ")
-        manipularEntidade(competenciaId, "Competência",
-                { id -> getEmpresaService().getCompetenciaDAO().competenciaExiste(id) },
-                { id -> editarCompetencia(id) },
-                "atualizada"
-        )
-    }
-
-    void deletarCompetencia() {
-        Long competenciaId = validarInteiro("Digite o ID da competência que deseja deletar: ")
-        manipularEntidade(competenciaId, "Competência",
-                { id -> getEmpresaService().getCompetenciaDAO().competenciaExiste(id) },
-                { id -> getEmpresaService().deletarCompetencia(id) },
-                "deletada"
-        )
-    }
-
 
     void adicionarEmpresa(){
 
@@ -93,6 +39,33 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
 
     }
 
+    void exibirEmpresa(){
+        List<Empresa> empresas = getEmpresaService().mostrarEmpresas()
+        empresas.each { empresa ->
+            println "Descrição: ${empresa.getDescricao()}, Estado: ${empresa.getEstado()}"
+        }
+    }
+
+    void atualizarEmpresa() {
+        Long empresaId = validarInteiro("Digite o ID da empresa que deseja editar: ")
+        manipularEntidade(empresaId, "Empresa",
+                { id -> getEmpresaService().getEmpresaDAO().empresaExiste(id) },
+                { id -> editarEmpresa(id) },
+                "atualizada"
+        )
+    }
+
+    void deletarEmpresa() {
+        Long empresaId = validarInteiro("Digite o ID da empresa que deseja deletar: ")
+        manipularEntidade(empresaId, "Empresa",
+                { id -> getEmpresaService().getEmpresaDAO().empresaExiste(id) },
+                { id -> getEmpresaService().deletarEmpresa(id) },
+                "deletada"
+        )
+    }
+
+
+
     void adicionarVaga(Long empresaId){
 
         String nome = validarTexto("Digite o TITULO da vaga: ")
@@ -112,6 +85,33 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
         }
     }
 
+    void exibirVaga(){
+        List<Vaga> vagas = getEmpresaService().mostrarVagas()
+        vagas.each { vaga ->
+            println "Nome: ${vaga.getNome()}, Descrição: ${vaga.getDescricao()}, Local: ${vaga.getLocal()}"
+        }
+    }
+
+    void atualizarVaga() {
+        Long vagaId = validarInteiro("Digite o ID da vaga que deseja editar: ")
+        manipularEntidade(vagaId, "Vaga",
+                { id -> getEmpresaService().getVagaDAO().vagaExiste(id) },
+                { id -> editarVaga(id) },
+                "atualizada"
+        )
+    }
+
+    void deletarVaga() {
+        Long vagaId = validarInteiro("Digite o ID da vaga que deseja deletar: ")
+        manipularEntidade(vagaId, "Vaga",
+                { id -> getEmpresaService().getVagaDAO().vagaExiste(id) },
+                { id -> getEmpresaService().deletarVaga(id) },
+                "deletada"
+        )
+    }
+
+
+
     void adicionarCompetencia(Long vagaId){
 
         String competencias = validarTexto("Digite as competências separadas por vírgula: ");
@@ -126,20 +126,35 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
         }
     }
 
-
-    void exibirEmpresa(){
-        List<Empresa> empresas = getEmpresaService().mostrarEmpresas()
-        empresas.each { empresa ->
-            println "Descrição: ${empresa.getDescricao()}, Estado: ${empresa.getEstado()}"
-        }
+    void atualizarCompetencia() {
+        Long competenciaId = validarInteiro("Digite o ID da competência que deseja editar: ")
+        manipularEntidade(competenciaId, "Competência",
+                { id -> getEmpresaService().getCompetenciaDAO().competenciaExiste(id) },
+                { id -> editarCompetencia(id) },
+                "atualizada"
+        )
     }
 
-    void exibirVaga(){
-        List<Vaga> vagas = getEmpresaService().mostrarVagas()
-        vagas.each { vaga ->
-            println "Nome: ${vaga.getNome()}, Descrição: ${vaga.getDescricao()}, Local: ${vaga.getLocal()}"
-        }
+    void deletarCompetencia() {
+        Long competenciaId = validarInteiro("Digite o ID da competência que deseja deletar: ")
+        manipularEntidade(competenciaId, "Competência",
+                { id -> getEmpresaService().getCompetenciaDAO().competenciaExiste(id) },
+                { id -> getEmpresaService().deletarCompetencia(id) },
+                "deletada"
+        )
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

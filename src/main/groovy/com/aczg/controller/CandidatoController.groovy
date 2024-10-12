@@ -49,10 +49,10 @@ class CandidatoController implements validadorEntrada, EntidadeTrait{
 
         try {
             candidatoService.cadastrarCompetencia(listaCompetencias, candidatoId)
-            println("Competencia '${nome}' cadastrada com sucesso!");
+            println("Competencia cadastrada com sucesso!");
 
         } catch (Exception e) {
-
+            println("Erro ao cadastrar dados': ${e.message}");
         }
 
     }
@@ -104,6 +104,15 @@ class CandidatoController implements validadorEntrada, EntidadeTrait{
         } catch (Exception e) {
             println "Erro ao atualizar empresa: ${e.message}"
         }
+    }
+
+    void deletarCandidato(){
+        Long candidatoId = validarInteiro("Digite o ID do candidato que deseja deletar: ")
+        manipularEntidade(candidatoId, "Candidato",
+                { id -> getCandidatoService().getCandidatoDAO().candidatoExiste(id) },
+                { id -> getCandidatoService().deletarCandidato(id) },
+                "deletada"
+        )
     }
 
 

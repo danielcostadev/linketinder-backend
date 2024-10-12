@@ -82,9 +82,25 @@ class VagaDAO {
 
     }
 
-    void deleteVaga(Vaga vaga) {
+    void deleteVaga(Long vagaId) {
 
+        String queryDeleteVaga = '''
+        DELETE FROM vagas 
+        WHERE id = ? 
+        '''
 
+        try {
+            int rowsAffected = sql.executeUpdate(queryDeleteVaga, [vagaId])
+
+            if(rowsAffected == 0){
+                println "Nenhuma vaga encontrada com o ID ${vagaId}."
+            } else {
+                println "Vaga com ID ${vagaId} removida com sucesso."
+            }
+
+        } catch (Exception e) {
+            println "Erro ao tentar remover vaga: ${e.message}"
+        }
 
     }
 

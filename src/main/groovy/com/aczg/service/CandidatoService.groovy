@@ -52,6 +52,7 @@ class CandidatoService {
         }
     }
 
+
     List<Candidato> mostrarCandidados(){
 
         return getCandidatoDAO().readCandidados()
@@ -64,15 +65,15 @@ class CandidatoService {
 
     }
 
+
     void atualizarCandidato(Candidato candidato){
         getCandidatoDAO().updateCandidato(candidato)
     }
 
 
+    void deletarCandidato(Long candidatoId) {
+        getCandidatoDAO().deleteCandidato(candidatoId)
+    }
+
+
 }
-
-
-
-/*if(candidatoDAO.existeCandidato(cpf)){
-    println("O candidato '${nome}' já existe.");
-}*/

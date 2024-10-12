@@ -90,9 +90,25 @@ class CompetenciaDAO {
 
     }
 
-    void deleteCompetencia(Competencia competencia) {
+    void deleteCompetencia(Long competenciaId) {
 
+        String queryDeleteCompetencia = '''
+        DELETE FROM competencias 
+        WHERE id = ? 
+        '''
 
+        try {
+            int rowsAffected = sql.executeUpdate(queryDeleteCompetencia, [competenciaId])
+
+            if(rowsAffected == 0){
+                println "Nenhuma competência encontrada com o ID ${competenciaId}."
+            } else {
+                println "Competência com ID ${competenciaId} removida com sucesso."
+            }
+
+        } catch (Exception e) {
+            println "Erro ao tentar remover Competência: ${e.message}"
+        }
 
     }
 
