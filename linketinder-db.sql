@@ -5,11 +5,11 @@ CREATE TABLE IF NOT EXISTS candidatos
     id SERIAL PRIMARY KEY,
     nome CHARACTER VARYING(100) NOT NULL,
     sobrenome CHARACTER VARYING(100) NOT NULL,
-    data_nascimento DATE NOT NULL,
-    email CHARACTER VARYING(150) NOT NULL,
+    data_nascimento DATE NOT NULL CHECK (data_nascimento <= CURRENT_DATE),
+    email CHARACTER VARYING(150) NOT NULL UNIQUE,
     telefone CHARACTER VARYING(20) NOT NULL,
     linkedin CHARACTER VARYING(150) NOT NULL,
-    cpf CHARACTER VARYING(14) NOT NULL,
+    cpf CHARACTER VARYING(14) NOT NULL UNIQUE,
     estado CHARACTER VARYING(2) NOT NULL,
     cep CHARACTER VARYING(10) NOT NULL,
     descricao CHARACTER VARYING(200),
@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS empresas
 (
     id SERIAL PRIMARY KEY,
     nome CHARACTER VARYING(100) NOT NULL,
-    cnpj CHARACTER VARYING(18) NOT NULL,
-    email CHARACTER VARYING(150) NOT NULL,
+    cnpj CHARACTER VARYING(18) NOT NULL UNIQUE,
+    email CHARACTER VARYING(150) NOT NULL UNIQUE,
     pais CHARACTER VARYING(100) NOT NULL,
     estado CHARACTER VARYING(2) NOT NULL,
     cep CHARACTER VARYING(10) NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS vagas
 CREATE TABLE IF NOT EXISTS competencias
 (
     id serial PRIMARY KEY,
-    nome CHARACTER VARYING(100) NOT NULL
+    nome CHARACTER VARYING(100) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS candidato_competencias
@@ -90,12 +90,11 @@ INSERT INTO Competencias (nome) VALUES ('Python'),('Java'),('Groovy');
 -- Inserindo candidatos
 INSERT INTO candidatos (nome,sobrenome,data_nascimento,email,telefone,linkedin,cpf,estado,cep,descricao,formacao,senha)
 VALUES 
-('Sandubinha', 'Silva', '1990-05-10', 'sanduba@gmail.com', '11999999999', 'https://www.linkedin.com/in/sandubinhadev/', '123.456.789-00', 'SP', '12345-678', 'Desenvolvedor fullstack', 'Superior Completo', 'senha123'),
-('Mariana', 'Lima', '1988-07-14', 'mariana.lima@gmail.com', '11988888888', 'https://www.linkedin.com/in/marianalima/', '321.654.987-10', 'RJ', '98765-432', 'Analista de Sistemas', 'Superior Completo', 'senha123'),
-('Carlos', 'Ferreira', '1992-03-22', 'carlos.ferreira@gmail.com', '11977777777', 'https://www.linkedin.com/in/carlosferreira/', '123.987.654-32', 'MG', '87654-321', 'Engenheiro de Software', 'Superior Completo', 'senha123'),
-('Juliana', 'Souza', '1995-11-05', 'juliana.souza@gmail.com', '11966666666', 'https://www.linkedin.com/in/julianasouza/', '987.654.321-01', 'SP', '54321-098', 'Desenvolvedora Backend', 'Superior Completo', 'senha123'),
-('Fernando', 'Oliveira', '1985-01-18', 'fernando.oliveira@gmail.com', '11955555555', 'https://www.linkedin.com/in/fernandooliveira/', '654.321.987-09', 'RS', '65432-109', 'Administrador de Sistemas', 'Superior Completo', 'senha123');
-
+('Sandubinha', 'Silva', '1990-05-10', 'sanduba@gmail.com', '11999999999', 'https://www.linkedin.com/in/sandubinhadev/', '12345678900', 'SP', '12345678', 'Desenvolvedor fullstack', 'Superior Completo', 'senha123'),
+('Mariana', 'Lima', '1988-07-14', 'mariana.lima@gmail.com', '11988888888', 'https://www.linkedin.com/in/marianalima/', '32165498710', 'RJ', '98765432', 'Analista de Sistemas', 'Superior Completo', 'senha123'),
+('Carlos', 'Ferreira', '1992-03-22', 'carlos.ferreira@gmail.com', '11977777777', 'https://www.linkedin.com/in/carlosferreira/', '12398765432', 'MG', '87654321', 'Engenheiro de Software', 'Superior Completo', 'senha123'),
+('Juliana', 'Souza', '1995-11-05', 'juliana.souza@gmail.com', '11966666666', 'https://www.linkedin.com/in/julianasouza/', '98765432101', 'SP', '54321098', 'Desenvolvedora Backend', 'Superior Completo', 'senha123'),
+('Fernando', 'Oliveira', '1985-01-18', 'fernando.oliveira@gmail.com', '11955555555', 'https://www.linkedin.com/in/fernandooliveira/', '65432198709', 'RS', '65432109', 'Administrador de Sistemas', 'Superior Completo', 'senha123')
 
 -- Relacionando competências predefinidas ao candidato Sandubinha
 INSERT INTO Candidato_Competencias (candidato_id, competencia_id) VALUES (1, 1);  -- Relacionando Sandubinha à competência Python
@@ -108,11 +107,11 @@ INSERT INTO Candidato_Competencias (candidato_id, competencia_id) VALUES (5, 3);
 -- Inserir empresa PastelSoft
 INSERT INTO empresas (nome,cnpj,email,pais,estado,cep,descricao,senha)
 VALUES 
-('Pastelsoft', '12.345.678/0001-00', 'contato@pastelsoft.com', 'Brasil', 'SP', '98765-432', 'Empresa de desenvolvimento de ERPs', 'pastel123'),
-('TechBurger', '23.456.789/0001-11', 'contato@techburger.com', 'Brasil', 'RJ', '12345-678', 'Empresa de soluções em TI e desenvolvimento de aplicativos', 'burger123'),
-('CodePizza', '34.567.890/0001-22', 'contato@codepizza.com', 'Brasil', 'MG', '87654-321', 'Desenvolvedora de software especializado para automação de pizzarias', 'pizza123'),
-('CloudSalad', '45.678.901/0001-33', 'contato@cloudsalad.com', 'Brasil', 'PR', '54321-098', 'Consultoria em computação em nuvem e migração de dados', 'salad123'),
-('ByteCafe', '56.789.012/0001-44', 'contato@bytecafe.com', 'Brasil', 'RS', '65432-109', 'Cafeteria especializada no desenvolvimento de software sob medida', 'cafe123');
+('Pastelsoft', '12345678000100', 'contato@pastelsoft.com', 'Brasil', 'SP', '98765432', 'Empresa de desenvolvimento de ERPs', 'pastel123'),
+('TechBurger', '23456789000111', 'contato@techburger.com', 'Brasil', 'RJ', '12345678', 'Empresa de soluções em TI e desenvolvimento de aplicativos', 'burger123'),
+('CodePizza', '34567890000122', 'contato@codepizza.com', 'Brasil', 'MG', '87654321', 'Desenvolvedora de software especializado para automação de pizzarias', 'pizza123'),
+('CloudSalad', '45678901000133', 'contato@cloudsalad.com', 'Brasil', 'PR', '54321098', 'Consultoria em computação em nuvem e migração de dados', 'salad123'),
+('ByteCafe', '56789012000144', 'contato@bytecafe.com', 'Brasil', 'RS', '65432109', 'Cafeteria especializada no desenvolvimento de software sob medida', 'cafe123')
 
 -- Inserir Vaga
 INSERT INTO vagas (nome,descricao,local,empresa_id)

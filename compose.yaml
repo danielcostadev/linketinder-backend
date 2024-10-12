@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:17
+    container_name: postgres_teste
+    environment: 
+      POSTGRES_USER: user123
+      POSTGRES_PASSWORD: pass123
+      POSTGRES_DB: linketinder_testes
+    ports: 
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - banco_net
+    
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_teste
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: pass123
+    ports: 
+      - 8080:80
+    depends_on:
+      - db
+    networks:
+      - banco_net
+    
+
+volumes:
+  postgres_data:  
+    
+networks:
+  banco_net:
