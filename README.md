@@ -81,57 +81,55 @@ A estrutura de curtidas mediada pelas vagas permite que candidatos interajam ape
 
 ## Funcionalidades
 
-- **Adicionar Empresa**: Capacidade de criar empresas
-- **Adicionar Candidato**: Capacidade de criar candidatos
-- **Listar Empresas**: Listagem de tarefas
-- **Listar Candidatos**: Listagem de candidatos
-- **Validação de Dados**: Entrada de dados validada para garantir a integridade das informações.
+- **CRUD Completo**: Capaciade de Criar, Listar, Atualizar e Deletar (Empresas, Candidatos, Vagas e competências)
+- **Validação de Dados**: Entrada de dados validada com regex
 
 ## Tecnologias Utilizadas
 
 - **Groovy**: Linguagem de programação principal utilizada no desenvolvimento do projeto.
+- **Gradle**: Project Builder
+- **Docker**: Containers Docker para O PostgreSQL e o PGADMIN4
+- **PostgreSQL**: Banco de Dados utilizado no projeto
+- **PgAdmin4**: SGDB utilizado durante o desenvolvimento do projeto
 - **Git e GitHub**: Para versionamento e armazenamento do projeto
 - **JDK 1.8**: Versão do Java Development Kit utilizada como base para o projeto Groovy.
 - **IntelliJ IDEA**: Ambiente de Desenvolvimento Integrado (IDE) utilizado.
 
 ## Minhas breves considerações
 
-> O projeto LinkeTinder traz consigo uma ideia bastante promissora quando a contração de novos colaboradores, através da "Contratação às cegas" [Funcionalidade que será incluida no decorrer do desenvolimento].
-> 
-> No desevolvimento desse projeto pude aprimorar ainda mais meus conhecimentos em POO e organização de projeto seguindo os ritos básicos do padrão MVC, também pude melhorar a escrita do código deixando de lado
-> antigas práticas, no que diz respeito ao uso desnecessário do modificador 'static', comentários redundantes e nomenclatura com prefixos repetitivos. Com essa mudança de hábito pude perceber o quanto o código
-> se tornou manutenível e escalável.
->
-> Nesse projeto também utilizei a abordagem de validar os dados passados pelo usuário, onde é possível evitar exceções em tempo de execução.
-> Dessa vez utilizei o validador dentro de uma classe 'Trait' que serve como um tipo de interface ou classe abstrata, porém mais robusta e poderosa.
->
-> Como mais uma vez não houve a exigência de implementação de um front-end robusto, toda a aplicação é exibida através de um menu simples, com interações para o usuário.
->
+Com a evolução do projeto Linketinder, novos desafios surgiram, especialmente na implementação de um banco de dados para a persistência das informações. Como o projeto exigia maior organização e estrutura, optei por separar o Backend do Frontend, permitindo que ambos evoluíssem de forma independente. Essa abordagem melhora a modularidade e facilita o gerenciamento de cada parte do sistema, o que é crucial para o crescimento do projeto. Com um banco de dados robusto e eficiente em mente, decidi usar o PostgreSQL para armazenar as informações, e o pgAdmin como interface de gerenciamento, que facilita a interação com o banco de dados.
+
+Para garantir que o ambiente de banco de dados fosse replicável e isolado do sistema principal, utilizei o Docker para criar containers tanto do PostgreSQL quanto do pgAdmin. O Docker simplifica a criação de ambientes consistentes, permitindo que eu configure e gerencie o banco de dados sem a necessidade de instalá-lo diretamente na máquina local. Com o PostgreSQL rodando em um container, o banco de dados pode ser facilmente acessado e configurado através do pgAdmin, que também está em outro container, oferecendo uma interface gráfica amigável para gerenciamento de tabelas, visualização de dados e execução de queries SQL.
+
+Além disso, essa nova versão reestruturada do projeto foi automatizada com o uso do Gradle, uma poderosa ferramenta de automação de builds. O Gradle não apenas facilita o processo de compilação e integração contínua, mas também permite a inclusão de dependências e tarefas de forma eficiente, tornando o desenvolvimento mais fluido e ágil. Com Docker gerenciando os containers do PostgreSQL e do pgAdmin, e o Gradle cuidando da automatização do build, o ambiente de desenvolvimento ficou mais organizado, replicável e preparado para novos desafios e expansões.
+
+
+
+
+
+
+
 
 ## COMO FUNCIONA?
 ### Tela Principal
-- Ao executar a aplicação o usuário é apresentado a um modesto Menu interativo
-- Onde é possível escolher ações como Cadastrar e Listar Candidatos ou Empresas
-### Cadastrar Candidato/Empresa
-- Na opção de cadastrar o usuário preenche um breve formulário.
+- Ao executar a aplicação o usuário é apresentado a um menu multiplo
+- Onde é possível escolher diversas ações para cada tipo de entidade
+### Cadastrar Candidato/Empresa/Vagas
+- Na opção de cadastro o usuário preenche os dados que serão encapsulados no objeto em questão e posteriormente enviadas ao BD
 - Durante o preenchimento do formulário são realizadas validações quanto a integridade dos dados. (A verificação dos campos de acordo com o tipo será incluida em versões futuras)
-- Todas as entradas de dados passam por esse rigoroso sistema de validações.
-- Essas validações asseguram que não sejam lançadas exceções durante a execução da aplicação
-- Após o preenchimento da última informação, os dados são armazenados em uma lista.
-- Essa lista não é a lista original, para preservar os dados e garantir a persistência de pelo menos 5 cadastros tanto para candidatos quanto para empresas, o cadastro não manipula diretamente a lista original
-- Foi criado um clone da lista, e os novos cadastros são inseridos nesse clone.
-### Listar Candidatos/Empresas
-- São exibido os candidatos ou empresas cadastradas que por sua vez são recuperadas de uma lista que foi previamente populada
-- AS informações que o usário vê são da lista dinâmica (Um clone da lista original + novos cadastros)
+- Todas as entradas de dados passam por esse rigoroso sistema de validações em regex
+### Listar Candidatos/Empresas/Vagas
+- AS informações que o usário vê são recuperadas do banco de dados.
 
 ## Estrutura do Projeto
 
 ### O projeto está organizado da seguinte forma:
 
-- **Controller**: Contém as classes e os métodos responsáveis por gerenciar as operações.
-- **Repository**: Contém as classes responsáveis por manutenção e manipulação dos dados.
+- **Controller**: Contém as classes responsáveis por receber as entradas do usuário e fazer a interação entre a camada view e camada service
+- **DAO**: Contém as classes responsáveis por manutenção e manipulação dos dados no banco de dados.
 - **Model**: Define as classes principais do domínio, como `Pessoa, Canditado e Empresa`.
-- **View**: Contém a estrutura principal de exibição do Menu e tarefas.
+- **Service**: Define as classes responsáveis por gerir a lógica principal da aplicação e a comunicação com a camada DAO
+- **View**: Contém a estrutura principal de exibição do Menu
 
 
 ## Como Executar
@@ -146,12 +144,12 @@ A estrutura de curtidas mediada pelas vagas permite que candidatos interajam ape
 1. Clone o repositório:
 
    ```bash
-   git clone https://github.com/danielcostadev/Linketinder-Project.git
+   git clone https://github.com/danielcostadev/Linketinder-Backend.git
 
 2. Navegue até a pasta do projeto
 
    ```bash
-   cd Linketinder-Project/
+   cd Linketinder-Backend/
 
 3. Compile o projeto
 
@@ -163,7 +161,7 @@ A estrutura de curtidas mediada pelas vagas permite que candidatos interajam ape
    ```bash
    java -cp build Main
 
-### Download do arquivo JAR v1.0.0
+### Download do arquivo JAR v3.0.0
 
 ---
 
@@ -173,7 +171,7 @@ A estrutura de curtidas mediada pelas vagas permite que candidatos interajam ape
 - Para executar a aplicação utilize o comando abaixo:
 
    ```bash
-  java -jar Linketinder-Project.jar
+  java -jar Linketinder-Backend.jar
 
 ## Contribuindo
 

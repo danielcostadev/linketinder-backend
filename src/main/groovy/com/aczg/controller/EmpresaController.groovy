@@ -18,10 +18,10 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
 
         String nome = validarTextoComRegex("nome","Digite o NOME da empresa: ")
         String email = validarTextoComRegex("email","Digite o EMAIL da empresa: ")
-        String estado = validarTextoComRegex("estado","Digite o estado da empresa: ")
+        String estado = validarTextoComRegex("estado","Digite o estado da empresa: ").toUpperCase()
         String cnpj = validarTextoComRegex("cnpj","Digite o CNPJ da empresa: ")
         String pais = validarTexto("Digite o PAÍS da empresa: ")
-        String cep = validarTextoComRegex("cep","Digite o CEP da empresa: ")
+        String cep = validarTextoComRegex("cep","Digite o CEP da empresa: ").replaceAll(/\D/, '')
         String descricao = validarTextoComRegex("descricao","Digite uma breve descrição da empresa: ")
         String senha = validarTexto("Digite a SENHA da empresa: ")
 
