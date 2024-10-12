@@ -15,16 +15,18 @@ class CompetenciaDAO {
         try {
 
             String query = '''
-                SELECT nome
+                SELECT id, nome
                 FROM competencias
+                ORDER BY id
             '''
 
             sql.eachRow(query) { row ->
-
+                Long id = row["id"]
                 String nome = row['nome']
 
 
                 Competencia competencia = new Competencia(
+                        id,
                         nome,
                 )
 
@@ -38,22 +40,34 @@ class CompetenciaDAO {
     }
 
     void insertCompetencia(String nomeCompetencia, Long candidatoId = null, Long vagaId = null) {
-
         try {
-            String queryCompetencia = '''
-            INSERT INTO competencias (nome)
-            VALUES (?)
-            RETURNING id
+            // Tente obter o ID da competência se já existir
+            String queryCompetenciaExistente = '''
+            SELECT id FROM competencias WHERE nome = ?
         '''
-            Long competenciaId = sql.firstRow(queryCompetencia, [nomeCompetencia]).id
+            Long competenciaId = sql.firstRow(queryCompetenciaExistente, [nomeCompetencia])?.id
 
+            // Se a competência não existe, insira-a
+            if (competenciaId == null) {
+                String queryInserirCompetencia = '''
+                INSERT INTO competencias (nome)
+                VALUES (?)
+                RETURNING id
+            '''
+                competenciaId = sql.firstRow(queryInserirCompetencia, [nomeCompetencia]).id
+                println "Competência '${nomeCompetencia}' cadastrada com sucesso."
+            } else {
+                println "Competência '${nomeCompetencia}' já existe com ID: ${competenciaId}."
+            }
+
+            // Associar a competência ao candidato ou à vaga
             if (candidatoId) {
                 String queryAssociacaoCandidato = '''
                 INSERT INTO candidato_competencias (candidato_id, competencia_id)
                 VALUES (?, ?)
             '''
                 sql.execute(queryAssociacaoCandidato, [candidatoId, competenciaId])
-                println "Competência '${nomeCompetencia}' cadastrada e associada ao candidato ID: ${candidatoId}"
+                println "Competência '${nomeCompetencia}' associada ao candidato ID: ${candidatoId}"
 
             } else if (vagaId) {
                 String queryAssociacaoVaga = '''
@@ -61,7 +75,8 @@ class CompetenciaDAO {
                 VALUES (?, ?)
             '''
                 sql.execute(queryAssociacaoVaga, [vagaId, competenciaId])
-                println "Competência '${nomeCompetencia}' cadastrada e associada à vaga ID: ${vagaId}"
+                println "Competência '${nomeCompetencia}' associada à vaga ID: ${vagaId}"
+
             } else {
                 throw new IllegalArgumentException("Nenhum candidatoId ou vagaId fornecido.")
             }

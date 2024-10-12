@@ -16,22 +16,22 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
 
     void adicionarEmpresa(){
 
-        String nome = validarTexto("Digite o NOME da empresa: ")
-        String email = validarTexto("Digite o EMAIL da empresa: ")
-        String estado = validarTexto("Digite o estado da empresa: ")
-        String cnpj = validarTexto("Digite o CNPJ da empresa: ")
+        String nome = validarTextoComRegex("nome","Digite o NOME da empresa: ")
+        String email = validarTextoComRegex("email","Digite o EMAIL da empresa: ")
+        String estado = validarTextoComRegex("estado","Digite o estado da empresa: ")
+        String cnpj = validarTextoComRegex("cnpj","Digite o CNPJ da empresa: ")
         String pais = validarTexto("Digite o PAÍS da empresa: ")
-        String cep = validarTexto("Digite o CEP da empresa: ")
-        String descricao = validarTexto("Digite uma breve descrição da empresa: ")
+        String cep = validarTextoComRegex("cep","Digite o CEP da empresa: ")
+        String descricao = validarTextoComRegex("descricao","Digite uma breve descrição da empresa: ")
         String senha = validarTexto("Digite a SENHA da empresa: ")
 
         try {
             Long empresaId = getEmpresaService().cadastrarEmpresa(nome,email,estado,cnpj,pais,cep,descricao,senha)
             println("Empresa '${nome}' cadastrada com sucesso!");
 
-            if(empresaId){
+         /*   if(empresaId){
                 adicionarVaga(empresaId)
-            }
+            }*/
 
         } catch (Exception e) {
             println("Erro ao cadastrar empresa '${nome}': ${e.message}");
@@ -42,7 +42,7 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
     void exibirEmpresa(){
         List<Empresa> empresas = getEmpresaService().mostrarEmpresas()
         empresas.each { empresa ->
-            println "Descrição: ${empresa.getDescricao()}, Estado: ${empresa.getEstado()}"
+            println "ID: ${empresa.getId()}, Descrição: ${empresa.getDescricao()}, Estado: ${empresa.getEstado()}"
         }
     }
 
@@ -66,29 +66,20 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
 
 
 
-    void adicionarVaga(Long empresaId){
-
-        String nome = validarTexto("Digite o TITULO da vaga: ")
-        String descricao = validarTexto("Digite a DESCRIÇÃO da vaga: ")
-        String local = validarTexto("Digite o LOCAL da vaga: ")
-
-        try {
-            Long vagaId = empresaService.cadastrarVaga(nome,descricao,local,empresaId)
-            println("Vaga '${nome}' cadastrada com sucesso!");
-
-            if (vagaId){
-                adicionarCompetencia(vagaId)
-            }
-
-        } catch (Exception e) {
-            println("Erro ao cadastrar vaga '${nome}': ${e.message}");
-        }
+    void adicionarVaga(){
+        Long empresaId = validarInteiro("Digite o ID da empresa que está cadastrando a vaga: ")
+        manipularEntidade(empresaId, "Empresa",
+                { id -> getEmpresaService().getEmpresaDAO().empresaExiste(id) },
+                { id -> cadastrarVaga(id) },
+                "cadastrada",
+                "Vaga"
+        )
     }
 
     void exibirVaga(){
         List<Vaga> vagas = getEmpresaService().mostrarVagas()
         vagas.each { vaga ->
-            println "Nome: ${vaga.getNome()}, Descrição: ${vaga.getDescricao()}, Local: ${vaga.getLocal()}"
+            println "ID: ${vaga.getId()}, Nome: ${vaga.getNome()}, Descrição: ${vaga.getDescricao()}, Local: ${vaga.getLocal()}"
         }
     }
 
@@ -145,17 +136,26 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
     }
 
 
+    private void cadastrarVaga(Long empresaId){
 
+        print "================== CADASTRO DE VAGA ==================\n"
+        String nome = validarTexto("Digite o TITULO da vaga: ")
+        String descricao = validarTexto("Digite a DESCRIÇÃO da vaga: ")
+        String local = validarTexto("Digite o LOCAL da vaga: ")
 
+        try {
+            Long vagaId = empresaService.cadastrarVaga(nome,descricao,local,empresaId)
+            println("Vaga '${nome}' cadastrada com sucesso!");
 
+            if (vagaId){
+                adicionarCompetencia(vagaId)
+            }
 
+        } catch (Exception e) {
+            println("Erro ao cadastrar vaga '${nome}': ${e.message}");
+        }
 
-
-
-
-
-
-
+    }
 
 
     private void editarEmpresa(Long empresaId){
@@ -210,7 +210,5 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
             println "Erro ao atualizar vaga: ${e.message}"
         }
     }
-
-
 
 }

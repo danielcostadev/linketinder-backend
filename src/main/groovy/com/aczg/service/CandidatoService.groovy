@@ -32,7 +32,7 @@ class CandidatoService {
             return candidatoId
 
         } catch (Exception e){
-            println "Erro ao cadastrar candidato e competências: ${e.message}"
+            println "Erro ao cadastrar candidato: ${e.message}"
         } finally {
             sql.close()
         }
@@ -54,15 +54,11 @@ class CandidatoService {
 
 
     List<Candidato> mostrarCandidados(){
-
         return getCandidatoDAO().readCandidados()
-
     }
 
     List<Competencia> mostrarCompetencias(){
-
         return getCompetenciaDAO().readCompetencias()
-
     }
 
 

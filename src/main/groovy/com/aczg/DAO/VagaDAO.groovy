@@ -15,17 +15,20 @@ class VagaDAO {
         try {
 
             String query = '''
-                SELECT nome, descricao, local
+                SELECT id, nome, descricao, local
                 FROM vagas
+                ORDER BY id
             '''
 
             sql.eachRow(query) { row ->
 
+                Long id = row["id"]
                 String nome = row['nome']
                 String descricao = row['descricao']
                 String local = row['local']
 
                 Vaga vaga = new Vaga(
+                        id,
                         nome,
                         descricao,
                         local

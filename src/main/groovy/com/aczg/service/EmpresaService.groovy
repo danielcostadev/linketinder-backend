@@ -4,7 +4,6 @@ import com.aczg.DAO.CompetenciaDAO
 import com.aczg.DAO.ConexaoDAO
 import com.aczg.DAO.EmpresaDAO
 import com.aczg.DAO.VagaDAO
-import com.aczg.model.Candidato
 import com.aczg.model.Competencia
 import com.aczg.model.Empresa
 import com.aczg.model.Vaga
@@ -105,8 +104,5 @@ class EmpresaService {
     void deletarCompetencia(Long competenciaId){
         getCompetenciaDAO().deleteCompetencia(competenciaId)
     }
-
-
-
 
 }

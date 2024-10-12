@@ -7,8 +7,7 @@ class Vaga {
     String descricao
     String local
     Integer idEmpresa
-    Vaga(String nome, String descricao, String local){
-
+    Vaga(Long id = null, String nome, String descricao, String local){
         this.id = id
         this.nome = nome
         this.descricao = descricao

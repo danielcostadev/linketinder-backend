@@ -15,12 +15,14 @@ class CandidatoDAO {
         try {
 
             String query = '''
-                SELECT nome, sobrenome, email, telefone, linkedin, cpf, data_nascimento, estado, cep, descricao, formacao, senha
-                FROM candidatos
+                SELECT id, nome, sobrenome, email, telefone, linkedin, cpf, data_nascimento, estado, cep, descricao, formacao, senha
+                FROM candidatos 
+                ORDER BY id
             '''
 
             sql.eachRow(query) { row ->
 
+                Long id = row["id"]
                 String nome = row['nome']
                 String sobrenome = row['sobrenome']
                 String email = row['email']
@@ -32,9 +34,10 @@ class CandidatoDAO {
                 String cep = row['cep']
                 String descricao = row['descricao']
                 String formacao = row['formacao']
-                String senha = row['senha']
+                String senha = null
 
                 Candidato candidato = new Candidato(
+                        id,
                         nome,
                         sobrenome,
                         email,
@@ -59,38 +62,46 @@ class CandidatoDAO {
     }
 
     Long insertCandidato(Candidato candidato) {
+        Long candidatoId = null
 
         try {
-
-            String queryCandidato = '''
-        INSERT INTO candidatos (nome, sobrenome, data_nascimento, email, telefone, linkedin, cpf, estado, cep, descricao, formacao, senha)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        RETURNING id
+            String queryVerificaCandidato = '''
+            SELECT id FROM candidatos WHERE email = ? OR cpf = ?
         '''
+            candidatoId = sql.firstRow(queryVerificaCandidato, [candidato.email, candidato.cpf])?.id
 
-            Long candidatoId = sql.firstRow(queryCandidato, [
-                    candidato.nome,
-                    candidato.sobrenome,
-                    candidato.dataNascimento,
-                    candidato.email,
-                    candidato.telefone,
-                    candidato.linkedin,
-                    candidato.cpf,
-                    candidato.estado,
-                    candidato.cep,
-                    candidato.descricao,
-                    candidato.formacao,
-                    candidato.senha
-            ]).id
+            if (candidatoId == null) {
+                String queryCandidato = '''
+                INSERT INTO candidatos (nome, sobrenome, data_nascimento, email, telefone, linkedin, cpf, estado, cep, descricao, formacao, senha)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                RETURNING id
+            '''
 
-            return candidatoId
+                candidatoId = sql.firstRow(queryCandidato, [
+                        candidato.nome,
+                        candidato.sobrenome,
+                        candidato.dataNascimento,
+                        candidato.email,
+                        candidato.telefone,
+                        candidato.linkedin,
+                        candidato.cpf,
+                        candidato.estado,
+                        candidato.cep,
+                        candidato.descricao,
+                        candidato.formacao,
+                        candidato.senha
+                ]).id
+            } else {
+                println "Candidato já existe com o e-mail ou CPF fornecido. ID: ${candidatoId}"
+            }
 
         } catch (Exception e) {
             println "Erro ao cadastrar candidato: ${e.message}"
-            return null
         }
 
+        return candidatoId
     }
+
 
     void updateCandidato(Candidato candidato) {
 

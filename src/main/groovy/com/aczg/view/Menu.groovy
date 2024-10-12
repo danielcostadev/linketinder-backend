@@ -117,16 +117,18 @@ class Menu implements validadorEntrada{
     }
     private void menuGerenciarVagas(){
         List<String> opcoes = [
-                "1  - Listar Vagas",
-                "2  - Editar Vaga",
-                "3  - Remover Vaga"
+                "1  - Cadastrar Vaga",
+                "2  - Listar Vagas",
+                "3  - Editar Vaga",
+                "4  - Remover Vaga"
         ]
 
         exibirMenu("Vaga", opcoes, { String opcao ->
             switch (opcao) {
-                case '1': listarVagas(); break
-                case '2': editarVaga(); break
-                case '3': deletarVaga(); break
+                case '1': cadastrarVaga(); break
+                case '2': listarVagas(); break
+                case '3': editarVaga(); break
+                case '4': deletarVaga(); break
                 default: println "Entrada inválida"; break
             }
         }, { menuGerenciarEmpresas() })
@@ -174,6 +176,7 @@ class Menu implements validadorEntrada{
         getCandidatoController().deletarCandidato()
     }
 
+    private void cadastrarVaga(){getEmpresaController().adicionarVaga()}
     private void listarVagas(){
         getEmpresaController().exibirVaga()
     }

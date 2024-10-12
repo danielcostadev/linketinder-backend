@@ -15,12 +15,13 @@ class EmpresaDAO {
         try {
 
             String query = '''
-                SELECT nome, email, estado, cnpj, pais, cep, descricao, senha
-                FROM empresas
+                SELECT id, nome, email, estado, cnpj, pais, cep, descricao, senha
+                FROM empresas 
+                ORDER BY id
             '''
 
             sql.eachRow(query) { row ->
-
+                Long id = row['id']
                 String nome = row['nome']
                 String email = row['email']
                 String estado = row['estado']
@@ -31,6 +32,7 @@ class EmpresaDAO {
                 String senha = null
 
                 Empresa empresa = new Empresa(
+                        id,
                         nome,
                         email,
                         estado,
@@ -51,32 +53,40 @@ class EmpresaDAO {
     }
 
     Long insertEmpresa(Empresa empresa) {
+        Long empresaId = null
 
         try {
-
-            String queryEmpresa = '''
-        INSERT INTO empresas (nome,email,estado,cnpj,pais,cep,descricao,senha)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        RETURNING id
+            String queryVerificaEmpresa = '''
+            SELECT id FROM empresas WHERE email = ? OR cnpj = ?
         '''
+            empresaId = sql.firstRow(queryVerificaEmpresa, [empresa.email, empresa.cnpj])?.id
 
-            Long empresaId = sql.firstRow(queryEmpresa, [
-                    empresa.nome,
-                    empresa.email,
-                    empresa.estado,
-                    empresa.cnpj,
-                    empresa.pais,
-                    empresa.cep,
-                    empresa.descricao,
-                    empresa.senha
-            ]).id
+            if (empresaId == null) {
+                String queryEmpresa = '''
+                INSERT INTO empresas (nome,email,estado,cnpj,pais,cep,descricao,senha)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                RETURNING id
+            '''
 
-            return empresaId
+                empresaId = sql.firstRow(queryEmpresa, [
+                        empresa.nome,
+                        empresa.email,
+                        empresa.estado,
+                        empresa.cnpj,
+                        empresa.pais,
+                        empresa.cep,
+                        empresa.descricao,
+                        empresa.senha
+                ]).id
+            } else {
+                println "Empresa já existe com o e-mail ou CNPJ fornecido. ID: ${empresaId}"
+            }
 
         } catch (Exception e) {
             println "Erro ao cadastrar empresa: ${e.message}"
-            return null
         }
+
+        return empresaId
     }
 
     void updateEmpresa(Empresa empresa) {
