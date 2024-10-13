@@ -41,13 +41,11 @@ class CompetenciaDAO {
 
     void insertCompetencia(String nomeCompetencia, Long candidatoId = null, Long vagaId = null) {
         try {
-            // Tente obter o ID da competência se já existir
             String queryCompetenciaExistente = '''
             SELECT id FROM competencias WHERE nome = ?
         '''
             Long competenciaId = sql.firstRow(queryCompetenciaExistente, [nomeCompetencia])?.id
 
-            // Se a competência não existe, insira-a
             if (competenciaId == null) {
                 String queryInserirCompetencia = '''
                 INSERT INTO competencias (nome)
@@ -60,7 +58,6 @@ class CompetenciaDAO {
                 println "Competência '${nomeCompetencia}' já existe com ID: ${competenciaId}."
             }
 
-            // Associar a competência ao candidato ou à vaga
             if (candidatoId) {
                 String queryAssociacaoCandidato = '''
                 INSERT INTO candidato_competencias (candidato_id, competencia_id)
