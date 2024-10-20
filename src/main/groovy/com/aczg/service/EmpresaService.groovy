@@ -29,7 +29,7 @@ class EmpresaService {
 
         try {
             Empresa empresa = new Empresa(nome,email,estado,cnpj,pais,cep,descricao,senha)
-            Long empresaId = empresaDAO.insertEmpresa(empresa)
+            Long empresaId = empresaDAO.adicionarEmpresa(empresa)
 
             return empresaId
 
@@ -45,7 +45,7 @@ class EmpresaService {
 
         try {
             Vaga vaga = new Vaga(nome, descricao, local)
-            Long vagaId = vagaDAO.insertVaga(vaga.nome, vaga.descricao, vaga.local, empresaId)
+            Long vagaId = vagaDAO.adicionarVaga(vaga.nome, vaga.descricao, vaga.local, empresaId)
             println "Vaga '${nome}' cadastrada para a empresa ID: ${empresaId}"
 
             return vagaId
@@ -62,7 +62,7 @@ class EmpresaService {
 
             competencias.each { nomeCompetencia ->
                 Competencia novaCompetencia = new Competencia(nomeCompetencia)
-                competenciaDAO.insertCompetencia(novaCompetencia.nome, null, vagaId)
+                competenciaDAO.adicionarCompetencia(novaCompetencia.nome, null, vagaId)
             }
 
         } catch (Exception e) {
@@ -72,37 +72,37 @@ class EmpresaService {
 
 
     List<Empresa> mostrarEmpresas(){
-        return getEmpresaDAO().readEmpresas()
+        return getEmpresaDAO().listarEmpresas()
     }
 
     List<Vaga> mostrarVagas(){
-        return getVagaDAO().readVagas()
+        return getVagaDAO().listarVagas()
     }
 
 
     void atualizarEmpresa(Empresa empresa){
-        getEmpresaDAO().updateEmpresa(empresa)
+        getEmpresaDAO().atualizarEmpresa(empresa)
     }
 
     void atualizarVaga(Vaga vaga){
-        getVagaDAO().updateVaga(vaga)
+        getVagaDAO().atualizarVaga(vaga)
     }
 
     void atualizarCompetencia(Competencia competencia){
-        getCompetenciaDAO().updateCompetencia(competencia)
+        getCompetenciaDAO().atualizarCompetencia(competencia)
     }
 
 
     void deletarEmpresa(Long empresaId) {
-        getEmpresaDAO().deleteEmpresa(empresaId)
+        getEmpresaDAO().removerEmpresa(empresaId)
     }
 
     void deletarVaga(Long vagaId){
-        getVagaDAO().deleteVaga(vagaId)
+        getVagaDAO().removerVaga(vagaId)
     }
 
     void deletarCompetencia(Long competenciaId){
-        getCompetenciaDAO().deleteCompetencia(competenciaId)
+        getCompetenciaDAO().removerCompetencia(competenciaId)
     }
 
 }

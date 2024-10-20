@@ -34,7 +34,7 @@ class EmpresaServiceSpec extends Specification {
         String senha = "senhaSegura"
 
         when: "O método cadastrarEmpresa é chamado"
-        empresaDAO.insertEmpresa(_) >> 1L
+        empresaDAO.adicionarEmpresa(_) >> 1L
         Long empresaId = empresaService.cadastrarEmpresa(nome, email, estado, cnpj, pais, cep, descricao, senha)
 
         then: "A empresa é cadastrada com sucesso"
@@ -49,7 +49,7 @@ class EmpresaServiceSpec extends Specification {
         Long empresaId = 1L
 
         when: "O método cadastrarVaga é chamado"
-        vagaDAO.insertVaga(nome, descricao, local, empresaId) >> 2L  // Parâmetros explícitos
+        vagaDAO.adicionarVaga(nome, descricao, local, empresaId) >> 2L  // Parâmetros explícitos
         Long vagaId = empresaService.cadastrarVaga(nome, descricao, local, empresaId)
 
         then: "A vaga é cadastrada com sucesso"
@@ -59,7 +59,7 @@ class EmpresaServiceSpec extends Specification {
     def "Deve listar todas as empresas"() {
         given: "Empresas no banco de dados"
         List<Empresa> listaEmpresas = [new Empresa(1L,"Empresa X","abc@abc.com","SE","12345678000199","Brasil","49400000","testando descricao grande","senha000")]
-        empresaDAO.readEmpresas() >> listaEmpresas
+        empresaDAO.listarEmpresas() >> listaEmpresas
 
         when: "O método mostrarEmpresas é chamado"
         List<Empresa> empresas = empresaService.mostrarEmpresas()
@@ -77,7 +77,7 @@ class EmpresaServiceSpec extends Specification {
         empresaService.atualizarEmpresa(empresa)
 
         then: "A empresa é atualizada"
-        1 * empresaDAO.updateEmpresa(empresa)
+        1 * empresaDAO.atualizarEmpresa(empresa)
     }
 
     def "Deve deletar uma empresa com sucesso"() {
@@ -88,6 +88,6 @@ class EmpresaServiceSpec extends Specification {
         empresaService.deletarEmpresa(empresaId)
 
         then: "A empresa é deletada"
-        1 * empresaDAO.deleteEmpresa(empresaId)
+        1 * empresaDAO.removerEmpresa(empresaId)
     }
 }

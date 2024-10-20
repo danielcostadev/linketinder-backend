@@ -3,13 +3,13 @@ package com.aczg.DAO
 import com.aczg.model.Empresa
 import groovy.sql.Sql
 
-class EmpresaDAO {
+class EmpresaDAO implements VerificarExistenciaDeEntidadeTrait{
 
     private ConexaoDAO conexaoDAO = new ConexaoDAO()
 
     Sql sql = conexaoDAO.getSql()
 
-    List<Empresa> readEmpresas() {
+    List<Empresa> listarEmpresas() {
         List<Empresa> empresas = []
 
         try {
@@ -52,7 +52,7 @@ class EmpresaDAO {
         return empresas
     }
 
-    Long insertEmpresa(Empresa empresa) {
+    Long adicionarEmpresa(Empresa empresa) {
         Long empresaId = null
 
         try {
@@ -89,7 +89,7 @@ class EmpresaDAO {
         return empresaId
     }
 
-    void updateEmpresa(Empresa empresa) {
+    void atualizarEmpresa(Empresa empresa) {
 
         String queryUpdateEmpresa = '''
         UPDATE empresas
@@ -114,7 +114,7 @@ class EmpresaDAO {
         }
     }
 
-    void deleteEmpresa(Long empresaId) {
+    void removerEmpresa(Long empresaId) {
 
         String queryDeleteEmpresa = '''
         DELETE FROM empresas 
@@ -136,9 +136,4 @@ class EmpresaDAO {
 
     }
 
-    boolean empresaExiste(Long empresaId) {
-        String query = 'SELECT COUNT(*) FROM empresas WHERE id = ?'
-        def count = sql.firstRow(query, [empresaId])?.count ?: 0
-        return count > 0
-    }
 }

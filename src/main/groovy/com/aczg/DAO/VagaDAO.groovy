@@ -9,7 +9,7 @@ class VagaDAO {
 
     Sql sql = conexaoDAO.getSql()
 
-    List<Vaga> readVagas() {
+    List<Vaga> listarVagas() {
         List<Vaga> vagas = []
 
         try {
@@ -43,7 +43,7 @@ class VagaDAO {
         return vagas
     }
 
-    Long insertVaga(String nomeVaga, String nomeDescricao, String nomeLocal, Long empresaId) {
+    Long adicionarVaga(String nomeVaga, String nomeDescricao, String nomeLocal, Long empresaId) {
 
         try {
 
@@ -64,7 +64,7 @@ class VagaDAO {
         }
     }
 
-    void updateVaga(Vaga vaga) {
+    void atualizarVaga(Vaga vaga) {
 
         String queryUpdateVaga = '''
         UPDATE vagas
@@ -85,7 +85,7 @@ class VagaDAO {
 
     }
 
-    void deleteVaga(Long vagaId) {
+    void removerVaga(Long vagaId) {
 
         String queryDeleteVaga = '''
         DELETE FROM vagas 
@@ -107,9 +107,4 @@ class VagaDAO {
 
     }
 
-    boolean vagaExiste(Long vagaId) {
-        String query = 'SELECT COUNT(*) FROM vagas WHERE id = ?'
-        def count = sql.firstRow(query, [vagaId])?.count ?: 0
-        return count > 0
-    }
 }

@@ -5,7 +5,6 @@ import com.aczg.DAO.CompetenciaDAO
 import com.aczg.DAO.ConexaoDAO
 import com.aczg.model.Candidato
 import com.aczg.model.Competencia
-import com.aczg.model.Empresa
 import groovy.sql.Sql
 
 import java.sql.Date
@@ -27,7 +26,7 @@ class CandidatoService {
 
         try {
             Candidato candidato = new Candidato(nome,sobrenome,email,telefone,linkedin,cpf,dataNascimento,estado,cep,descricao,formacao,senha)
-            Long candidatoId = candidatoDAO.insertCandidato(candidato)
+            Long candidatoId = candidatoDAO.adicionarCandidato(candidato)
 
             return candidatoId
 
@@ -44,7 +43,7 @@ class CandidatoService {
 
             competencias.each { nomeCompetencia ->
                 Competencia novaCompetencia = new Competencia(nomeCompetencia)
-                competenciaDAO.insertCompetencia(novaCompetencia.nome, candidatoId, null)
+                competenciaDAO.adicionarCompetencia(novaCompetencia.nome, candidatoId, null)
             }
 
         } catch (Exception e) {
@@ -54,21 +53,21 @@ class CandidatoService {
 
 
     List<Candidato> mostrarCandidados(){
-        return getCandidatoDAO().readCandidados()
+        return getCandidatoDAO().listarCandidatos()
     }
 
     List<Competencia> mostrarCompetencias(){
-        return getCompetenciaDAO().readCompetencias()
+        return getCompetenciaDAO().listarCompetencias()
     }
 
 
     void atualizarCandidato(Candidato candidato){
-        getCandidatoDAO().updateCandidato(candidato)
+        getCandidatoDAO().atualizarCandidato(candidato)
     }
 
 
     void deletarCandidato(Long candidatoId) {
-        getCandidatoDAO().deleteCandidato(candidatoId)
+        getCandidatoDAO().removerCandidato(candidatoId)
     }
 
 

@@ -9,7 +9,7 @@ class CompetenciaDAO {
 
     Sql sql = conexaoDAO.getSql()
 
-    List<Competencia> readCompetencias() {
+    List<Competencia> listarCompetencias() {
         List<Competencia> competencias = []
 
         try {
@@ -39,7 +39,7 @@ class CompetenciaDAO {
         return competencias
     }
 
-    void insertCompetencia(String nomeCompetencia, Long candidatoId = null, Long vagaId = null) {
+    void adicionarCompetencia(String nomeCompetencia, Long candidatoId = null, Long vagaId = null) {
         try {
             String queryCompetenciaExistente = '''
             SELECT id FROM competencias WHERE nome = ?
@@ -83,7 +83,7 @@ class CompetenciaDAO {
         }
     }
 
-    void updateCompetencia(Competencia competencia) {
+    void atualizarCompetencia(Competencia competencia) {
 
         String queryUpdateCompetencia = '''
         UPDATE competencias
@@ -102,7 +102,7 @@ class CompetenciaDAO {
 
     }
 
-    void deleteCompetencia(Long competenciaId) {
+    void removerCompetencia(Long competenciaId) {
 
         String queryDeleteCompetencia = '''
         DELETE FROM competencias 
@@ -123,12 +123,5 @@ class CompetenciaDAO {
         }
 
     }
-
-    boolean competenciaExiste(Long competenciaId) {
-        String query = 'SELECT COUNT(*) FROM competencias WHERE id = ?'
-        def count = sql.firstRow(query, [competenciaId])?.count ?: 0
-        return count > 0
-    }
-
 
 }

@@ -4,7 +4,7 @@ import java.sql.Date
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-trait validadorEntrada {
+trait validadorEntradaTrait {
 
     public Scanner scanner = new Scanner(System.in)
 
