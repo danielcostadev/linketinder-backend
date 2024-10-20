@@ -26,7 +26,7 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
         String senha = validarTexto("Digite a SENHA da empresa: ")
 
         try {
-            Long empresaId = getEmpresaService().cadastrarEmpresa(nome,email,estado,cnpj,pais,cep,descricao,senha)
+            Long empresaId = getEmpresaService().adicionarEmpresa(nome,email,estado,cnpj,pais,cep,descricao,senha)
             println("Empresa '${nome}' cadastrada com sucesso!");
 
          /*   if(empresaId){
@@ -40,7 +40,7 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
     }
 
     void listarEmpresas(){
-        List<Empresa> empresas = getEmpresaService().mostrarEmpresas()
+        List<Empresa> empresas = getEmpresaService().listarEmpresas()
         empresas.each { empresa ->
             println "ID: ${empresa.getId()}, Descrição: ${empresa.getDescricao()}, Estado: ${empresa.getEstado()}"
         }
@@ -82,7 +82,7 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
         Long empresaId = validarInteiro("Digite o ID da empresa que deseja remover: ")
         manipularEntidade(empresaId, "Empresa",
                 { id -> getEmpresaService().getEmpresaDAO().verificarExistencia('empresas',id) },
-                { id -> getEmpresaService().deletarEmpresa(id) },
+                { id -> getEmpresaService().removerEmpresa(id) },
                 "removida"
         )
     }
@@ -107,7 +107,7 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
         String local = validarTexto("Digite o LOCAL da vaga: ")
 
         try {
-            Long vagaId = empresaService.cadastrarVaga(nome,descricao,local,empresaId)
+            Long vagaId = empresaService.adicionarVaga(nome,descricao,local,empresaId)
             println("Vaga '${nome}' cadastrada com sucesso!");
 
             if (vagaId){
@@ -121,7 +121,7 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
     }
 
     void listarVagas(){
-        List<Vaga> vagas = getEmpresaService().mostrarVagas()
+        List<Vaga> vagas = getEmpresaService().listarVagas()
         vagas.each { vaga ->
             println "ID: ${vaga.getId()}, Nome: ${vaga.getNome()}, Descrição: ${vaga.getDescricao()}, Local: ${vaga.getLocal()}"
         }
@@ -156,7 +156,7 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
         Long vagaId = validarInteiro("Digite o ID da vaga que deseja deletar: ")
         manipularEntidade(vagaId, "Vaga",
                 { id -> getEmpresaService().getVagaDAO().verificarExistencia('vagas',id) },
-                { id -> getEmpresaService().deletarVaga(id) },
+                { id -> getEmpresaService().removerVaga(id) },
                 "deletada"
         )
     }
@@ -169,7 +169,7 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
         List<String> listaCompetencias = competencias.split(",\\s*");
 
         try {
-            empresaService.cadastrarCompetencia(listaCompetencias, vagaId)
+            empresaService.adicionarCompetencia(listaCompetencias, vagaId)
             println("Competencia cadastrada com sucesso!");
 
         } catch (Exception e) {
@@ -204,7 +204,7 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
         Long competenciaId = validarInteiro("Digite o ID da competência que deseja deletar: ")
         manipularEntidade(competenciaId, "Competência",
                 { id -> getEmpresaService().getCompetenciaDAO().verificarExistencia('competencias',id) },
-                { id -> getEmpresaService().deletarCompetencia(id) },
+                { id -> getEmpresaService().removerCompetencia(id) },
                 "deletada"
         )
     }

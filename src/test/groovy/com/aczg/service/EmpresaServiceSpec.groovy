@@ -35,7 +35,7 @@ class EmpresaServiceSpec extends Specification {
 
         when: "O método cadastrarEmpresa é chamado"
         empresaDAO.adicionarEmpresa(_) >> 1L
-        Long empresaId = empresaService.cadastrarEmpresa(nome, email, estado, cnpj, pais, cep, descricao, senha)
+        Long empresaId = empresaService.adicionarEmpresa(nome, email, estado, cnpj, pais, cep, descricao, senha)
 
         then: "A empresa é cadastrada com sucesso"
         empresaId == 1L
@@ -50,7 +50,7 @@ class EmpresaServiceSpec extends Specification {
 
         when: "O método cadastrarVaga é chamado"
         vagaDAO.adicionarVaga(nome, descricao, local, empresaId) >> 2L  // Parâmetros explícitos
-        Long vagaId = empresaService.cadastrarVaga(nome, descricao, local, empresaId)
+        Long vagaId = empresaService.adicionarVaga(nome, descricao, local, empresaId)
 
         then: "A vaga é cadastrada com sucesso"
         vagaId == 2L
@@ -62,7 +62,7 @@ class EmpresaServiceSpec extends Specification {
         empresaDAO.listarEmpresas() >> listaEmpresas
 
         when: "O método mostrarEmpresas é chamado"
-        List<Empresa> empresas = empresaService.mostrarEmpresas()
+        List<Empresa> empresas = empresaService.listarEmpresas()
 
         then: "A lista de empresas é retornada corretamente"
         empresas.size() == 1
@@ -85,7 +85,7 @@ class EmpresaServiceSpec extends Specification {
         Long empresaId = 1L
 
         when: "O método deletarEmpresa é chamado"
-        empresaService.deletarEmpresa(empresaId)
+        empresaService.removerEmpresa(empresaId)
 
         then: "A empresa é deletada"
         1 * empresaDAO.removerEmpresa(empresaId)

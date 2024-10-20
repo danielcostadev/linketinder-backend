@@ -20,7 +20,8 @@ class CandidatoService {
         this.competenciaDAO = competenciaDAO
     }
 
-    Long cadastrarCandidato(String nome, String sobrenome, String email, String telefone, String linkedin, String cpf, Date dataNascimento, String estado, String cep, String descricao, String formacao, String senha){
+
+    Long adicionarCandidato(String nome, String sobrenome, String email, String telefone, String linkedin, String cpf, Date dataNascimento, String estado, String cep, String descricao, String formacao, String senha){
 
         Sql sql = conexaoDAO.getSql()
 
@@ -37,7 +38,20 @@ class CandidatoService {
         }
     }
 
-    void cadastrarCompetencia(List<String> competencias, Long candidatoId){
+    List<Candidato> listarCandidados(){
+        return getCandidatoDAO().listarCandidatos()
+    }
+
+    void atualizarCandidato(Candidato candidato){
+        getCandidatoDAO().atualizarCandidato(candidato)
+    }
+
+    void removerCandidato(Long candidatoId) {
+        getCandidatoDAO().removerCandidato(candidatoId)
+    }
+
+
+    void adicionarCompetencia(List<String> competencias, Long candidatoId){
 
         try {
 
@@ -51,24 +65,11 @@ class CandidatoService {
         }
     }
 
-
-    List<Candidato> mostrarCandidados(){
-        return getCandidatoDAO().listarCandidatos()
-    }
-
-    List<Competencia> mostrarCompetencias(){
+    List<Competencia> listarCompetencias(){
         return getCompetenciaDAO().listarCompetencias()
     }
 
 
-    void atualizarCandidato(Candidato candidato){
-        getCandidatoDAO().atualizarCandidato(candidato)
-    }
-
-
-    void deletarCandidato(Long candidatoId) {
-        getCandidatoDAO().removerCandidato(candidatoId)
-    }
 
 
 }

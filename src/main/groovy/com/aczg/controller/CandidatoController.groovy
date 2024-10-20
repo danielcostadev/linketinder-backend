@@ -31,7 +31,7 @@ class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
 
         try {
 
-            Long candidatoId = candidatoService.cadastrarCandidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha)
+            Long candidatoId = candidatoService.adicionarCandidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha)
             println("Candidato '${nome}' cadastrado com sucesso!");
 
             if (candidatoId){
@@ -44,7 +44,7 @@ class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
     }
 
     void listarCandidatos(){
-        List<Candidato> candidatos = getCandidatoService().mostrarCandidados()
+        List<Candidato> candidatos = getCandidatoService().listarCandidados()
         candidatos.each { candidato ->
             println "ID: ${candidato.getId()}, Formação ${candidato.getFormacao()}, Descrição: ${candidato.getDescricao()}"
         }
@@ -89,7 +89,7 @@ class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
         Long candidatoId = validarInteiro("Digite o ID do(a) candidato(a) que deseja remover: ")
         manipularEntidade(candidatoId, "Candidato(a)",
                 { id -> getCandidatoService().getCandidatoDAO().verificarExistencia('candidatos',id) },
-                { id -> getCandidatoService().deletarCandidato(id) },
+                { id -> getCandidatoService().removerCandidato(id) },
                 "removido(a)"
         )
     }
@@ -101,7 +101,7 @@ class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
         List<String> listaCompetencias = competencias.split(",\\s*");
 
         try {
-            candidatoService.cadastrarCompetencia(listaCompetencias, candidatoId)
+            candidatoService.adicionarCompetencia(listaCompetencias, candidatoId)
             println("Competencia cadastrada com sucesso!");
 
         } catch (Exception e) {
@@ -111,7 +111,7 @@ class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
     }
 
     void listarCompetencias(){
-        List<Competencia> competencias = getCandidatoService().mostrarCompetencias()
+        List<Competencia> competencias = getCandidatoService().listarCompetencias()
         competencias.each { competencia ->
             println "ID: ${competencia.getId()}, Nome: ${competencia.getNome()}"
         }

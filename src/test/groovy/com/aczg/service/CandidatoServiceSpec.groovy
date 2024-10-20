@@ -27,7 +27,7 @@ class CandidatoServiceSpec extends Specification {
         Candidato candidato = new Candidato("Daniel", "Costa", "daniel@test.com", "(79)99911-0213", "https://linkedin.com/in/daniel", "03658426560", Date.valueOf("1990-08-06"), "SE", "49400000", "Descrição", "Superior", "senha123")
 
         when: "Cadastrar um candidato"
-        Long candidatoId = candidatoService.cadastrarCandidato(candidato.nome, candidato.sobrenome, candidato.email, candidato.telefone, candidato.linkedin, candidato.cpf, candidato.dataNascimento, candidato.estado, candidato.cep, candidato.descricao, candidato.formacao, candidato.senha)
+        Long candidatoId = candidatoService.adicionarCandidato(candidato.nome, candidato.sobrenome, candidato.email, candidato.telefone, candidato.linkedin, candidato.cpf, candidato.dataNascimento, candidato.estado, candidato.cep, candidato.descricao, candidato.formacao, candidato.senha)
 
         then: "O candidato deve ser inserido e retornar o ID corretamente"
         1 * candidatoDAO.adicionarCandidato(_) >> 1L
@@ -40,7 +40,7 @@ class CandidatoServiceSpec extends Specification {
         List<String> competencias = ["Java", "Groovy", "SQL"]
 
         when: "Cadastrar competências para um candidato"
-        candidatoService.cadastrarCompetencia(competencias, 1L)
+        candidatoService.adicionarCompetencia(competencias, 1L)
 
         then: "As competências devem ser inseridas corretamente"
         3 * competenciaDAO.adicionarCompetencia(_, 1L, _)
@@ -52,7 +52,7 @@ class CandidatoServiceSpec extends Specification {
         candidatoDAO.listarCandidatos() >> candidatosEsperados
 
         when: "Mostrar candidatos"
-        List<Candidato> candidatos = candidatoService.mostrarCandidados()
+        List<Candidato> candidatos = candidatoService.listarCandidados()
 
         then: "A lista de candidatos deve ser a esperada"
         candidatos == candidatosEsperados
@@ -74,7 +74,7 @@ class CandidatoServiceSpec extends Specification {
         Long candidatoId = 1L
 
         when: "Deletar candidato"
-        candidatoService.deletarCandidato(candidatoId)
+        candidatoService.removerCandidato(candidatoId)
 
         then: "O método de deletar deve ser chamado com o ID correto"
         1 * candidatoDAO.removerCandidato(candidatoId)
