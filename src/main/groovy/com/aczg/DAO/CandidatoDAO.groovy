@@ -3,13 +3,13 @@ package com.aczg.DAO
 import com.aczg.model.Candidato
 import groovy.sql.Sql
 
-class CandidatoDAO {
+class CandidatoDAO implements VerificarExistenciaDeEntidadeTrait{
 
     private ConexaoDAO conexaoDAO = new ConexaoDAO()
 
     Sql sql = conexaoDAO.getSql()
 
-    List<Candidato> readCandidados() {
+    List<Candidato> listarCandidatos() {
         List<Candidato> candidatos = []
 
         try {
@@ -61,7 +61,7 @@ class CandidatoDAO {
         return candidatos
     }
 
-    Long insertCandidato(Candidato candidato) {
+    Long adicionarCandidato(Candidato candidato) {
         Long candidatoId = null
 
         try {
@@ -102,8 +102,7 @@ class CandidatoDAO {
         return candidatoId
     }
 
-
-    void updateCandidato(Candidato candidato) {
+    void atualizarCandidato(Candidato candidato) {
 
         String queryUpdateCandidato = '''
         UPDATE candidatos
@@ -133,7 +132,7 @@ class CandidatoDAO {
         }
     }
 
-    void deleteCandidato(Long candidatoId) {
+    void removerCandidato(Long candidatoId) {
 
         String queryDeleteCandidato = '''
         DELETE FROM candidatos 
@@ -154,13 +153,5 @@ class CandidatoDAO {
         }
 
     }
-
-    boolean candidatoExiste(Long candidatoId) {
-        String query = 'SELECT COUNT(*) FROM candidatos WHERE id = ?'
-        def count = sql.firstRow(query, [candidatoId])?.count ?: 0
-        return count > 0
-    }
-
-
 
 }

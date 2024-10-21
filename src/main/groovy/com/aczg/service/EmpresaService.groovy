@@ -23,13 +23,12 @@ class EmpresaService {
     }
 
 
-    Long cadastrarEmpresa(String nome, String email, String estado, String cnpj, String pais, String cep, String descricao, String senha){
+    Long adicionarEmpresa(Empresa empresa){
 
         Sql sql = conexaoDAO.getSql()
 
         try {
-            Empresa empresa = new Empresa(nome,email,estado,cnpj,pais,cep,descricao,senha)
-            Long empresaId = empresaDAO.insertEmpresa(empresa)
+            Long empresaId = empresaDAO.adicionarEmpresa(empresa)
 
             return empresaId
 
@@ -41,11 +40,24 @@ class EmpresaService {
         }
     }
 
-    Long cadastrarVaga(String nome, String descricao, String local, Long empresaId) {
+    List<Empresa> listarEmpresas(){
+        return getEmpresaDAO().listarEmpresas()
+    }
+
+    void atualizarEmpresa(Empresa empresa){
+        getEmpresaDAO().atualizarEmpresa(empresa)
+    }
+
+    void removerEmpresa(Long empresaId) {
+        getEmpresaDAO().removerEmpresa(empresaId)
+    }
+
+
+    Long adicionarVaga(String nome, String descricao, String local, Long empresaId) {
 
         try {
             Vaga vaga = new Vaga(nome, descricao, local)
-            Long vagaId = vagaDAO.insertVaga(vaga.nome, vaga.descricao, vaga.local, empresaId)
+            Long vagaId = vagaDAO.adicionarVaga(vaga.nome, vaga.descricao, vaga.local, empresaId)
             println "Vaga '${nome}' cadastrada para a empresa ID: ${empresaId}"
 
             return vagaId
@@ -56,13 +68,26 @@ class EmpresaService {
         }
     }
 
-    void cadastrarCompetencia(List<String> competencias, Long vagaId){
+    List<Vaga> listarVagas(){
+        return getVagaDAO().listarVagas()
+    }
+
+    void atualizarVaga(Vaga vaga){
+        getVagaDAO().atualizarVaga(vaga)
+    }
+
+    void removerVaga(Long vagaId){
+        getVagaDAO().removerVaga(vagaId)
+    }
+
+
+    void adicionarCompetencia(List<String> competencias, Long vagaId){
 
         try {
 
             competencias.each { nomeCompetencia ->
                 Competencia novaCompetencia = new Competencia(nomeCompetencia)
-                competenciaDAO.insertCompetencia(novaCompetencia.nome, null, vagaId)
+                competenciaDAO.adicionarCompetencia(novaCompetencia.nome, null, vagaId)
             }
 
         } catch (Exception e) {
@@ -70,39 +95,12 @@ class EmpresaService {
         }
     }
 
-
-    List<Empresa> mostrarEmpresas(){
-        return getEmpresaDAO().readEmpresas()
-    }
-
-    List<Vaga> mostrarVagas(){
-        return getVagaDAO().readVagas()
-    }
-
-
-    void atualizarEmpresa(Empresa empresa){
-        getEmpresaDAO().updateEmpresa(empresa)
-    }
-
-    void atualizarVaga(Vaga vaga){
-        getVagaDAO().updateVaga(vaga)
-    }
-
     void atualizarCompetencia(Competencia competencia){
-        getCompetenciaDAO().updateCompetencia(competencia)
+        getCompetenciaDAO().atualizarCompetencia(competencia)
     }
 
-
-    void deletarEmpresa(Long empresaId) {
-        getEmpresaDAO().deleteEmpresa(empresaId)
-    }
-
-    void deletarVaga(Long vagaId){
-        getVagaDAO().deleteVaga(vagaId)
-    }
-
-    void deletarCompetencia(Long competenciaId){
-        getCompetenciaDAO().deleteCompetencia(competenciaId)
+    void removerCompetencia(Long competenciaId){
+        getCompetenciaDAO().removerCompetencia(competenciaId)
     }
 
 }

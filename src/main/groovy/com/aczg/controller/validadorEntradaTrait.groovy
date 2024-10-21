@@ -4,7 +4,7 @@ import java.sql.Date
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-trait validadorEntrada {
+trait validadorEntradaTrait {
 
     public Scanner scanner = new Scanner(System.in)
 
@@ -55,7 +55,7 @@ trait validadorEntrada {
         }
     }
 
-    String manipularRegex(String tipo){
+    String declararEstruturaDeValidacoesComRegex(String tipo){
 
         String regex = null;
 
@@ -77,7 +77,7 @@ trait validadorEntrada {
         return regex
     }
 
-    String mensagemErro(String tipo) {
+    String exibirMensagemDeErro(String tipo) {
         String mensagem = null;
 
         switch (tipo) {
@@ -99,7 +99,7 @@ trait validadorEntrada {
 
     String validarTextoComRegex(String tipo, String mensagemInterativa, Scanner entradaScanner = scanner) {
 
-        String regex = manipularRegex(tipo)
+        String regex = declararEstruturaDeValidacoesComRegex(tipo)
 
         while (true) {
             print "${mensagemInterativa}"
@@ -107,7 +107,7 @@ trait validadorEntrada {
             if (resposta && resposta.matches(regex)) {
                 return resposta
             }
-            println mensagemErro(tipo)
+            println exibirMensagemDeErro(tipo)
         }
     }
 

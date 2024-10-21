@@ -9,7 +9,7 @@ class CompetenciaDAO {
 
     Sql sql = conexaoDAO.getSql()
 
-    List<Competencia> readCompetencias() {
+    List<Competencia> listarCompetencias() {
         List<Competencia> competencias = []
 
         try {
@@ -39,15 +39,13 @@ class CompetenciaDAO {
         return competencias
     }
 
-    void insertCompetencia(String nomeCompetencia, Long candidatoId = null, Long vagaId = null) {
+    void adicionarCompetencia(String nomeCompetencia, Long candidatoId = null, Long vagaId = null) {
         try {
-            // Tente obter o ID da competência se já existir
             String queryCompetenciaExistente = '''
             SELECT id FROM competencias WHERE nome = ?
         '''
             Long competenciaId = sql.firstRow(queryCompetenciaExistente, [nomeCompetencia])?.id
 
-            // Se a competência não existe, insira-a
             if (competenciaId == null) {
                 String queryInserirCompetencia = '''
                 INSERT INTO competencias (nome)
@@ -60,7 +58,6 @@ class CompetenciaDAO {
                 println "Competência '${nomeCompetencia}' já existe com ID: ${competenciaId}."
             }
 
-            // Associar a competência ao candidato ou à vaga
             if (candidatoId) {
                 String queryAssociacaoCandidato = '''
                 INSERT INTO candidato_competencias (candidato_id, competencia_id)
@@ -86,7 +83,7 @@ class CompetenciaDAO {
         }
     }
 
-    void updateCompetencia(Competencia competencia) {
+    void atualizarCompetencia(Competencia competencia) {
 
         String queryUpdateCompetencia = '''
         UPDATE competencias
@@ -105,7 +102,7 @@ class CompetenciaDAO {
 
     }
 
-    void deleteCompetencia(Long competenciaId) {
+    void removerCompetencia(Long competenciaId) {
 
         String queryDeleteCompetencia = '''
         DELETE FROM competencias 
@@ -126,12 +123,5 @@ class CompetenciaDAO {
         }
 
     }
-
-    boolean competenciaExiste(Long competenciaId) {
-        String query = 'SELECT COUNT(*) FROM competencias WHERE id = ?'
-        def count = sql.firstRow(query, [competenciaId])?.count ?: 0
-        return count > 0
-    }
-
 
 }
