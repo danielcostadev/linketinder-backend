@@ -23,12 +23,11 @@ class EmpresaService {
     }
 
 
-    Long adicionarEmpresa(String nome, String email, String estado, String cnpj, String pais, String cep, String descricao, String senha){
+    Long adicionarEmpresa(Empresa empresa){
 
         Sql sql = conexaoDAO.getSql()
 
         try {
-            Empresa empresa = new Empresa(nome,email,estado,cnpj,pais,cep,descricao,senha)
             Long empresaId = empresaDAO.adicionarEmpresa(empresa)
 
             return empresaId

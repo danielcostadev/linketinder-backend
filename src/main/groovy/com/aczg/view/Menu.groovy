@@ -24,10 +24,10 @@ class Menu implements validadorEntradaTrait{
     CandidatoController candidatoController = new CandidatoController(candidatoService)
     EmpresaController empresaController = new EmpresaController(empresaService)
 
-    Boolean menuAtivo = true
+    Boolean aplicacaoExecutando = true
 
     private void exibirMenu(String tipo, List<String> opcoes, Closure<?> acoes, Closure<?> onVoltar) {
-        while (menuAtivo) {
+        while (aplicacaoExecutando) {
             print "================== MENU ${tipo.toUpperCase()} ==================\n"
             print "${opcoes.join('\n')}"
             print "\n0  - Voltar\n"
@@ -48,7 +48,7 @@ class Menu implements validadorEntradaTrait{
     }
 
     void menuPrincipal(){
-        while (menuAtivo){
+        while (aplicacaoExecutando){
             print """
             ================== MENU PRINCIPAL ==================
             1  - Gerenciar Empresas
@@ -197,7 +197,7 @@ class Menu implements validadorEntradaTrait{
 
     private void encerrarAplicacao(){
         println "Encerrando aplicação..."
-        menuAtivo = false
+        aplicacaoExecutando = false
         fecharScanner()
         System.exit(0);
     }

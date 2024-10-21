@@ -16,6 +16,13 @@ class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
 
 
     void adicionarCandidato(){
+
+        exibirFormularioParaAdicionarCandidato()
+
+    }
+
+    void exibirFormularioParaAdicionarCandidato(){
+
         String nome = validarTextoComRegex("nome","Digite o NOME do candidato: ")
         String sobrenome = validarTextoComRegex("sobrenome","Digite O SOBRENOME do candidato ")
         String email = validarTextoComRegex("email","Digite o EMAIL pessoal do candidato: ")
@@ -31,7 +38,7 @@ class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
 
         try {
 
-            Long candidatoId = candidatoService.adicionarCandidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha)
+            Long candidatoId = candidatoService.adicionarCandidato(new Candidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha))
             println("Candidato '${nome}' cadastrado com sucesso!");
 
             if (candidatoId){
@@ -41,6 +48,7 @@ class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
         } catch (Exception e) {
             println("Erro ao cadastrar dados': ${e.message}");
         }
+
     }
 
     void listarCandidatos(){
@@ -81,7 +89,7 @@ class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
             getCandidatoService().atualizarCandidato(candidatoAtualizado)
             println "candidato atualizado com sucesso!"
         } catch (Exception e) {
-            println "Erro ao atualizar empresa: ${e.message}"
+            println "Erro ao atualizar candidato: ${e.message}"
         }
     }
 
@@ -96,6 +104,12 @@ class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
 
 
     void adicionarCompetencia(Long candidatoId){
+
+        exibirFormularioParaAdicionarCompetencia(candidatoId)
+
+    }
+
+    private void exibirFormularioParaAdicionarCompetencia(Long candidatoId){
 
         String competencias = validarTexto("Digite as competências separadas por vírgula: ");
         List<String> listaCompetencias = competencias.split(",\\s*");

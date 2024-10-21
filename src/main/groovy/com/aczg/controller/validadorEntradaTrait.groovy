@@ -55,7 +55,7 @@ trait validadorEntradaTrait {
         }
     }
 
-    String manipularRegex(String tipo){
+    String declararEstruturaDeValidacoesComRegex(String tipo){
 
         String regex = null;
 
@@ -77,7 +77,7 @@ trait validadorEntradaTrait {
         return regex
     }
 
-    String mensagemErro(String tipo) {
+    String exibirMensagemDeErro(String tipo) {
         String mensagem = null;
 
         switch (tipo) {
@@ -99,7 +99,7 @@ trait validadorEntradaTrait {
 
     String validarTextoComRegex(String tipo, String mensagemInterativa, Scanner entradaScanner = scanner) {
 
-        String regex = manipularRegex(tipo)
+        String regex = declararEstruturaDeValidacoesComRegex(tipo)
 
         while (true) {
             print "${mensagemInterativa}"
@@ -107,7 +107,7 @@ trait validadorEntradaTrait {
             if (resposta && resposta.matches(regex)) {
                 return resposta
             }
-            println mensagemErro(tipo)
+            println exibirMensagemDeErro(tipo)
         }
     }
 

@@ -21,12 +21,11 @@ class CandidatoService {
     }
 
 
-    Long adicionarCandidato(String nome, String sobrenome, String email, String telefone, String linkedin, String cpf, Date dataNascimento, String estado, String cep, String descricao, String formacao, String senha){
+    Long adicionarCandidato(Candidato candidato){
 
         Sql sql = conexaoDAO.getSql()
 
         try {
-            Candidato candidato = new Candidato(nome,sobrenome,email,telefone,linkedin,cpf,dataNascimento,estado,cep,descricao,formacao,senha)
             Long candidatoId = candidatoDAO.adicionarCandidato(candidato)
 
             return candidatoId

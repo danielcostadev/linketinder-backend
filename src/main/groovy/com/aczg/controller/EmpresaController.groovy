@@ -16,6 +16,12 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
 
     void adicionarEmpresa(){
 
+        exibirFormularioParaAdicionarEmpresa()
+
+    }
+
+    void exibirFormularioParaAdicionarEmpresa(){
+
         String nome = validarTextoComRegex("nome","Digite o NOME da empresa: ")
         String email = validarTextoComRegex("email","Digite o EMAIL da empresa: ")
         String estado = validarTextoComRegex("estado","Digite o estado da empresa: ").toUpperCase()
@@ -26,17 +32,16 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
         String senha = validarTexto("Digite a SENHA da empresa: ")
 
         try {
-            Long empresaId = getEmpresaService().adicionarEmpresa(nome,email,estado,cnpj,pais,cep,descricao,senha)
+            Long empresaId = getEmpresaService().adicionarEmpresa(new Empresa(nome,email,estado,cnpj,pais,cep,descricao,senha))
             println("Empresa '${nome}' cadastrada com sucesso!");
 
-         /*   if(empresaId){
-                adicionarVaga(empresaId)
-            }*/
+            /*   if(empresaId){
+                   adicionarVaga(empresaId)
+               }*/
 
         } catch (Exception e) {
             println("Erro ao cadastrar empresa '${nome}': ${e.message}");
         }
-
     }
 
     void listarEmpresas(){
@@ -50,12 +55,12 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
         Long empresaId = validarInteiro("Digite o ID da empresa que deseja atualizar: ")
         manipularEntidade(empresaId, "Empresa",
                 { id -> getEmpresaService().getEmpresaDAO().verificarExistencia('empresas',id) },
-                { id -> exibirFormularioParaEdicaoDeEmpresa(id) },
+                { id -> exibirFormularioParaAtualizarEmpresa(id) },
                 "atualizada"
         )
     }
 
-    private void exibirFormularioParaEdicaoDeEmpresa(Long empresaId){
+    private void exibirFormularioParaAtualizarEmpresa(Long empresaId){
 
         String newNome = validarTexto("Digite o NOME da empresa: ")
         String newEmail = validarTexto("Digite o EMAIL da empresa: ")
@@ -93,13 +98,13 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
         Long empresaId = validarInteiro("Digite o ID da empresa que está cadastrando a vaga: ")
         manipularEntidade(empresaId, "Empresa",
                 { id -> getEmpresaService().getEmpresaDAO().verificarExistencia('empresas',id) },
-                { id -> exibirFormularioParaCadastroDeVaga(id) },
+                { id -> exibirFormularioParaAdicionarVaga(id) },
                 "cadastrada",
                 "Vaga"
         )
     }
 
-    private void exibirFormularioParaCadastroDeVaga(Long empresaId){
+    private void exibirFormularioParaAdicionarVaga(Long empresaId){
 
         print "================== CADASTRO DE VAGA ==================\n"
         String nome = validarTexto("Digite o TITULO da vaga: ")
@@ -131,12 +136,12 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
         Long vagaId = validarInteiro("Digite o ID da vaga que deseja atualizar: ")
         manipularEntidade(vagaId, "Vaga",
                 { id -> getEmpresaService().getVagaDAO().verificarExistencia('vagas',id) },
-                { id -> exibirFormularioParaEdicaoDeVaga(id) },
+                { id -> exibirFormularioParaAtualizarVaga(id) },
                 "atualizada"
         )
     }
 
-    private void exibirFormularioParaEdicaoDeVaga(Long vagaId){
+    private void exibirFormularioParaAtualizarVaga(Long vagaId){
         String newNome = validarTexto("Digite o NOME da vaga: ")
         String newDescricao = validarTexto("Digite o DESCRIÇÃO da vaga: ")
         String newLocal = validarTexto("Digite o LOCAL da vaga: ")
@@ -165,6 +170,12 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
 
     void adicionarCompetencia(Long vagaId){
 
+        exibirFormularioParaAdicionarCompetencia()
+
+    }
+
+    private void exibirFormularioParaAdicionarCompetencia(){
+
         String competencias = validarTexto("Digite as competências separadas por vírgula: ");
         List<String> listaCompetencias = competencias.split(",\\s*");
 
@@ -175,18 +186,19 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
         } catch (Exception e) {
             println("Erro ao cadastrar dados': ${e.message}");
         }
+
     }
 
     void atualizarCompetencia() {
         Long competenciaId = validarInteiro("Digite o ID da competência que deseja editar: ")
         manipularEntidade(competenciaId, "Competência",
                 { id -> getEmpresaService().getCompetenciaDAO().verificarExistencia('competencias',id) },
-                { id -> exibirFormularioParaEdicaoDeCompetencia(id) },
+                { id -> exibirFormularioParaAtualizarCompetencia(id) },
                 "atualizada"
         )
     }
 
-    private void exibirFormularioParaEdicaoDeCompetencia(Long competenciaId){
+    private void exibirFormularioParaAtualizarCompetencia(Long competenciaId){
         String newNome = validarTexto("Digite o NOME da competência: ")
 
         Competencia competenciaAtualizada = new Competencia(newNome)
