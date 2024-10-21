@@ -2,12 +2,11 @@ package com.aczg.controller
 
 import com.aczg.model.Candidato
 import com.aczg.model.Competencia
-import com.aczg.model.Empresa
 import com.aczg.service.CandidatoService
 
 import java.sql.Date
 
-class CandidatoController implements validadorEntrada, EntidadeTrait{
+class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
 
     CandidatoService candidatoService
 
@@ -15,7 +14,15 @@ class CandidatoController implements validadorEntrada, EntidadeTrait{
         this.candidatoService = candidatoService
     }
 
+
     void adicionarCandidato(){
+
+        exibirFormularioParaAdicionarCandidato()
+
+    }
+
+    void exibirFormularioParaAdicionarCandidato(){
+
         String nome = validarTextoComRegex("nome","Digite o NOME do candidato: ")
         String sobrenome = validarTextoComRegex("sobrenome","Digite O SOBRENOME do candidato ")
         String email = validarTextoComRegex("email","Digite o EMAIL pessoal do candidato: ")
@@ -31,7 +38,7 @@ class CandidatoController implements validadorEntrada, EntidadeTrait{
 
         try {
 
-            Long candidatoId = candidatoService.cadastrarCandidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha)
+            Long candidatoId = candidatoService.adicionarCandidato(new Candidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha))
             println("Candidato '${nome}' cadastrado com sucesso!");
 
             if (candidatoId){
@@ -41,47 +48,26 @@ class CandidatoController implements validadorEntrada, EntidadeTrait{
         } catch (Exception e) {
             println("Erro ao cadastrar dados': ${e.message}");
         }
-    }
-
-    void adicionarCompetencia(Long candidatoId){
-
-        String competencias = validarTexto("Digite as competências separadas por vírgula: ");
-        List<String> listaCompetencias = competencias.split(",\\s*");
-
-        try {
-            candidatoService.cadastrarCompetencia(listaCompetencias, candidatoId)
-            println("Competencia cadastrada com sucesso!");
-
-        } catch (Exception e) {
-            println("Erro ao cadastrar dados': ${e.message}");
-        }
 
     }
 
-    void exibirCandidado(){
-        List<Candidato> candidatos = getCandidatoService().mostrarCandidados()
+    void listarCandidatos(){
+        List<Candidato> candidatos = getCandidatoService().listarCandidados()
         candidatos.each { candidato ->
             println "ID: ${candidato.getId()}, Formação ${candidato.getFormacao()}, Descrição: ${candidato.getDescricao()}"
-        }
-    }
-
-    void exibirCompetencias(){
-        List<Competencia> competencias = getCandidatoService().mostrarCompetencias()
-        competencias.each { competencia ->
-            println "ID: ${competencia.getId()}, Nome: ${competencia.getNome()}"
         }
     }
 
     void atualizarCandidato() {
         Long candidatoId = validarInteiro("Digite o ID do candidato que deseja editar: ")
         manipularEntidade(candidatoId, "Candidato",
-                { id -> getCandidatoService().getCandidatoDAO().candidatoExiste(id) },
-                { id -> editarCandidato(id) },
+                { id -> getCandidatoService().getCandidatoDAO().verificarExistencia('candidatos',id) },
+                { id -> exibirFormularioParaEdicaoDeCandidato(id) },
                 "atualizada"
         )
     }
 
-    private void editarCandidato(Long candidatoId){
+    private void exibirFormularioParaEdicaoDeCandidato(Long candidatoId){
 
         String newNome = validarTexto("Digite o NOME do candidato: ")
         String newSobrenome = validarTexto("Digite O SOBRENOME do candidato ")
@@ -96,25 +82,53 @@ class CandidatoController implements validadorEntrada, EntidadeTrait{
         String newFormacao = validarTexto("Digite a FORMAÇÃO do candidato: ")
         String newSenha = validarTexto("Digite a SENHA do candidato: ")
 
-        Candidato candidatoAtualizada = new Candidato(newNome,newSobrenome,newEmail,newTelefone,newLinkedin,newCpf,newDataNascimento,newEstado,newCep,newDescricao,newFormacao,newSenha)
-        candidatoAtualizada.id = candidatoId
+        Candidato candidatoAtualizado = new Candidato(newNome,newSobrenome,newEmail,newTelefone,newLinkedin,newCpf,newDataNascimento,newEstado,newCep,newDescricao,newFormacao,newSenha)
+        candidatoAtualizado.id = candidatoId
 
         try {
-            getCandidatoService().atualizarCandidato(candidatoAtualizada)
+            getCandidatoService().atualizarCandidato(candidatoAtualizado)
             println "candidato atualizado com sucesso!"
         } catch (Exception e) {
-            println "Erro ao atualizar empresa: ${e.message}"
+            println "Erro ao atualizar candidato: ${e.message}"
         }
     }
 
-    void deletarCandidato(){
-        Long candidatoId = validarInteiro("Digite o ID do candidato que deseja deletar: ")
-        manipularEntidade(candidatoId, "Candidato",
-                { id -> getCandidatoService().getCandidatoDAO().candidatoExiste(id) },
-                { id -> getCandidatoService().deletarCandidato(id) },
-                "deletada"
+    void removerCandidato(){
+        Long candidatoId = validarInteiro("Digite o ID do(a) candidato(a) que deseja remover: ")
+        manipularEntidade(candidatoId, "Candidato(a)",
+                { id -> getCandidatoService().getCandidatoDAO().verificarExistencia('candidatos',id) },
+                { id -> getCandidatoService().removerCandidato(id) },
+                "removido(a)"
         )
     }
 
+
+    void adicionarCompetencia(Long candidatoId){
+
+        exibirFormularioParaAdicionarCompetencia(candidatoId)
+
+    }
+
+    private void exibirFormularioParaAdicionarCompetencia(Long candidatoId){
+
+        String competencias = validarTexto("Digite as competências separadas por vírgula: ");
+        List<String> listaCompetencias = competencias.split(",\\s*");
+
+        try {
+            candidatoService.adicionarCompetencia(listaCompetencias, candidatoId)
+            println("Competencia cadastrada com sucesso!");
+
+        } catch (Exception e) {
+            println("Erro ao cadastrar dados': ${e.message}");
+        }
+
+    }
+
+    void listarCompetencias(){
+        List<Competencia> competencias = getCandidatoService().listarCompetencias()
+        competencias.each { competencia ->
+            println "ID: ${competencia.getId()}, Nome: ${competencia.getNome()}"
+        }
+    }
 
 }

@@ -5,7 +5,7 @@ import com.aczg.model.Empresa
 import com.aczg.model.Vaga
 import com.aczg.service.EmpresaService
 
-class EmpresaController implements validadorEntrada, EntidadeTrait{
+class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
 
     EmpresaService empresaService
 
@@ -15,6 +15,12 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
 
 
     void adicionarEmpresa(){
+
+        exibirFormularioParaAdicionarEmpresa()
+
+    }
+
+    void exibirFormularioParaAdicionarEmpresa(){
 
         String nome = validarTextoComRegex("nome","Digite o NOME da empresa: ")
         String email = validarTextoComRegex("email","Digite o EMAIL da empresa: ")
@@ -26,139 +32,35 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
         String senha = validarTexto("Digite a SENHA da empresa: ")
 
         try {
-            Long empresaId = getEmpresaService().cadastrarEmpresa(nome,email,estado,cnpj,pais,cep,descricao,senha)
+            Long empresaId = getEmpresaService().adicionarEmpresa(new Empresa(nome,email,estado,cnpj,pais,cep,descricao,senha))
             println("Empresa '${nome}' cadastrada com sucesso!");
 
-         /*   if(empresaId){
-                adicionarVaga(empresaId)
-            }*/
+            /*   if(empresaId){
+                   adicionarVaga(empresaId)
+               }*/
 
         } catch (Exception e) {
             println("Erro ao cadastrar empresa '${nome}': ${e.message}");
         }
-
     }
 
-    void exibirEmpresa(){
-        List<Empresa> empresas = getEmpresaService().mostrarEmpresas()
+    void listarEmpresas(){
+        List<Empresa> empresas = getEmpresaService().listarEmpresas()
         empresas.each { empresa ->
             println "ID: ${empresa.getId()}, Descrição: ${empresa.getDescricao()}, Estado: ${empresa.getEstado()}"
         }
     }
 
     void atualizarEmpresa() {
-        Long empresaId = validarInteiro("Digite o ID da empresa que deseja editar: ")
+        Long empresaId = validarInteiro("Digite o ID da empresa que deseja atualizar: ")
         manipularEntidade(empresaId, "Empresa",
-                { id -> getEmpresaService().getEmpresaDAO().empresaExiste(id) },
-                { id -> editarEmpresa(id) },
+                { id -> getEmpresaService().getEmpresaDAO().verificarExistencia('empresas',id) },
+                { id -> exibirFormularioParaAtualizarEmpresa(id) },
                 "atualizada"
         )
     }
 
-    void deletarEmpresa() {
-        Long empresaId = validarInteiro("Digite o ID da empresa que deseja deletar: ")
-        manipularEntidade(empresaId, "Empresa",
-                { id -> getEmpresaService().getEmpresaDAO().empresaExiste(id) },
-                { id -> getEmpresaService().deletarEmpresa(id) },
-                "deletada"
-        )
-    }
-
-
-
-    void adicionarVaga(){
-        Long empresaId = validarInteiro("Digite o ID da empresa que está cadastrando a vaga: ")
-        manipularEntidade(empresaId, "Empresa",
-                { id -> getEmpresaService().getEmpresaDAO().empresaExiste(id) },
-                { id -> cadastrarVaga(id) },
-                "cadastrada",
-                "Vaga"
-        )
-    }
-
-    void exibirVaga(){
-        List<Vaga> vagas = getEmpresaService().mostrarVagas()
-        vagas.each { vaga ->
-            println "ID: ${vaga.getId()}, Nome: ${vaga.getNome()}, Descrição: ${vaga.getDescricao()}, Local: ${vaga.getLocal()}"
-        }
-    }
-
-    void atualizarVaga() {
-        Long vagaId = validarInteiro("Digite o ID da vaga que deseja editar: ")
-        manipularEntidade(vagaId, "Vaga",
-                { id -> getEmpresaService().getVagaDAO().vagaExiste(id) },
-                { id -> editarVaga(id) },
-                "atualizada"
-        )
-    }
-
-    void deletarVaga() {
-        Long vagaId = validarInteiro("Digite o ID da vaga que deseja deletar: ")
-        manipularEntidade(vagaId, "Vaga",
-                { id -> getEmpresaService().getVagaDAO().vagaExiste(id) },
-                { id -> getEmpresaService().deletarVaga(id) },
-                "deletada"
-        )
-    }
-
-
-
-    void adicionarCompetencia(Long vagaId){
-
-        String competencias = validarTexto("Digite as competências separadas por vírgula: ");
-        List<String> listaCompetencias = competencias.split(",\\s*");
-
-        try {
-            empresaService.cadastrarCompetencia(listaCompetencias, vagaId)
-            println("Competencia cadastrada com sucesso!");
-
-        } catch (Exception e) {
-            println("Erro ao cadastrar dados': ${e.message}");
-        }
-    }
-
-    void atualizarCompetencia() {
-        Long competenciaId = validarInteiro("Digite o ID da competência que deseja editar: ")
-        manipularEntidade(competenciaId, "Competência",
-                { id -> getEmpresaService().getCompetenciaDAO().competenciaExiste(id) },
-                { id -> editarCompetencia(id) },
-                "atualizada"
-        )
-    }
-
-    void deletarCompetencia() {
-        Long competenciaId = validarInteiro("Digite o ID da competência que deseja deletar: ")
-        manipularEntidade(competenciaId, "Competência",
-                { id -> getEmpresaService().getCompetenciaDAO().competenciaExiste(id) },
-                { id -> getEmpresaService().deletarCompetencia(id) },
-                "deletada"
-        )
-    }
-
-
-    private void cadastrarVaga(Long empresaId){
-
-        print "================== CADASTRO DE VAGA ==================\n"
-        String nome = validarTexto("Digite o TITULO da vaga: ")
-        String descricao = validarTexto("Digite a DESCRIÇÃO da vaga: ")
-        String local = validarTexto("Digite o LOCAL da vaga: ")
-
-        try {
-            Long vagaId = empresaService.cadastrarVaga(nome,descricao,local,empresaId)
-            println("Vaga '${nome}' cadastrada com sucesso!");
-
-            if (vagaId){
-                adicionarCompetencia(vagaId)
-            }
-
-        } catch (Exception e) {
-            println("Erro ao cadastrar vaga '${nome}': ${e.message}");
-        }
-
-    }
-
-
-    private void editarEmpresa(Long empresaId){
+    private void exibirFormularioParaAtualizarEmpresa(Long empresaId){
 
         String newNome = validarTexto("Digite o NOME da empresa: ")
         String newEmail = validarTexto("Digite o EMAIL da empresa: ")
@@ -181,7 +83,65 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
         }
     }
 
-    private void editarVaga(Long vagaId){
+    void removerEmpresa() {
+        Long empresaId = validarInteiro("Digite o ID da empresa que deseja remover: ")
+        manipularEntidade(empresaId, "Empresa",
+                { id -> getEmpresaService().getEmpresaDAO().verificarExistencia('empresas',id) },
+                { id -> getEmpresaService().removerEmpresa(id) },
+                "removida"
+        )
+    }
+
+
+
+    void adicionarVaga(){
+        Long empresaId = validarInteiro("Digite o ID da empresa que está cadastrando a vaga: ")
+        manipularEntidade(empresaId, "Empresa",
+                { id -> getEmpresaService().getEmpresaDAO().verificarExistencia('empresas',id) },
+                { id -> exibirFormularioParaAdicionarVaga(id) },
+                "cadastrada",
+                "Vaga"
+        )
+    }
+
+    private void exibirFormularioParaAdicionarVaga(Long empresaId){
+
+        print "================== CADASTRO DE VAGA ==================\n"
+        String nome = validarTexto("Digite o TITULO da vaga: ")
+        String descricao = validarTexto("Digite a DESCRIÇÃO da vaga: ")
+        String local = validarTexto("Digite o LOCAL da vaga: ")
+
+        try {
+            Long vagaId = empresaService.adicionarVaga(nome,descricao,local,empresaId)
+            println("Vaga '${nome}' cadastrada com sucesso!");
+
+            if (vagaId){
+                adicionarCompetencia(vagaId)
+            }
+
+        } catch (Exception e) {
+            println("Erro ao cadastrar vaga '${nome}': ${e.message}");
+        }
+
+    }
+
+    void listarVagas(){
+        List<Vaga> vagas = getEmpresaService().listarVagas()
+        vagas.each { vaga ->
+            println "ID: ${vaga.getId()}, Nome: ${vaga.getNome()}, Descrição: ${vaga.getDescricao()}, Local: ${vaga.getLocal()}"
+        }
+    }
+
+    void atualizarVaga() {
+        Long vagaId = validarInteiro("Digite o ID da vaga que deseja atualizar: ")
+        manipularEntidade(vagaId, "Vaga",
+                { id -> getEmpresaService().getVagaDAO().verificarExistencia('vagas',id) },
+                { id -> exibirFormularioParaAtualizarVaga(id) },
+                "atualizada"
+        )
+    }
+
+    private void exibirFormularioParaAtualizarVaga(Long vagaId){
         String newNome = validarTexto("Digite o NOME da vaga: ")
         String newDescricao = validarTexto("Digite o DESCRIÇÃO da vaga: ")
         String newLocal = validarTexto("Digite o LOCAL da vaga: ")
@@ -197,7 +157,48 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
         }
     }
 
-    private void editarCompetencia(Long competenciaId){
+    void removerVaga() {
+        Long vagaId = validarInteiro("Digite o ID da vaga que deseja deletar: ")
+        manipularEntidade(vagaId, "Vaga",
+                { id -> getEmpresaService().getVagaDAO().verificarExistencia('vagas',id) },
+                { id -> getEmpresaService().removerVaga(id) },
+                "deletada"
+        )
+    }
+
+
+
+    void adicionarCompetencia(Long vagaId){
+
+        exibirFormularioParaAdicionarCompetencia()
+
+    }
+
+    private void exibirFormularioParaAdicionarCompetencia(){
+
+        String competencias = validarTexto("Digite as competências separadas por vírgula: ");
+        List<String> listaCompetencias = competencias.split(",\\s*");
+
+        try {
+            empresaService.adicionarCompetencia(listaCompetencias, vagaId)
+            println("Competencia cadastrada com sucesso!");
+
+        } catch (Exception e) {
+            println("Erro ao cadastrar dados': ${e.message}");
+        }
+
+    }
+
+    void atualizarCompetencia() {
+        Long competenciaId = validarInteiro("Digite o ID da competência que deseja editar: ")
+        manipularEntidade(competenciaId, "Competência",
+                { id -> getEmpresaService().getCompetenciaDAO().verificarExistencia('competencias',id) },
+                { id -> exibirFormularioParaAtualizarCompetencia(id) },
+                "atualizada"
+        )
+    }
+
+    private void exibirFormularioParaAtualizarCompetencia(Long competenciaId){
         String newNome = validarTexto("Digite o NOME da competência: ")
 
         Competencia competenciaAtualizada = new Competencia(newNome)
@@ -210,5 +211,19 @@ class EmpresaController implements validadorEntrada, EntidadeTrait{
             println "Erro ao atualizar vaga: ${e.message}"
         }
     }
+
+    void removerCompetencia() {
+        Long competenciaId = validarInteiro("Digite o ID da competência que deseja deletar: ")
+        manipularEntidade(competenciaId, "Competência",
+                { id -> getEmpresaService().getCompetenciaDAO().verificarExistencia('competencias',id) },
+                { id -> getEmpresaService().removerCompetencia(id) },
+                "deletada"
+        )
+    }
+
+
+
+
+
 
 }

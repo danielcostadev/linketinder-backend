@@ -7,11 +7,11 @@ import com.aczg.DAO.VagaDAO
 import com.aczg.controller.CandidatoController
 
 import com.aczg.controller.EmpresaController
-import com.aczg.controller.validadorEntrada
+import com.aczg.controller.validadorEntradaTrait
 import com.aczg.service.CandidatoService
 import com.aczg.service.EmpresaService
 
-class Menu implements validadorEntrada{
+class Menu implements validadorEntradaTrait{
 
     CandidatoDAO candidatoDAO = new CandidatoDAO()
     CompetenciaDAO competenciaDAO = new CompetenciaDAO()
@@ -24,10 +24,10 @@ class Menu implements validadorEntrada{
     CandidatoController candidatoController = new CandidatoController(candidatoService)
     EmpresaController empresaController = new EmpresaController(empresaService)
 
-    Boolean menuAtivo = true
+    Boolean aplicacaoExecutando = true
 
     private void exibirMenu(String tipo, List<String> opcoes, Closure<?> acoes, Closure<?> onVoltar) {
-        while (menuAtivo) {
+        while (aplicacaoExecutando) {
             print "================== MENU ${tipo.toUpperCase()} ==================\n"
             print "${opcoes.join('\n')}"
             print "\n0  - Voltar\n"
@@ -48,7 +48,7 @@ class Menu implements validadorEntrada{
     }
 
     void menuPrincipal(){
-        while (menuAtivo){
+        while (aplicacaoExecutando){
             print """
             ================== MENU PRINCIPAL ==================
             1  - Gerenciar Empresas
@@ -154,50 +154,50 @@ class Menu implements validadorEntrada{
         getEmpresaController().adicionarEmpresa()
     }
     private void listarEmpresas(){
-        getEmpresaController().exibirEmpresa()
+        getEmpresaController().listarEmpresas()
     }
     private void editarEmpresa(){
         getEmpresaController().atualizarEmpresa()
     }
     private void deletarEmpresa(){
-        getEmpresaController().deletarEmpresa()
+        getEmpresaController().removerEmpresa()
     }
 
     private void cadastrarCandidato(){
         getCandidatoController().adicionarCandidato()
     }
     private void listarCandidatos(){
-        getCandidatoController().exibirCandidado()
+        getCandidatoController().listarCandidatos()
     }
     private void editarCandidato(){
         getCandidatoController().atualizarCandidato()
     }
     private void deletarCandidato(){
-        getCandidatoController().deletarCandidato()
+        getCandidatoController().removerCandidato()
     }
 
     private void cadastrarVaga(){getEmpresaController().adicionarVaga()}
     private void listarVagas(){
-        getEmpresaController().exibirVaga()
+        getEmpresaController().listarVagas()
     }
     private void editarVaga(){getEmpresaController().atualizarVaga()}
     private void deletarVaga(){
-        getEmpresaController().deletarVaga()
+        getEmpresaController().removerVaga()
     }
 
     private void listarCompetencias(){
-        getCandidatoController().exibirCompetencias()
+        getCandidatoController().listarCompetencias()
     }
     private void editarCompetencia(){getEmpresaController().atualizarCompetencia()}
     private void deletarCompetencia(){
-        getEmpresaController().deletarCompetencia()
+        getEmpresaController().removerCompetencia()
     }
 
 
 
     private void encerrarAplicacao(){
         println "Encerrando aplicação..."
-        menuAtivo = false
+        aplicacaoExecutando = false
         fecharScanner()
         System.exit(0);
     }
