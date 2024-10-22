@@ -14,7 +14,6 @@ class EmpresaService {
     EmpresaDAO empresaDAO
     VagaDAO vagaDAO
     CompetenciaDAO competenciaDAO
-    ConexaoDAO conexaoDAO = new ConexaoDAO()
 
     EmpresaService(EmpresaDAO empresaDAO, VagaDAO vagaDAO, CompetenciaDAO competenciaDAO){
         this.empresaDAO = empresaDAO
@@ -25,18 +24,13 @@ class EmpresaService {
 
     Long adicionarEmpresa(Empresa empresa){
 
-        Sql sql = conexaoDAO.getSql()
-
         try {
             Long empresaId = empresaDAO.adicionarEmpresa(empresa)
-
             return empresaId
 
         } catch (Exception e) {
             println "Erro ao cadastrar empresa e vagas: ${e.message}"
             return null
-        } finally {
-            sql.close()
         }
     }
 

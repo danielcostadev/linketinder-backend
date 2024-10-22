@@ -176,11 +176,15 @@ class Menu implements validadorEntradaTrait{
         getCandidatoController().removerCandidato()
     }
 
-    private void cadastrarVaga(){getEmpresaController().adicionarVaga()}
+    private void cadastrarVaga(){
+        getEmpresaController().adicionarVaga()
+    }
     private void listarVagas(){
         getEmpresaController().listarVagas()
     }
-    private void editarVaga(){getEmpresaController().atualizarVaga()}
+    private void editarVaga(){
+        getEmpresaController().atualizarVaga()
+    }
     private void deletarVaga(){
         getEmpresaController().removerVaga()
     }
@@ -188,12 +192,12 @@ class Menu implements validadorEntradaTrait{
     private void listarCompetencias(){
         getCandidatoController().listarCompetencias()
     }
-    private void editarCompetencia(){getEmpresaController().atualizarCompetencia()}
+    private void editarCompetencia(){
+        getEmpresaController().atualizarCompetencia()
+    }
     private void deletarCompetencia(){
         getEmpresaController().removerCompetencia()
     }
-
-
 
     private void encerrarAplicacao(){
         println "Encerrando aplicação..."
