@@ -23,8 +23,6 @@ class CandidatoService {
 
     Long adicionarCandidato(Candidato candidato){
 
-        Sql sql = conexaoDAO.getSql()
-
         try {
             Long candidatoId = candidatoDAO.adicionarCandidato(candidato)
 
@@ -32,8 +30,6 @@ class CandidatoService {
 
         } catch (Exception e){
             println "Erro ao cadastrar candidato: ${e.message}"
-        } finally {
-            sql.close()
         }
     }
 

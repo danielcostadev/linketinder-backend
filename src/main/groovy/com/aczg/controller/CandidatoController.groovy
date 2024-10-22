@@ -14,14 +14,7 @@ class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
         this.candidatoService = candidatoService
     }
 
-
     void adicionarCandidato(){
-
-        exibirFormularioParaAdicionarCandidato()
-
-    }
-
-    void exibirFormularioParaAdicionarCandidato(){
 
         String nome = validarTextoComRegex("nome","Digite o NOME do candidato: ")
         String sobrenome = validarTextoComRegex("sobrenome","Digite O SOBRENOME do candidato ")
