@@ -1,7 +1,6 @@
 package com.aczg.controller
 
 import com.aczg.model.Candidato
-import com.aczg.model.Competencia
 import com.aczg.service.CandidatoService
 
 import java.sql.Date
