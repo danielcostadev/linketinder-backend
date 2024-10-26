@@ -1,23 +1,15 @@
 package com.aczg.service
 
-import com.aczg.DAO.CandidatoDAO
-import com.aczg.DAO.CompetenciaDAO
-import com.aczg.DAO.ConexaoDAO
-import com.aczg.model.Candidato
-import com.aczg.model.Competencia
-import groovy.sql.Sql
 
-import java.sql.Date
+import com.aczg.DAO.ICandidatoDAO
+import com.aczg.model.Candidato
 
 class CandidatoService {
 
-    CandidatoDAO candidatoDAO
-    CompetenciaDAO competenciaDAO
-    ConexaoDAO conexaoDAO = new ConexaoDAO()
+    ICandidatoDAO candidatoDAO
 
-    CandidatoService(CandidatoDAO candidatoDAO, CompetenciaDAO competenciaDAO){
+    CandidatoService(ICandidatoDAO candidatoDAO){
         this.candidatoDAO = candidatoDAO
-        this.competenciaDAO = competenciaDAO
     }
 
 
@@ -44,27 +36,5 @@ class CandidatoService {
     void removerCandidato(Long candidatoId) {
         getCandidatoDAO().removerCandidato(candidatoId)
     }
-
-
-    void adicionarCompetencia(List<String> competencias, Long candidatoId){
-
-        try {
-
-            competencias.each { nomeCompetencia ->
-                Competencia novaCompetencia = new Competencia(nomeCompetencia)
-                competenciaDAO.adicionarCompetencia(novaCompetencia.nome, candidatoId, null)
-            }
-
-        } catch (Exception e) {
-            println "Erro ao cadastrar competências: ${e.message}"
-        }
-    }
-
-    List<Competencia> listarCompetencias(){
-        return getCompetenciaDAO().listarCompetencias()
-    }
-
-
-
 
 }

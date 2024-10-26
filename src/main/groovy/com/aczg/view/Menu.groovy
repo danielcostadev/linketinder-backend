@@ -206,5 +206,4 @@ class Menu implements validadorEntradaTrait{
         System.exit(0);
     }
 
-
 }

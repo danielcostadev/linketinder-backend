@@ -96,32 +96,4 @@ class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
     }
 
 
-    void adicionarCompetencia(Long candidatoId){
-
-        exibirFormularioParaAdicionarCompetencia(candidatoId)
-
-    }
-
-    private void exibirFormularioParaAdicionarCompetencia(Long candidatoId){
-
-        String competencias = validarTexto("Digite as competências separadas por vírgula: ");
-        List<String> listaCompetencias = competencias.split(",\\s*");
-
-        try {
-            candidatoService.adicionarCompetencia(listaCompetencias, candidatoId)
-            println("Competencia cadastrada com sucesso!");
-
-        } catch (Exception e) {
-            println("Erro ao cadastrar dados': ${e.message}");
-        }
-
-    }
-
-    void listarCompetencias(){
-        List<Competencia> competencias = getCandidatoService().listarCompetencias()
-        competencias.each { competencia ->
-            println "ID: ${competencia.getId()}, Nome: ${competencia.getNome()}"
-        }
-    }
-
 }

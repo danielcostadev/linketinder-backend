@@ -3,7 +3,7 @@ package com.aczg.DAO
 import com.aczg.model.Candidato
 import groovy.sql.Sql
 
-class CandidatoDAO implements VerificarExistenciaDeEntidadeTrait{
+class CandidatoDAO implements ICandidatoDAO, VerificarExistenciaDeEntidadeTrait{
 
     private ConexaoDAO conexaoDAO = new ConexaoDAO()
 

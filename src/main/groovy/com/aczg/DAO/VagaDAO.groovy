@@ -3,7 +3,7 @@ package com.aczg.DAO
 import com.aczg.model.Vaga
 import groovy.sql.Sql
 
-class VagaDAO {
+class VagaDAO implements IVagaDAO{
 
     private ConexaoDAO conexaoDAO = new ConexaoDAO()
 

@@ -1,24 +1,15 @@
 package com.aczg.service
 
-import com.aczg.DAO.CompetenciaDAO
-import com.aczg.DAO.ConexaoDAO
-import com.aczg.DAO.EmpresaDAO
-import com.aczg.DAO.VagaDAO
-import com.aczg.model.Competencia
+import com.aczg.DAO.IEmpresaDAO
 import com.aczg.model.Empresa
-import com.aczg.model.Vaga
-import groovy.sql.Sql
+
 
 class EmpresaService {
 
-    EmpresaDAO empresaDAO
-    VagaDAO vagaDAO
-    CompetenciaDAO competenciaDAO
+    IEmpresaDAO empresaDAO
 
-    EmpresaService(EmpresaDAO empresaDAO, VagaDAO vagaDAO, CompetenciaDAO competenciaDAO){
+    EmpresaService(IEmpresaDAO empresaDAO){
         this.empresaDAO = empresaDAO
-        this.vagaDAO = vagaDAO
-        this.competenciaDAO = competenciaDAO
     }
 
 
@@ -44,57 +35,6 @@ class EmpresaService {
 
     void removerEmpresa(Long empresaId) {
         getEmpresaDAO().removerEmpresa(empresaId)
-    }
-
-
-    Long adicionarVaga(String nome, String descricao, String local, Long empresaId) {
-
-        try {
-            Vaga vaga = new Vaga(nome, descricao, local)
-            Long vagaId = vagaDAO.adicionarVaga(vaga.nome, vaga.descricao, vaga.local, empresaId)
-            println "Vaga '${nome}' cadastrada para a empresa ID: ${empresaId}"
-
-            return vagaId
-
-        } catch (Exception e) {
-            println "Erro ao cadastrar vaga: ${e.message}"
-            return null
-        }
-    }
-
-    List<Vaga> listarVagas(){
-        return getVagaDAO().listarVagas()
-    }
-
-    void atualizarVaga(Vaga vaga){
-        getVagaDAO().atualizarVaga(vaga)
-    }
-
-    void removerVaga(Long vagaId){
-        getVagaDAO().removerVaga(vagaId)
-    }
-
-
-    void adicionarCompetencia(List<String> competencias, Long vagaId){
-
-        try {
-
-            competencias.each { nomeCompetencia ->
-                Competencia novaCompetencia = new Competencia(nomeCompetencia)
-                competenciaDAO.adicionarCompetencia(novaCompetencia.nome, null, vagaId)
-            }
-
-        } catch (Exception e) {
-            println "Erro ao cadastrar competências: ${e.message}"
-        }
-    }
-
-    void atualizarCompetencia(Competencia competencia){
-        getCompetenciaDAO().atualizarCompetencia(competencia)
-    }
-
-    void removerCompetencia(Long competenciaId){
-        getCompetenciaDAO().removerCompetencia(competenciaId)
     }
 
 }
