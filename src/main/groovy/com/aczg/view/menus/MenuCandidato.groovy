@@ -1,11 +1,11 @@
 package com.aczg.view.menus
 
-import com.aczg.view.menus.interfaces.IMenuCandidato
+import com.aczg.view.menus.interfaces.IMenu
 
-class MenuCandidato implements IMenuCandidato, GeradorDeMenus{
+class MenuCandidato implements IMenu, GeradorDeMenus{
 
     @Override
-    void menuGerenciarCandidatos(){
+    void menuGerenciar(){
         List<String> opcoes = [
                 "1  - Cadastrar Candidato",
                 "2  - Listar Candidatos",
@@ -15,32 +15,32 @@ class MenuCandidato implements IMenuCandidato, GeradorDeMenus{
 
         exibirMenu("Candidato", opcoes, { String opcao ->
             switch (opcao) {
-                case '1': cadastrarCandidato(); break
-                case '2': listarCandidatos(); break
-                case '3': editarCandidato(); break
-                case '4': removerCandidato(); break
+                case '1': cadastrar(); break
+                case '2': listar(); break
+                case '3': editar(); break
+                case '4': remover(); break
                 default: println "Entrada inválida"; break
             }
         }, { menuPrincipal() })
     }
 
     @Override
-    void cadastrarCandidato(){
+    void cadastrar(){
         getCandidatoController().adicionarCandidato()
     }
 
     @Override
-    void listarCandidatos(){
+    void listar(){
         getCandidatoController().listarCandidatos()
     }
 
     @Override
-    void editarCandidato(){
+    void editar(){
         getCandidatoController().atualizarCandidato()
     }
 
     @Override
-    void removerCandidato(){
+    void remover(){
         getCandidatoController().removerCandidato()
     }
 }

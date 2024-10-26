@@ -1,9 +1,13 @@
 package com.aczg.view
 
+import com.aczg.view.menus.MenuPrincipal
+
 class Main {
 
     static void main(String[] args) {
-        Menu menu = new Menu()
-        menu.menuPrincipal()
+
+        MenuPrincipal menu = new MenuPrincipal()
+        menu.exibirMenuPrincipal()
+
     }
 }

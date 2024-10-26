@@ -1,18 +1,17 @@
 package com.aczg.view.menus
 
-import com.aczg.view.menus.interfaces.IMenuEmpresa
-import com.aczg.view.menus.interfaces.IMenuVaga
+import com.aczg.view.menus.interfaces.IMenu
 
-class MenuEmpresa implements IMenuEmpresa, GeradorDeMenus{
+class MenuEmpresa implements IMenu, GeradorDeMenus{
 
-    private IMenuVaga menuVaga
+    private IMenu menuVaga
 
-    MenuEmpresa(IMenuVaga menuVaga){
+    MenuEmpresa(IMenu menuVaga){
         this.menuVaga = menuVaga
     }
 
     @Override
-    void menuGerenciarEmpresas() {
+    void menuGerenciar() {
 
         List<String> opcoes = [
                 "1  - Cadastrar Empresa",
@@ -24,10 +23,10 @@ class MenuEmpresa implements IMenuEmpresa, GeradorDeMenus{
 
         exibirMenu("Empresa", opcoes, { String opcao ->
             switch (opcao) {
-                case '1': cadastrarEmpresa(); break
-                case '2': listarEmpresas(); break
-                case '3': editarEmpresa(); break
-                case '4': removerEmpresa(); break
+                case '1': cadastrar(); break
+                case '2': listar(); break
+                case '3': editar(); break
+                case '4': remover(); break
                 case '5': menuVaga.menuGerenciarVagas(); break
                 default: println "Entrada inválida"; break
             }
@@ -36,22 +35,22 @@ class MenuEmpresa implements IMenuEmpresa, GeradorDeMenus{
     }
 
     @Override
-    void cadastrarEmpresa() {
+    void cadastrar() {
         getEmpresaController().adicionarEmpresa()
     }
 
     @Override
-    void listarEmpresas() {
+    void listar() {
         getEmpresaController().listarEmpresas()
     }
 
     @Override
-    void editarEmpresa() {
+    void editar() {
         getEmpresaController().atualizarEmpresa()
     }
 
     @Override
-    void removerEmpresa() {
+    void remover() {
         getEmpresaController().removerEmpresa()
     }
 }

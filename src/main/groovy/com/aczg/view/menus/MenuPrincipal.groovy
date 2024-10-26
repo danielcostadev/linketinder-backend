@@ -1,17 +1,15 @@
 package com.aczg.view.menus
 
-import com.aczg.view.menus.interfaces.IMenuCandidato
-import com.aczg.view.menus.interfaces.IMenuCompetencia
-import com.aczg.view.menus.interfaces.IMenuEmpresa
+import com.aczg.view.menus.interfaces.IMenu
 import com.aczg.view.menus.interfaces.IMenuPrincipal
 
 class MenuPrincipal implements IMenuPrincipal, GeradorDeMenus{
 
-    private IMenuEmpresa menuEmpresa
-    private IMenuCandidato menuCandidato
-    private IMenuCompetencia menuCompetencia
+    private IMenu menuEmpresa
+    private IMenu menuCandidato
+    private IMenu menuCompetencia
 
-    MenuPrincipal(IMenuEmpresa menuEmpresa, IMenuCandidato menuCandidato, IMenuCompetencia menuCompetencia) {
+    MenuPrincipal(IMenu menuEmpresa, IMenu menuCandidato, IMenu menuCompetencia) {
         this.menuEmpresa = menuEmpresa
         this.menuCandidato = menuCandidato
         this.menuCompetencia = menuCompetencia
@@ -34,9 +32,9 @@ class MenuPrincipal implements IMenuPrincipal, GeradorDeMenus{
 
                 switch (menuPrincipalOpcaoEscolhida){
 
-                    case '1': menuEmpresa.menuGerenciarEmpresas(exibirMenuPrincipal()); break
-                    case '2': menuCandidato.menuGerenciarCandidatos(exibirMenuPrincipal()); break
-                    case '3': menuCompetencia.menuGerenciarCompetencias(exibirMenuPrincipal()); break
+                    case '1': menuEmpresa.menuGerenciar(); break
+                    case '2': menuCandidato.menuGerenciar(); break
+                    case '3': menuCompetencia.menuGerenciar(); break
                     case '0': encerrarAplicacao(); break
                     default: println "Entrada inválida"; break
 
