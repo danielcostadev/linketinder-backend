@@ -1,5 +1,6 @@
 package com.aczg.view.menus
 
+import com.aczg.view.menus.interfaces.GeradorDeMenus
 import com.aczg.view.menus.interfaces.IMenu
 import com.aczg.view.menus.interfaces.IMenuPrincipal
 
@@ -8,11 +9,24 @@ class MenuPrincipal implements IMenuPrincipal, GeradorDeMenus{
     private IMenu menuEmpresa
     private IMenu menuCandidato
     private IMenu menuCompetencia
+    private IMenu menuVaga
 
-    MenuPrincipal(IMenu menuEmpresa, IMenu menuCandidato, IMenu menuCompetencia) {
+    MenuPrincipal() {}
+
+    void setMenuEmpresa(IMenu menuEmpresa) {
         this.menuEmpresa = menuEmpresa
+    }
+
+    void setMenuCandidato(IMenu menuCandidato) {
         this.menuCandidato = menuCandidato
+    }
+
+    void setMenuCompetencia(IMenu menuCompetencia){
         this.menuCompetencia = menuCompetencia
+    }
+
+    void setMenuVaga(IMenu menuVaga){
+        this.menuVaga = menuVaga
     }
 
     @Override
@@ -22,7 +36,8 @@ class MenuPrincipal implements IMenuPrincipal, GeradorDeMenus{
             ================== MENU PRINCIPAL ==================
             1  - Gerenciar Empresas
             2  - Gerenciar Candidatos
-            3  - Gerenciar Competências
+            3  - Gerencias Vagas
+            4  - Gerenciar Competências
             0  - Encerrar Aplicação
             ====================================================            
             """.stripIndent()
@@ -34,7 +49,8 @@ class MenuPrincipal implements IMenuPrincipal, GeradorDeMenus{
 
                     case '1': menuEmpresa.menuGerenciar(); break
                     case '2': menuCandidato.menuGerenciar(); break
-                    case '3': menuCompetencia.menuGerenciar(); break
+                    case '3': menuVaga.menuGerenciar(); break
+                    case '4': menuCompetencia.menuGerenciar(); break
                     case '0': encerrarAplicacao(); break
                     default: println "Entrada inválida"; break
 

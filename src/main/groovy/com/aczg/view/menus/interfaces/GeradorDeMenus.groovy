@@ -1,27 +1,8 @@
-package com.aczg.view.menus
+package com.aczg.view.menus.interfaces
 
-import com.aczg.DAO.CandidatoDAO
-import com.aczg.DAO.CompetenciaDAO
-import com.aczg.DAO.EmpresaDAO
-import com.aczg.DAO.VagaDAO
-import com.aczg.controller.CandidatoController
-import com.aczg.controller.EmpresaController
 import com.aczg.controller.validadorEntradaTrait
-import com.aczg.service.CandidatoService
-import com.aczg.service.EmpresaService
 
 trait GeradorDeMenus implements validadorEntradaTrait{
-
-    CandidatoDAO candidatoDAO = new CandidatoDAO()
-    CompetenciaDAO competenciaDAO = new CompetenciaDAO()
-    EmpresaDAO empresaDAO = new EmpresaDAO()
-    VagaDAO vagaDAO = new VagaDAO()
-
-    CandidatoService candidatoService = new CandidatoService(candidatoDAO)
-    EmpresaService empresaService = new EmpresaService(empresaDAO)
-
-    CandidatoController candidatoController = new CandidatoController(candidatoService)
-    EmpresaController empresaController = new EmpresaController(empresaService)
 
     Boolean aplicacaoExecutando = true
     Stack<Closure<?>> historicoMenus = new Stack<>()

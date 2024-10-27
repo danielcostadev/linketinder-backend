@@ -1,22 +1,24 @@
 package com.aczg.service
 
-import com.aczg.DAO.IEmpresaDAO
+import com.aczg.DAO.interfaces.IEntidadeDAO
 import com.aczg.model.Empresa
+import com.aczg.service.interfaces.EntidadeTrait
+import com.aczg.service.interfaces.IEntidadeService
 
 
-class EmpresaService {
+class EmpresaService implements IEntidadeService<Empresa>, EntidadeTrait{
 
-    IEmpresaDAO empresaDAO
+    IEntidadeDAO empresaDAO
 
-    EmpresaService(IEmpresaDAO empresaDAO){
+    EmpresaService(IEntidadeDAO empresaDAO){
         this.empresaDAO = empresaDAO
     }
 
-
-    Long adicionarEmpresa(Empresa empresa){
+    @Override
+    Long cadastrar(Empresa empresa){
 
         try {
-            Long empresaId = empresaDAO.adicionarEmpresa(empresa)
+            Long empresaId = empresaDAO.cadastrar(empresa)
             return empresaId
 
         } catch (Exception e) {
@@ -25,16 +27,54 @@ class EmpresaService {
         }
     }
 
-    List<Empresa> listarEmpresas(){
-        return getEmpresaDAO().listarEmpresas()
+    @Override
+    List<Empresa> listar(){
+        return getEmpresaDAO().listar()
     }
 
+    @Override
+    void editar(Empresa empresa) {
+        try {
+            manipularEntidade(empresa.id, "Empresa",
+                    { id -> verificarExistencia(id) },
+                    { id -> empresaDAO.editar(empresa) },
+                    "atualizado(a)"
+            )
+        } catch (Exception e) {
+            println "Erro ao editar empresa: ${e.message}"
+        }
+    }
+
+    @Override
+    void remover(Long empresaId) {
+        try {
+            manipularEntidade(empresaId, "Empresa",
+                    { id -> verificarExistencia(empresaId) },
+                    { id -> empresaDAO.remover(empresaId) },
+                    "removido(a)"
+            )
+        } catch (Exception e) {
+            println "Erro ao remover empresa: ${e.message}"
+        }
+    }
+
+    @Override
+    boolean verificarExistencia(Long empresaId) {
+        return empresaDAO.verificarExistencia('empresas', empresaId)
+    }
+
+
+
+
+
+
+
     void atualizarEmpresa(Empresa empresa){
-        getEmpresaDAO().atualizarEmpresa(empresa)
+        getEmpresaDAO().editar(empresa)
     }
 
     void removerEmpresa(Long empresaId) {
-        getEmpresaDAO().removerEmpresa(empresaId)
+        getEmpresaDAO().remover(empresaId)
     }
 
 }

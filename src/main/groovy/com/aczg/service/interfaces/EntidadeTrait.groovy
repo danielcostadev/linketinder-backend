@@ -1,4 +1,4 @@
-package com.aczg.controller
+package com.aczg.service.interfaces
 
 trait EntidadeTrait {
 
@@ -18,8 +18,4 @@ trait EntidadeTrait {
             println "Erro ao ${tipoAcao.toLowerCase()} ${nomeEntidadePrincipal}: ${e.message}"
         }
     }
-
-
-
-
 }

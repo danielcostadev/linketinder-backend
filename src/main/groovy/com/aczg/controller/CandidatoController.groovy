@@ -2,6 +2,7 @@ package com.aczg.controller
 
 import com.aczg.model.Candidato
 import com.aczg.service.CandidatoService
+import com.aczg.service.interfaces.EntidadeTrait
 
 import java.sql.Date
 

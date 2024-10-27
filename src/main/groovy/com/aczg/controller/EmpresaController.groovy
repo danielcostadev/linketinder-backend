@@ -1,58 +1,83 @@
 package com.aczg.controller
 
+import com.aczg.controller.interfaces.IEntidadeController
 import com.aczg.model.Competencia
 import com.aczg.model.Empresa
 import com.aczg.model.Vaga
-import com.aczg.service.EmpresaService
+import com.aczg.service.interfaces.IEntidadeService
 
-class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
+class EmpresaController implements IEntidadeController<Empresa>, validadorEntradaTrait{
 
-    EmpresaService empresaService
+    IEntidadeService empresaService
 
-    EmpresaController(EmpresaService empresaService){
+    EmpresaController(IEntidadeService empresaService){
         this.empresaService = empresaService
     }
 
-
-    void adicionarEmpresa(){
-
-        exibirFormularioParaAdicionarEmpresa()
-
-    }
-
-    void exibirFormularioParaAdicionarEmpresa(){
-
-        String nome = validarTextoComRegex("nome","Digite o NOME da empresa: ")
-        String email = validarTextoComRegex("email","Digite o EMAIL da empresa: ")
-        String estado = validarTextoComRegex("estado","Digite o estado da empresa: ").toUpperCase()
-        String cnpj = validarTextoComRegex("cnpj","Digite o CNPJ da empresa: ")
-        String pais = validarTexto("Digite o PAÍS da empresa: ")
-        String cep = validarTextoComRegex("cep","Digite o CEP da empresa: ").replaceAll(/\D/, '')
-        String descricao = validarTextoComRegex("descricao","Digite uma breve descrição da empresa: ")
-        String senha = validarTexto("Digite a SENHA da empresa: ")
-
+    @Override
+    void cadastrar(Empresa empresa){
         try {
-            Long empresaId = getEmpresaService().adicionarEmpresa(new Empresa(nome,email,estado,cnpj,pais,cep,descricao,senha))
-            println("Empresa '${nome}' cadastrada com sucesso!");
-
-            /*   if(empresaId){
-                   adicionarVaga(empresaId)
-               }*/
-
+            getEmpresaService().cadastrar(empresa)
         } catch (Exception e) {
-            println("Erro ao cadastrar empresa '${nome}': ${e.message}");
+            println "Erro ao cadastrar empresa: ${e.message}"
         }
     }
 
-    void listarEmpresas(){
-        List<Empresa> empresas = getEmpresaService().listarEmpresas()
-        empresas.each { empresa ->
-            println "ID: ${empresa.getId()}, Descrição: ${empresa.getDescricao()}, Estado: ${empresa.getEstado()}"
+    @Override
+    List<Empresa> listar() {
+        try {
+            getEmpresaService().listar()
+        } catch (Exception e) {
+            println "Erro ao listar empresas: ${e.message}"
         }
     }
 
-    void atualizarEmpresa() {
-        Long empresaId = validarInteiro("Digite o ID da empresa que deseja atualizar: ")
+    @Override
+    void editar(Empresa empresa) {
+        try {
+            getEmpresaService().editar(empresa)
+        } catch (Exception e) {
+            println "Erro ao editar empresa: ${e.message}"
+        }
+    }
+
+    @Override
+    void remover(Long empresaId) {
+        try {
+            if (verificarExistencia(empresaId)) {
+                getEmpresaService().remover(empresaId)
+            } else {
+                println "Empresa com ID ${empresaId} não encontrada."
+            }
+        } catch (Exception e) {
+            println "Erro ao remover empresa: ${e.message}"
+        }
+    }
+
+    @Override
+    boolean verificarExistencia(Long empresaId) {
+        return getEmpresaService().verificarExistencia(empresaId)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    void atualizarEmpresa(Long EmpresaId) {
         manipularEntidade(empresaId, "Empresa",
                 { id -> getEmpresaService().getEmpresaDAO().verificarExistencia('empresas',id) },
                 { id -> exibirFormularioParaAtualizarEmpresa(id) },
@@ -91,6 +116,7 @@ class EmpresaController implements validadorEntradaTrait, EntidadeTrait{
                 "removida"
         )
     }
+
 
 
 

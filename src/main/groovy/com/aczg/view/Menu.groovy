@@ -151,7 +151,7 @@ class Menu implements validadorEntradaTrait{
     }
 
     private void cadastrarEmpresa(){
-        getEmpresaController().adicionarEmpresa()
+        getEmpresaController().cadastrar()
     }
     private void listarEmpresas(){
         getEmpresaController().listarEmpresas()

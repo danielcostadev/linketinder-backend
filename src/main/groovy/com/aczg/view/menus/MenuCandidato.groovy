@@ -1,8 +1,17 @@
 package com.aczg.view.menus
 
+import com.aczg.view.menus.interfaces.GeradorDeMenus
 import com.aczg.view.menus.interfaces.IMenu
+import com.aczg.view.menus.interfaces.IMenuPrincipal
 
 class MenuCandidato implements IMenu, GeradorDeMenus{
+
+    private IMenuPrincipal menuPrincipal
+
+    @Override
+    void setMenuPrincipal(IMenuPrincipal menuPrincipal) {
+        this.menuPrincipal = menuPrincipal
+    }
 
     @Override
     void menuGerenciar(){
@@ -21,7 +30,7 @@ class MenuCandidato implements IMenu, GeradorDeMenus{
                 case '4': remover(); break
                 default: println "Entrada inválida"; break
             }
-        }, { menuPrincipal() })
+        }, { menuPrincipal.exibirMenuPrincipal() })
     }
 
     @Override

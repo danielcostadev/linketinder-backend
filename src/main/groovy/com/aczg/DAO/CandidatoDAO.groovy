@@ -1,5 +1,6 @@
 package com.aczg.DAO
 
+import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
 import com.aczg.model.Candidato
 import groovy.sql.Sql
 

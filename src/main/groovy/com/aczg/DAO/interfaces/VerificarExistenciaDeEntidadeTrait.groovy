@@ -1,5 +1,6 @@
-package com.aczg.DAO
+package com.aczg.DAO.interfaces
 
+import com.aczg.DAO.ConexaoDAO
 import groovy.sql.Sql
 
 trait VerificarExistenciaDeEntidadeTrait {

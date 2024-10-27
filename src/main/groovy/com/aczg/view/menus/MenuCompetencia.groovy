@@ -1,8 +1,17 @@
 package com.aczg.view.menus
 
+import com.aczg.view.menus.interfaces.GeradorDeMenus
 import com.aczg.view.menus.interfaces.IMenu
+import com.aczg.view.menus.interfaces.IMenuPrincipal
 
 class MenuCompetencia implements IMenu, GeradorDeMenus{
+
+    private IMenuPrincipal menuPrincipal
+
+    @Override
+    void setMenuPrincipal(IMenuPrincipal menuPrincipal) {
+        this.menuPrincipal = menuPrincipal
+    }
 
     @Override
     void menuGerenciar(){
@@ -19,7 +28,7 @@ class MenuCompetencia implements IMenu, GeradorDeMenus{
                 case '3': remover(); break
                 default: println "Entrada inválida"; break
             }
-        }, { menuPrincipal() })
+        }, { menuPrincipal.exibirMenuPrincipal() })
     }
 
     @Override
@@ -41,4 +50,5 @@ class MenuCompetencia implements IMenu, GeradorDeMenus{
     void remover(){
         getCompetenciaController().removerCompetencia()
     }
+
 }

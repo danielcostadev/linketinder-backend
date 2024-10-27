@@ -1,13 +1,23 @@
 package com.aczg.view.menus
 
+
+import com.aczg.view.telas.interfaces.IEntidadeView
+import com.aczg.view.menus.interfaces.GeradorDeMenus
 import com.aczg.view.menus.interfaces.IMenu
+import com.aczg.view.menus.interfaces.IMenuPrincipal
 
 class MenuEmpresa implements IMenu, GeradorDeMenus{
 
-    private IMenu menuVaga
+    private IMenuPrincipal menuPrincipal
+    private IEntidadeView empresaView
 
-    MenuEmpresa(IMenu menuVaga){
-        this.menuVaga = menuVaga
+    void setEmpresaView(IEntidadeView empresaView){
+        this.empresaView = empresaView
+    }
+
+    @Override
+    void setMenuPrincipal(IMenuPrincipal menuPrincipal) {
+        this.menuPrincipal = menuPrincipal
     }
 
     @Override
@@ -17,8 +27,7 @@ class MenuEmpresa implements IMenu, GeradorDeMenus{
                 "1  - Cadastrar Empresa",
                 "2  - Listar Empresas",
                 "3  - Editar Empresa",
-                "4  - Remover Empresa",
-                "5  - Gerenciar Vagas"
+                "4  - Remover Empresa"
         ]
 
         exibirMenu("Empresa", opcoes, { String opcao ->
@@ -27,30 +36,30 @@ class MenuEmpresa implements IMenu, GeradorDeMenus{
                 case '2': listar(); break
                 case '3': editar(); break
                 case '4': remover(); break
-                case '5': menuVaga.menuGerenciarVagas(); break
                 default: println "Entrada inválida"; break
             }
-        }, { menuPrincipal() })
+        }, { menuPrincipal.exibirMenuPrincipal() })
 
     }
 
     @Override
     void cadastrar() {
-        getEmpresaController().adicionarEmpresa()
+        empresaView.exibirFormularioDeCadastro()
     }
 
     @Override
     void listar() {
-        getEmpresaController().listarEmpresas()
+        empresaView.exibirListaDeEmpresas()
     }
 
     @Override
     void editar() {
-        getEmpresaController().atualizarEmpresa()
+        empresaView.exibirFormulariodeEdicao()
     }
 
     @Override
     void remover() {
-        getEmpresaController().removerEmpresa()
+        empresaView.exibirFormulariodeExclusao()
     }
+
 }
