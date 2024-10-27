@@ -3,10 +3,16 @@ package com.aczg.view.menus
 import com.aczg.view.menus.interfaces.GeradorDeMenus
 import com.aczg.view.menus.interfaces.IMenu
 import com.aczg.view.menus.interfaces.IMenuPrincipal
+import com.aczg.view.telas.interfaces.IEntidadeView
 
 class MenuCandidato implements IMenu, GeradorDeMenus{
 
     private IMenuPrincipal menuPrincipal
+    private IEntidadeView candidatoView
+
+    void setCandidatoView(IEntidadeView candidatoView){
+        this.candidatoView = candidatoView
+    }
 
     @Override
     void setMenuPrincipal(IMenuPrincipal menuPrincipal) {
@@ -35,21 +41,21 @@ class MenuCandidato implements IMenu, GeradorDeMenus{
 
     @Override
     void cadastrar(){
-        getCandidatoController().adicionarCandidato()
+        candidatoView.exibirFormularioDeCadastro()
     }
 
     @Override
     void listar(){
-        getCandidatoController().listarCandidatos()
+        candidatoView.exibirLista()
     }
 
     @Override
     void editar(){
-        getCandidatoController().atualizarCandidato()
+        candidatoView.exibirFormulariodeEdicao()
     }
 
     @Override
     void remover(){
-        getCandidatoController().removerCandidato()
+        candidatoView.exibirFormulariodeExclusao()
     }
 }

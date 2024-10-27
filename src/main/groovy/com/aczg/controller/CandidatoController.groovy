@@ -1,18 +1,76 @@
 package com.aczg.controller
 
+import com.aczg.controller.interfaces.IEntidadeController
 import com.aczg.model.Candidato
 import com.aczg.service.CandidatoService
 import com.aczg.service.interfaces.EntidadeTrait
 
 import java.sql.Date
 
-class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
+class CandidatoController implements IEntidadeController<Candidato>, validadorEntradaTrait, EntidadeTrait{
 
     CandidatoService candidatoService
 
     CandidatoController(CandidatoService candidatoService) {
         this.candidatoService = candidatoService
     }
+
+    @Override
+    void cadastrar(Candidato candidato) {
+        try {
+            getCandidatoService().cadastrar(candidato)
+        } catch (Exception e) {
+            println "Erro ao cadastrar candidato(a): ${e.message}"
+        }
+    }
+
+    @Override
+    List<Candidato> listar() {
+        try {
+            getCandidatoService().listar()
+        } catch (Exception e) {
+            println "Erro ao recuperar lista de candidatos: ${e.message}"
+        }
+    }
+
+    @Override
+    void editar(Candidato candidato) {
+        try {
+            getCandidatoService().editar(candidato)
+        } catch (Exception e) {
+            println "Erro ao editar candidato(a): ${e.message}"
+        }
+    }
+
+    @Override
+    void remover(Long candidatoId) {
+        try {
+            if (verificarExistencia(candidatoId)) {
+                getCandidatoService().remover(candidatoId)
+            } else {
+                println "Candidato(a) com ID ${candidatoId} não encontrado(a)."
+            }
+        } catch (Exception e) {
+            println "Erro ao remover candidato(a): ${e.message}"
+        }
+    }
+
+    @Override
+    boolean verificarExistencia(Long candidatoId) {
+        try {
+            return getCandidatoService().verificarExistencia(candidatoId)
+        } catch (Exception e) {
+            println "Erro ao verificar a existência do candidato: ${e.message}"
+        }
+    }
+
+
+
+
+
+
+
+
 
     void adicionarCandidato(){
 
@@ -94,6 +152,4 @@ class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
                 "removido(a)"
         )
     }
-
-
 }

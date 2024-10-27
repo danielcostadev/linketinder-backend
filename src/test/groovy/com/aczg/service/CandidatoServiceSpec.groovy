@@ -21,13 +21,13 @@ class CandidatoServiceSpec extends Specification{
         candidatoService.adicionarCandidato(candidato)
 
         then: "O método salvar do DAO é chamado uma vez com o candidato correto e retorna o ID do candidato cadastrado"
-        1 * candidatoDAO.adicionarCandidato(candidato) >> 1L
+        1 * candidatoDAO.cadastrar(candidato) >> 1L
     }
 
     def "Deve listar todos os candidatos"() {
         given: "Uma lista mockada de candidatos"
         List<Candidato> candidatosEsperados = [new Candidato("Daniel", "Costa", "daniel@test.com", "(79)99911-0213", "https://linkedin.com/in/daniel", "03658426560", Date.valueOf("1990-08-06"), "SE", "49400000", "Descrição", "Superior", "senha123")]
-        candidatoDAO.listarCandidatos() >> candidatosEsperados
+        candidatoDAO.listar() >> candidatosEsperados
 
         when: "Mostrar candidatos"
         List<Candidato> candidatos = candidatoService.listarCandidados()
@@ -44,7 +44,7 @@ class CandidatoServiceSpec extends Specification{
         candidatoService.atualizarCandidato(candidato)
 
         then: "O método de atualizar deve ser chamado corretamente"
-        1 * candidatoDAO.atualizarCandidato(candidato)
+        1 * candidatoDAO.editar(candidato)
     }
 
     def "Deve cadastrar competências para o candidato"() {
@@ -66,7 +66,7 @@ class CandidatoServiceSpec extends Specification{
         candidatoService.removerCandidato(candidatoId)
 
         then: "O método de deletar deve ser chamado com o ID correto"
-        1 * candidatoDAO.removerCandidato(candidatoId)
+        1 * candidatoDAO.remover(candidatoId)
     }
 
 }

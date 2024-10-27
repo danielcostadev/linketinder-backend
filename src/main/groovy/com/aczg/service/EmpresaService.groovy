@@ -22,14 +22,19 @@ class EmpresaService implements IEntidadeService<Empresa>, EntidadeTrait{
             return empresaId
 
         } catch (Exception e) {
-            println "Erro ao cadastrar empresa e vagas: ${e.message}"
+            println "Erro ao cadastrar empresa: ${e.message}"
             return null
         }
     }
 
     @Override
     List<Empresa> listar(){
-        return getEmpresaDAO().listar()
+        try {
+            return getEmpresaDAO().listar()
+        } catch (Exception e) {
+            println "Erro ao recuperar lista de empresas: ${e.message}"
+            return null
+        }
     }
 
     @Override
@@ -62,6 +67,12 @@ class EmpresaService implements IEntidadeService<Empresa>, EntidadeTrait{
     boolean verificarExistencia(Long empresaId) {
         return empresaDAO.verificarExistencia('empresas', empresaId)
     }
+
+
+
+
+
+
 
 
 

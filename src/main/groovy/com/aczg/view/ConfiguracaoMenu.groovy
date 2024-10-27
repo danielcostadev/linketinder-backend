@@ -1,11 +1,15 @@
 package com.aczg.view
 
+import com.aczg.DAO.CandidatoDAO
 import com.aczg.DAO.EmpresaDAO
 import com.aczg.DAO.interfaces.IEntidadeDAO
+import com.aczg.controller.CandidatoController
 import com.aczg.controller.EmpresaController
 import com.aczg.controller.interfaces.IEntidadeController
+import com.aczg.service.CandidatoService
 import com.aczg.service.EmpresaService
 import com.aczg.service.interfaces.IEntidadeService
+import com.aczg.view.telas.CandidatoView
 import com.aczg.view.telas.EmpresaView
 import com.aczg.view.telas.interfaces.IEntidadeView
 import com.aczg.view.menus.MenuCandidato
@@ -30,6 +34,11 @@ class ConfiguracaoMenu {
         IEntidadeController empresaController = new EmpresaController(empresaService)
         IEntidadeView empresaView = new EmpresaView(empresaController)
 
+        IEntidadeDAO candidatoDAO = new CandidatoDAO()
+        IEntidadeService candidatoService = new CandidatoService(candidatoDAO)
+        IEntidadeController candidatoController = new CandidatoController(candidatoService)
+        IEntidadeView candidatoView = new CandidatoView(candidatoController)
+
         menuPrincipal.setMenuEmpresa(menuEmpresa)
         menuPrincipal.setMenuCandidato(menuCandidato)
         menuPrincipal.setMenuVaga(menuVaga)
@@ -41,6 +50,7 @@ class ConfiguracaoMenu {
         menuCompetencia.setMenuPrincipal(menuPrincipal)
 
         menuEmpresa.setEmpresaView(empresaView)
+        menuCandidato.setCandidatoView(candidatoView)
 
         menuPrincipal.exibirMenuPrincipal()
 

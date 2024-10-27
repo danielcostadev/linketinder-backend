@@ -49,7 +49,7 @@ class MenuEmpresa implements IMenu, GeradorDeMenus{
 
     @Override
     void listar() {
-        empresaView.exibirListaDeEmpresas()
+        empresaView.exibirLista()
     }
 
     @Override

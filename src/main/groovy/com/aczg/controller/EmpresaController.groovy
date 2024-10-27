@@ -56,7 +56,12 @@ class EmpresaController implements IEntidadeController<Empresa>, validadorEntrad
 
     @Override
     boolean verificarExistencia(Long empresaId) {
-        return getEmpresaService().verificarExistencia(empresaId)
+        try {
+            return getEmpresaService().verificarExistencia(empresaId)
+        } catch (Exception e) {
+            println "Erro ao verificar existência da empresa: ${e.message}"
+            return false
+        }
     }
 
 

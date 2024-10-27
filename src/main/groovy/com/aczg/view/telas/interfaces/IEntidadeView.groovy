@@ -3,7 +3,7 @@ package com.aczg.view.telas.interfaces
 interface IEntidadeView<T> {
 
     void exibirFormularioDeCadastro()
-    void exibirListaDeEmpresas()
+    void exibirLista()
     void exibirFormulariodeEdicao()
     void exibirFormulariodeExclusao()
     boolean validarExistencia(Long entidadeId)
