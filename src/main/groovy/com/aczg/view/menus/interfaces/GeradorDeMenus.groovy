@@ -1,8 +1,8 @@
 package com.aczg.view.menus.interfaces
 
-import com.aczg.controller.validadorEntradaTrait
+import com.aczg.view.interfaces.ValidadorEntradaTrait
 
-trait GeradorDeMenus implements validadorEntradaTrait{
+trait GeradorDeMenus implements ValidadorEntradaTrait{
 
     Boolean aplicacaoExecutando = true
     Stack<Closure<?>> historicoMenus = new Stack<>()

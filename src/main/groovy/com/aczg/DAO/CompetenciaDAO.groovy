@@ -1,15 +1,18 @@
 package com.aczg.DAO
 
+import com.aczg.DAO.interfaces.ICompetenciaDAO
+import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
 import com.aczg.model.Competencia
 import groovy.sql.Sql
 
-class CompetenciaDAO {
+class CompetenciaDAO implements ICompetenciaDAO, VerificarExistenciaDeEntidadeTrait{
 
     private ConexaoDAO conexaoDAO = new ConexaoDAO()
 
     Sql sql = conexaoDAO.getSql()
 
-    List<Competencia> listarCompetencias() {
+    @Override
+    List<Competencia> listar() {
         List<Competencia> competencias = []
 
         try {
@@ -39,7 +42,8 @@ class CompetenciaDAO {
         return competencias
     }
 
-    void adicionarCompetencia(String nomeCompetencia, Long candidatoId = null, Long vagaId = null) {
+    @Override
+    Long cadastrar(String nomeCompetencia, Long candidatoId = null, Long vagaId = null) {
         try {
             String queryCompetenciaExistente = '''
             SELECT id FROM competencias WHERE nome = ?
@@ -83,7 +87,8 @@ class CompetenciaDAO {
         }
     }
 
-    void atualizarCompetencia(Competencia competencia) {
+    @Override
+    void editar(Competencia competencia) {
 
         String queryUpdateCompetencia = '''
         UPDATE competencias
@@ -102,7 +107,8 @@ class CompetenciaDAO {
 
     }
 
-    void removerCompetencia(Long competenciaId) {
+    @Override
+    void remover(Long competenciaId) {
 
         String queryDeleteCompetencia = '''
         DELETE FROM competencias 

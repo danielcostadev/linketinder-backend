@@ -2,13 +2,14 @@ package com.aczg.view.menus
 
 import com.aczg.view.menus.interfaces.GeradorDeMenus
 import com.aczg.view.menus.interfaces.IMenu
+import com.aczg.view.menus.interfaces.IMenuCompetencia
 import com.aczg.view.menus.interfaces.IMenuPrincipal
 
-class MenuPrincipal implements IMenuPrincipal, GeradorDeMenus{
+class MenuPrincipal implements IMenuPrincipal, GeradorDeMenus {
 
     private IMenu menuEmpresa
     private IMenu menuCandidato
-    private IMenu menuCompetencia
+    private IMenuCompetencia menuCompetencia
     private IMenu menuVaga
 
     MenuPrincipal() {}
@@ -21,53 +22,55 @@ class MenuPrincipal implements IMenuPrincipal, GeradorDeMenus{
         this.menuCandidato = menuCandidato
     }
 
-    void setMenuCompetencia(IMenu menuCompetencia){
+    void setMenuCompetencia(IMenuCompetencia menuCompetencia) {
         this.menuCompetencia = menuCompetencia
     }
 
-    void setMenuVaga(IMenu menuVaga){
+    void setMenuVaga(IMenu menuVaga) {
         this.menuVaga = menuVaga
     }
 
-    @Override
-    void exibirMenuPrincipal(){
-        while (aplicacaoExecutando){
-            print """
-            ================== MENU PRINCIPAL ==================
-            1  - Gerenciar Empresas
-            2  - Gerenciar Candidatos
-            3  - Gerencias Vagas
-            4  - Gerenciar Competências
-            0  - Encerrar Aplicação
-            ====================================================            
-            """.stripIndent()
 
-            try {
-                String menuPrincipalOpcaoEscolhida = validarTexto("Digite o número correspondente a opção desejada: ")
+    private boolean aplicacaoExecutando = true
 
-                switch (menuPrincipalOpcaoEscolhida){
-
-                    case '1': menuEmpresa.menuGerenciar(); break
-                    case '2': menuCandidato.menuGerenciar(); break
-                    case '3': menuVaga.menuGerenciar(); break
-                    case '4': menuCompetencia.menuGerenciar(); break
-                    case '0': encerrarAplicacao(); break
-                    default: println "Entrada inválida"; break
-
-                }
-            } catch (Exception e) {
-                println "Erro ao ler a entrada: ${e.message}"
-            }
-
+    void iniciar() {
+        while (aplicacaoExecutando) {
+            exibirMenuPrincipal()
         }
     }
 
-    private void encerrarAplicacao(){
-        println "Encerrando aplicação..."
-        aplicacaoExecutando = false
-        fecharScanner()
-        System.exit(0);
+    @Override
+    void exibirMenuPrincipal() {
+        println """            ================== MENU PRINCIPAL ==================
+            1  - Gerenciar Empresas
+            2  - Gerenciar Candidatos
+            3  - Gerenciar Vagas
+            4  - Gerenciar Competências
+            0  - Encerrar Aplicação
+            ====================================================                        
+            """.stripIndent()
+        try {
+            String menuPrincipalOpcaoEscolhida = validarTexto("Digite o número correspondente a opção desejada: ")
+            processarOpcao(menuPrincipalOpcaoEscolhida)
+        } catch (Exception e) {
+            println "Erro ao ler a entrada: ${e.message}"
+        }
     }
 
+    void processarOpcao(String opcao) {
+        switch (opcao) {
+            case '1': menuEmpresa.menuGerenciar(); break
+            case '2': menuCandidato.menuGerenciar(); break
+            case '3': menuVaga.menuGerenciar(); break
+            case '4': menuCompetencia.menuGerenciar(); break
+            case '0': encerrarAplicacao(); break
+            default: println "Entrada inválida"; break
+        }
+    }
+
+    void encerrarAplicacao() {
+        aplicacaoExecutando = false
+        println "Aplicação encerrada"
+    }
 
 }

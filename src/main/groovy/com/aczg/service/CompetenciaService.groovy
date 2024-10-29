@@ -1,35 +1,26 @@
 package com.aczg.service
 
-import com.aczg.DAO.ICompetenciaDAO
+import com.aczg.DAO.interfaces.ICompetenciaDAO
+import com.aczg.interfaces.ICompetencia
 import com.aczg.model.Competencia
+import com.aczg.service.interfaces.ManipulaEntidadeTrait
 
-class CompetenciaService {
+class CompetenciaService implements ICompetencia, ManipulaEntidadeTrait{
     ICompetenciaDAO competenciaDAO
 
     CompetenciaService(ICompetenciaDAO competenciaDAO) {
         this.competenciaDAO = competenciaDAO
     }
 
-    private void adicionarCompetenciaGenerico(List<String> competencias, Long candidatoId, Long vagaId) {
-        competencias.each { nomeCompetencia ->
-            Competencia novaCompetencia = new Competencia(nomeCompetencia)
-            competenciaDAO.adicionarCompetencia(novaCompetencia.nome, candidatoId, vagaId)
+    void cadastrar(List<String> competencias, Long candidatoId, Long vagaId) {
+        competencias.each { competencia ->
+            Competencia novaCompetencia = new Competencia(competencia)
+            competenciaDAO.cadastrar(novaCompetencia.getNome(), candidatoId, vagaId)
         }
     }
 
-    void adicionarCompetenciaParaCandidato(List<String> competencias, Long candidatoId) {
-        adicionarCompetenciaGenerico(competencias, candidatoId, null)
+    List<Competencia> listar() {
+        return competenciaDAO.listar()
     }
 
-    void adicionarCompetenciaParaVaga(List<String> competencias, Long vagaId) {
-        adicionarCompetenciaGenerico(competencias, null, vagaId)
-    }
-
-    void atualizarCompetencia(Competencia competencia) {
-        competenciaDAO.atualizarCompetencia(competencia)
-    }
-
-    void removerCompetencia(Long competenciaId) {
-        competenciaDAO.removerCompetencia(competenciaId)
-    }
 }

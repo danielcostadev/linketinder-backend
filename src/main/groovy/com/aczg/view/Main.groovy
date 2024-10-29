@@ -7,7 +7,7 @@ class Main {
     static void main(String[] args) {
 
         MenuPrincipal menuPrincipal = ConfiguracaoMenu.configurar()
-        menuPrincipal.exibirMenuPrincipal()
+        menuPrincipal.iniciar()
 
     }
 }

@@ -3,14 +3,14 @@ package com.aczg.view.menus
 import com.aczg.view.menus.interfaces.GeradorDeMenus
 import com.aczg.view.menus.interfaces.IMenu
 import com.aczg.view.menus.interfaces.IMenuPrincipal
-import com.aczg.view.telas.interfaces.IEntidadeView
+import com.aczg.view.telas.interfaces.IEntidadeCRUDView
 
 class MenuCandidato implements IMenu, GeradorDeMenus{
 
     private IMenuPrincipal menuPrincipal
-    private IEntidadeView candidatoView
+    private IEntidadeCRUDView candidatoView
 
-    void setCandidatoView(IEntidadeView candidatoView){
+    void setCandidatoView(IEntidadeCRUDView candidatoView){
         this.candidatoView = candidatoView
     }
 

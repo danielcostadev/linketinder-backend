@@ -2,11 +2,10 @@ package com.aczg.service
 
 import com.aczg.DAO.interfaces.IEntidadeDAO
 import com.aczg.model.Empresa
-import com.aczg.service.interfaces.EntidadeTrait
-import com.aczg.service.interfaces.IEntidadeService
+import com.aczg.service.interfaces.ManipulaEntidadeTrait
+import com.aczg.interfaces.IEntidade
 
-
-class EmpresaService implements IEntidadeService<Empresa>, EntidadeTrait{
+class EmpresaService implements IEntidade<Empresa>, ManipulaEntidadeTrait{
 
     IEntidadeDAO empresaDAO
 
@@ -67,25 +66,4 @@ class EmpresaService implements IEntidadeService<Empresa>, EntidadeTrait{
     boolean verificarExistencia(Long empresaId) {
         return empresaDAO.verificarExistencia('empresas', empresaId)
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    void atualizarEmpresa(Empresa empresa){
-        getEmpresaDAO().editar(empresa)
-    }
-
-    void removerEmpresa(Long empresaId) {
-        getEmpresaDAO().remover(empresaId)
-    }
-
 }

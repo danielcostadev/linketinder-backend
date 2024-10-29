@@ -1,32 +1,33 @@
 package com.aczg.view.telas
 
-import com.aczg.service.interfaces.EntidadeTrait
-import com.aczg.controller.interfaces.IEntidadeController
+import com.aczg.interfaces.IEntidade
+import com.aczg.service.interfaces.ManipulaEntidadeTrait
+
 import com.aczg.model.Empresa
-import com.aczg.view.telas.interfaces.IEntidadeView
-import com.aczg.view.telas.interfaces.ValidadorEntradaTrait
+import com.aczg.view.telas.interfaces.IEntidadeAuxiliarEdicaoView
+import com.aczg.view.telas.interfaces.IEntidadeCRUDView
+import com.aczg.view.interfaces.ValidadorEntradaTrait
 
-class EmpresaView implements IEntidadeView<Empresa>, EntidadeTrait, ValidadorEntradaTrait {
+class EmpresaView implements IEntidadeCRUDView, IEntidadeAuxiliarEdicaoView<Empresa>, ManipulaEntidadeTrait, ValidadorEntradaTrait {
 
-    IEntidadeController empresaController
+    IEntidade empresaController
 
-    EmpresaView(IEntidadeController empresaController) {
+    EmpresaView(IEntidade empresaController) {
         this.empresaController = empresaController
     }
 
     @Override
     void exibirFormularioDeCadastro() {
-
-        String nome = validarTextoComRegex("nome", "Digite o NOME da empresa: ")
-        String email = validarTextoComRegex("email", "Digite o EMAIL da empresa: ")
-        String estado = validarTextoComRegex("estado", "Digite o estado da empresa: ").toUpperCase()
-        String cnpj = validarTextoComRegex("cnpj", "Digite o CNPJ da empresa: ")
-        String pais = validarTexto("Digite o PAÍS da empresa: ")
-        String cep = validarTextoComRegex("cep", "Digite o CEP da empresa: ").replaceAll(/\D/, '')
-        String descricao = validarTextoComRegex("descricao", "Digite uma breve descrição da empresa: ")
-        String senha = validarTexto("Digite a SENHA da empresa: ")
-
         try {
+            String nome = validarTextoComRegex("nome", "Digite o NOME da empresa: ")
+            String email = validarTextoComRegex("email", "Digite o EMAIL da empresa: ")
+            String estado = validarTextoComRegex("estado", "Digite o estado da empresa: ").toUpperCase()
+            String cnpj = validarTextoComRegex("cnpj", "Digite o CNPJ da empresa: ")
+            String pais = validarTexto("Digite o PAÍS da empresa: ")
+            String cep = validarTextoComRegex("cep", "Digite o CEP da empresa: ").replaceAll(/\D/, '')
+            String descricao = validarTextoComRegex("descricao", "Digite uma breve descrição da empresa: ")
+            String senha = validarTexto("Digite a SENHA da empresa: ")
+
             getEmpresaController().cadastrar(new Empresa(nome, email, estado, cnpj, pais, cep, descricao, senha))
             println "empresa cadastrada com sucesso!"
         } catch (Exception e) {
@@ -49,7 +50,6 @@ class EmpresaView implements IEntidadeView<Empresa>, EntidadeTrait, ValidadorEnt
     }
 
     @Override
-
     void exibirFormulariodeEdicao() {
         try {
             Long empresaId = validarInteiro("Digite o ID da empresa que deseja atualizar: ")

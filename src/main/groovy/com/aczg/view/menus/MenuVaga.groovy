@@ -3,10 +3,16 @@ package com.aczg.view.menus
 import com.aczg.view.menus.interfaces.GeradorDeMenus
 import com.aczg.view.menus.interfaces.IMenu
 import com.aczg.view.menus.interfaces.IMenuPrincipal
+import com.aczg.view.telas.interfaces.IEntidadeCRUDView
 
 class MenuVaga implements IMenu, GeradorDeMenus{
 
     private IMenuPrincipal menuPrincipal
+    private IEntidadeCRUDView vagaView
+
+    void setVagaview(IEntidadeCRUDView vagaView){
+        this.vagaView = vagaView
+    }
 
     @Override
     void setMenuPrincipal(IMenuPrincipal menuPrincipal) {
@@ -34,21 +40,21 @@ class MenuVaga implements IMenu, GeradorDeMenus{
 
     @Override
     void cadastrar(){
-        getEmpresaController().adicionarVaga()
+        vagaView.exibirFormularioDeCadastro()
     }
 
     @Override
     void listar(){
-        getEmpresaController().listarVagas()
+        vagaView.exibirLista()
     }
 
     @Override
     void editar(){
-        getEmpresaController().atualizarVaga()
+        vagaView.exibirFormulariodeEdicao()
     }
 
     @Override
     void remover() {
-        getEmpresaController().removerVaga()
+        vagaView.exibirFormulariodeExclusao()
     }
 }

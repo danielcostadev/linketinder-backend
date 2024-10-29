@@ -7,11 +7,12 @@ import com.aczg.DAO.VagaDAO
 import com.aczg.controller.CandidatoController
 
 import com.aczg.controller.EmpresaController
-import com.aczg.controller.validadorEntradaTrait
+
 import com.aczg.service.CandidatoService
 import com.aczg.service.EmpresaService
+import com.aczg.view.interfaces.ValidadorEntradaTrait
 
-class Menu implements validadorEntradaTrait{
+class Menu implements ValidadorEntradaTrait{
 
     CandidatoDAO candidatoDAO = new CandidatoDAO()
     CompetenciaDAO competenciaDAO = new CompetenciaDAO()

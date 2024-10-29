@@ -1,13 +1,11 @@
 package com.aczg.service
 
-
-import com.aczg.DAO.ICandidatoDAO
 import com.aczg.DAO.interfaces.IEntidadeDAO
 import com.aczg.model.Candidato
-import com.aczg.service.interfaces.EntidadeTrait
-import com.aczg.service.interfaces.IEntidadeService
+import com.aczg.service.interfaces.ManipulaEntidadeTrait
+import com.aczg.interfaces.IEntidade
 
-class CandidatoService implements IEntidadeService<Candidato>, EntidadeTrait{
+class CandidatoService implements IEntidade<Candidato>, ManipulaEntidadeTrait{
 
     IEntidadeDAO candidatoDAO
 
@@ -65,39 +63,7 @@ class CandidatoService implements IEntidadeService<Candidato>, EntidadeTrait{
 
     @Override
     boolean verificarExistencia(Long candidatoId) {
-        return false
+        return candidatoDAO.verificarExistencia('candidatos', candidatoId)
     }
 
-
-
-
-
-
-
-
-
-
-    Long adicionarCandidato(Candidato candidato){
-
-        try {
-            Long candidatoId = candidatoDAO.adicionarCandidato(candidato)
-
-            return candidatoId
-
-        } catch (Exception e){
-            println "Erro ao cadastrar candidato: ${e.message}"
-        }
-    }
-
-    List<Candidato> listarCandidados(){
-        return getCandidatoDAO().listarCandidatos()
-    }
-
-    void atualizarCandidato(Candidato candidato){
-        getCandidatoDAO().atualizarCandidato(candidato)
-    }
-
-    void removerCandidato(Long candidatoId) {
-        getCandidatoDAO().removerCandidato(candidatoId)
-    }
 }

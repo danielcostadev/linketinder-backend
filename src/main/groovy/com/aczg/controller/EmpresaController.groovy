@@ -1,23 +1,23 @@
 package com.aczg.controller
 
-import com.aczg.controller.interfaces.IEntidadeController
+
 import com.aczg.model.Competencia
 import com.aczg.model.Empresa
 import com.aczg.model.Vaga
-import com.aczg.service.interfaces.IEntidadeService
+import com.aczg.interfaces.IEntidade
 
-class EmpresaController implements IEntidadeController<Empresa>, validadorEntradaTrait{
+class EmpresaController implements IEntidade<Empresa> {
 
-    IEntidadeService empresaService
+    IEntidade empresaService
 
-    EmpresaController(IEntidadeService empresaService){
+    EmpresaController(IEntidade empresaService){
         this.empresaService = empresaService
     }
 
     @Override
-    void cadastrar(Empresa empresa){
+    Long cadastrar(Empresa empresa){
         try {
-            getEmpresaService().cadastrar(empresa)
+            return getEmpresaService().cadastrar(empresa)
         } catch (Exception e) {
             println "Erro ao cadastrar empresa: ${e.message}"
         }
@@ -26,7 +26,7 @@ class EmpresaController implements IEntidadeController<Empresa>, validadorEntrad
     @Override
     List<Empresa> listar() {
         try {
-            getEmpresaService().listar()
+            return getEmpresaService().listar()
         } catch (Exception e) {
             println "Erro ao listar empresas: ${e.message}"
         }
@@ -82,45 +82,10 @@ class EmpresaController implements IEntidadeController<Empresa>, validadorEntrad
 
 
 
-    void atualizarEmpresa(Long EmpresaId) {
-        manipularEntidade(empresaId, "Empresa",
-                { id -> getEmpresaService().getEmpresaDAO().verificarExistencia('empresas',id) },
-                { id -> exibirFormularioParaAtualizarEmpresa(id) },
-                "atualizada"
-        )
-    }
 
-    private void exibirFormularioParaAtualizarEmpresa(Long empresaId){
 
-        String newNome = validarTexto("Digite o NOME da empresa: ")
-        String newEmail = validarTexto("Digite o EMAIL da empresa: ")
-        String newEstado = validarTexto("Digite o estado da empresa: ")
-        String newCnpj = validarTexto("Digite o CNPJ da empresa: ")
-        String newPais = validarTexto("Digite o PAÍS da empresa: ")
-        String newCep = validarTexto("Digite o CEP da empresa: ")
-        String newDescricao = validarTexto("Digite uma breve descrição da empresa: ")
-        String newSenha = validarTexto("Digite a SENHA da empresa: ")
 
-        Empresa empresaAtualizada = new Empresa(newNome,newEmail,newEstado,newCnpj,newPais,newCep,newDescricao,newSenha)
-        empresaAtualizada.id = empresaId
 
-        try {
-            getEmpresaService().atualizarEmpresa(empresaAtualizada)
-            println "empresa atualizada com sucesso!"
-
-        } catch (Exception e) {
-            println "Erro ao atualizar empresa: ${e.message}"
-        }
-    }
-
-    void removerEmpresa() {
-        Long empresaId = validarInteiro("Digite o ID da empresa que deseja remover: ")
-        manipularEntidade(empresaId, "Empresa",
-                { id -> getEmpresaService().getEmpresaDAO().verificarExistencia('empresas',id) },
-                { id -> getEmpresaService().removerEmpresa(id) },
-                "removida"
-        )
-    }
 
 
 

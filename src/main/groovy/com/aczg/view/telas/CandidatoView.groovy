@@ -1,18 +1,19 @@
 package com.aczg.view.telas
 
-import com.aczg.controller.interfaces.IEntidadeController
+import com.aczg.interfaces.IEntidade
 import com.aczg.model.Candidato
-import com.aczg.service.interfaces.EntidadeTrait
-import com.aczg.view.telas.interfaces.IEntidadeView
-import com.aczg.view.telas.interfaces.ValidadorEntradaTrait
+import com.aczg.service.interfaces.ManipulaEntidadeTrait
+import com.aczg.view.telas.interfaces.IEntidadeAuxiliarEdicaoView
+import com.aczg.view.telas.interfaces.IEntidadeCRUDView
+import com.aczg.view.interfaces.ValidadorEntradaTrait
 
 import java.sql.Date
 
-class CandidatoView implements IEntidadeView<Candidato>, EntidadeTrait, ValidadorEntradaTrait {
+class CandidatoView implements IEntidadeCRUDView, IEntidadeAuxiliarEdicaoView<Candidato>, ManipulaEntidadeTrait, ValidadorEntradaTrait {
 
-    IEntidadeController candidatoController
+    private IEntidade candidatoController
 
-    CandidatoView(IEntidadeController candidatoController) {
+    CandidatoView(IEntidade candidatoController) {
         this.candidatoController = candidatoController
     }
 
@@ -76,7 +77,7 @@ class CandidatoView implements IEntidadeView<Candidato>, EntidadeTrait, Validado
     }
 
     @Override
-    Candidato coletarDados(Long entidadeaId) {
+    Candidato coletarDados(Long candidatoId) {
 
         try {
             String newNome = validarTextoComRegex("nome", "Digite o NOME do candidato: ")

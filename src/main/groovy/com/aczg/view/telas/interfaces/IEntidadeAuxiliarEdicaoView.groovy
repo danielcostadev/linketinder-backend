@@ -1,11 +1,7 @@
 package com.aczg.view.telas.interfaces
 
-interface IEntidadeView<T> {
+interface IEntidadeAuxiliarEdicaoView<T> {
 
-    void exibirFormularioDeCadastro()
-    void exibirLista()
-    void exibirFormulariodeEdicao()
-    void exibirFormulariodeExclusao()
     boolean validarExistencia(Long entidadeId)
     T coletarDados(Long entidadeaId)
     void atualizar(T entidadeAtualizada)
