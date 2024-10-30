@@ -1,126 +1,62 @@
 package com.aczg.controller
 
 import com.aczg.model.Candidato
-import com.aczg.model.Competencia
-import com.aczg.service.CandidatoService
+import com.aczg.interfaces.IEntidade
 
-import java.sql.Date
+class CandidatoController implements IEntidade<Candidato> {
 
-class CandidatoController implements validadorEntradaTrait, EntidadeTrait{
+    IEntidade candidatoService
 
-    CandidatoService candidatoService
-
-    CandidatoController(CandidatoService candidatoService) {
+    CandidatoController(IEntidade candidatoService) {
         this.candidatoService = candidatoService
     }
 
-    void adicionarCandidato(){
-
-        String nome = validarTextoComRegex("nome","Digite o NOME do candidato: ")
-        String sobrenome = validarTextoComRegex("sobrenome","Digite O SOBRENOME do candidato ")
-        String email = validarTextoComRegex("email","Digite o EMAIL pessoal do candidato: ")
-        String telefone = validarTextoComRegex("telefone","Digite o TELEFONE do candidato: ").replaceAll(/\D/, '')
-        String linkedin = validarTextoComRegex("linkedin","Digite o LINKEDIN do candidato: ")
-        String cpf = validarTextoComRegex("cpf","Digite o CPF da candidato: ").replaceAll(/\D/, '')
-        Date dataNascimento = validarData("Digite a DATA DE NASCIMENTO do candidato: ")
-        String estado = validarTextoComRegex("estado","Digite o estado do candidato: ").toUpperCase()
-        String cep = validarTextoComRegex("cep","Digite o CEP do candidato: ").replaceAll(/\D/, '')
-        String descricao = validarTextoComRegex("descricao","Digite uma breve descrição do candidato: ")
-        String formacao = validarTexto("Digite a FORMAÇÃO do candidato: ")
-        String senha = validarTexto("Digite a SENHA do candidato: ")
-
+    @Override
+    Long cadastrar(Candidato candidato) {
         try {
+            return getCandidatoService().cadastrar(candidato)
+        } catch (Exception e) {
+            println "Erro ao cadastrar candidato(a): ${e.message}"
+        }
+    }
 
-            Long candidatoId = candidatoService.adicionarCandidato(new Candidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha))
-            println("Candidato '${nome}' cadastrado com sucesso!");
+    @Override
+    List<Candidato> listar() {
+        try {
+           return getCandidatoService().listar()
+        } catch (Exception e) {
+            println "Erro ao recuperar lista de candidatos: ${e.message}"
+        }
+    }
 
-            if (candidatoId){
-                adicionarCompetencia(candidatoId)
+    @Override
+    void editar(Candidato candidato) {
+        try {
+            getCandidatoService().editar(candidato)
+        } catch (Exception e) {
+            println "Erro ao editar candidato(a): ${e.message}"
+        }
+    }
+
+    @Override
+    void remover(Long candidatoId) {
+        try {
+            if (verificarExistencia(candidatoId)) {
+                getCandidatoService().remover(candidatoId)
+            } else {
+                println "Candidato(a) com ID ${candidatoId} não encontrado(a)."
             }
-
         } catch (Exception e) {
-            println("Erro ao cadastrar dados': ${e.message}");
-        }
-
-    }
-
-    void listarCandidatos(){
-        List<Candidato> candidatos = getCandidatoService().listarCandidados()
-        candidatos.each { candidato ->
-            println "ID: ${candidato.getId()}, Formação ${candidato.getFormacao()}, Descrição: ${candidato.getDescricao()}"
+            println "Erro ao remover candidato(a): ${e.message}"
         }
     }
 
-    void atualizarCandidato() {
-        Long candidatoId = validarInteiro("Digite o ID do candidato que deseja editar: ")
-        manipularEntidade(candidatoId, "Candidato",
-                { id -> getCandidatoService().getCandidatoDAO().verificarExistencia('candidatos',id) },
-                { id -> exibirFormularioParaEdicaoDeCandidato(id) },
-                "atualizada"
-        )
-    }
-
-    private void exibirFormularioParaEdicaoDeCandidato(Long candidatoId){
-
-        String newNome = validarTexto("Digite o NOME do candidato: ")
-        String newSobrenome = validarTexto("Digite O SOBRENOME do candidato ")
-        String newEmail = validarTexto("Digite o EMAIL pessoal do candidato: ")
-        String newTelefone = validarTexto("Digite o TELEFONE do candidato: ")
-        String newLinkedin = validarTexto("Digite o LINKEDIN do candidato: ")
-        String newCpf = validarTexto("Digite o CPF da candidato: ")
-        Date newDataNascimento = validarData("Digite a DATA DE NASCIMENTO do candidato: ")
-        String newEstado = validarTexto("Digite o estado do candidato: ")
-        String newCep = validarTexto("Digite o CEP do candidato: ")
-        String newDescricao = validarTexto("Digite uma breve descrição do candidato: ")
-        String newFormacao = validarTexto("Digite a FORMAÇÃO do candidato: ")
-        String newSenha = validarTexto("Digite a SENHA do candidato: ")
-
-        Candidato candidatoAtualizado = new Candidato(newNome,newSobrenome,newEmail,newTelefone,newLinkedin,newCpf,newDataNascimento,newEstado,newCep,newDescricao,newFormacao,newSenha)
-        candidatoAtualizado.id = candidatoId
-
+    @Override
+    boolean verificarExistencia(Long candidatoId) {
         try {
-            getCandidatoService().atualizarCandidato(candidatoAtualizado)
-            println "candidato atualizado com sucesso!"
+            return getCandidatoService().verificarExistencia(candidatoId)
         } catch (Exception e) {
-            println "Erro ao atualizar candidato: ${e.message}"
-        }
-    }
-
-    void removerCandidato(){
-        Long candidatoId = validarInteiro("Digite o ID do(a) candidato(a) que deseja remover: ")
-        manipularEntidade(candidatoId, "Candidato(a)",
-                { id -> getCandidatoService().getCandidatoDAO().verificarExistencia('candidatos',id) },
-                { id -> getCandidatoService().removerCandidato(id) },
-                "removido(a)"
-        )
-    }
-
-
-    void adicionarCompetencia(Long candidatoId){
-
-        exibirFormularioParaAdicionarCompetencia(candidatoId)
-
-    }
-
-    private void exibirFormularioParaAdicionarCompetencia(Long candidatoId){
-
-        String competencias = validarTexto("Digite as competências separadas por vírgula: ");
-        List<String> listaCompetencias = competencias.split(",\\s*");
-
-        try {
-            candidatoService.adicionarCompetencia(listaCompetencias, candidatoId)
-            println("Competencia cadastrada com sucesso!");
-
-        } catch (Exception e) {
-            println("Erro ao cadastrar dados': ${e.message}");
-        }
-
-    }
-
-    void listarCompetencias(){
-        List<Competencia> competencias = getCandidatoService().listarCompetencias()
-        competencias.each { competencia ->
-            println "ID: ${competencia.getId()}, Nome: ${competencia.getNome()}"
+            println "Erro ao verificar a existência do candidato: ${e.message}"
         }
     }
 

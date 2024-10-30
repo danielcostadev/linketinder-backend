@@ -1,17 +1,20 @@
-package com.aczg.controller
+package com.aczg.view.interfaces
 
 import java.sql.Date
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-trait validadorEntradaTrait {
+trait ValidadorEntradaTrait {
 
     public Scanner scanner = new Scanner(System.in)
 
     String validarTexto(String mensagemInterativa, Scanner entradaScanner = scanner) {
-
         while (true) {
             print "${mensagemInterativa}"
+            if (!entradaScanner.hasNextLine()) {
+                println "Erro: Nenhuma linha de entrada encontrada"
+                return null
+            }
             String resposta = entradaScanner.nextLine()
             if (resposta && !resposta.trim().isEmpty()) {
                 return resposta

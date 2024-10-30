@@ -1,15 +1,18 @@
 package com.aczg.DAO
 
+import com.aczg.DAO.interfaces.IEntidadeDAO
+import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
 import com.aczg.model.Candidato
 import groovy.sql.Sql
 
-class CandidatoDAO implements VerificarExistenciaDeEntidadeTrait{
+class CandidatoDAO implements IEntidadeDAO<Candidato>, VerificarExistenciaDeEntidadeTrait{
 
     private ConexaoDAO conexaoDAO = new ConexaoDAO()
 
     Sql sql = conexaoDAO.getSql()
 
-    List<Candidato> listarCandidatos() {
+    @Override
+    List<Candidato> listar() {
         List<Candidato> candidatos = []
 
         try {
@@ -61,7 +64,8 @@ class CandidatoDAO implements VerificarExistenciaDeEntidadeTrait{
         return candidatos
     }
 
-    Long adicionarCandidato(Candidato candidato) {
+    @Override
+    Long cadastrar(Candidato candidato) {
         Long candidatoId = null
 
         try {
@@ -102,7 +106,8 @@ class CandidatoDAO implements VerificarExistenciaDeEntidadeTrait{
         return candidatoId
     }
 
-    void atualizarCandidato(Candidato candidato) {
+    @Override
+    void editar(Candidato candidato) {
 
         String queryUpdateCandidato = '''
         UPDATE candidatos
@@ -132,7 +137,8 @@ class CandidatoDAO implements VerificarExistenciaDeEntidadeTrait{
         }
     }
 
-    void removerCandidato(Long candidatoId) {
+    @Override
+    void remover(Long candidatoId) {
 
         String queryDeleteCandidato = '''
         DELETE FROM candidatos 

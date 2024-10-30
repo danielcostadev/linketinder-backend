@@ -1,100 +1,69 @@
 package com.aczg.service
 
-import com.aczg.DAO.CompetenciaDAO
-import com.aczg.DAO.ConexaoDAO
-import com.aczg.DAO.EmpresaDAO
-import com.aczg.DAO.VagaDAO
-import com.aczg.model.Competencia
+import com.aczg.DAO.interfaces.IEntidadeDAO
 import com.aczg.model.Empresa
-import com.aczg.model.Vaga
-import groovy.sql.Sql
+import com.aczg.service.interfaces.ManipulaEntidadeTrait
+import com.aczg.interfaces.IEntidade
 
-class EmpresaService {
+class EmpresaService implements IEntidade<Empresa>, ManipulaEntidadeTrait{
 
-    EmpresaDAO empresaDAO
-    VagaDAO vagaDAO
-    CompetenciaDAO competenciaDAO
+    IEntidadeDAO empresaDAO
 
-    EmpresaService(EmpresaDAO empresaDAO, VagaDAO vagaDAO, CompetenciaDAO competenciaDAO){
+    EmpresaService(IEntidadeDAO empresaDAO){
         this.empresaDAO = empresaDAO
-        this.vagaDAO = vagaDAO
-        this.competenciaDAO = competenciaDAO
     }
 
-
-    Long adicionarEmpresa(Empresa empresa){
+    @Override
+    Long cadastrar(Empresa empresa){
 
         try {
-            Long empresaId = empresaDAO.adicionarEmpresa(empresa)
+            Long empresaId = empresaDAO.cadastrar(empresa)
             return empresaId
 
         } catch (Exception e) {
-            println "Erro ao cadastrar empresa e vagas: ${e.message}"
+            println "Erro ao cadastrar empresa: ${e.message}"
             return null
         }
     }
 
-    List<Empresa> listarEmpresas(){
-        return getEmpresaDAO().listarEmpresas()
-    }
-
-    void atualizarEmpresa(Empresa empresa){
-        getEmpresaDAO().atualizarEmpresa(empresa)
-    }
-
-    void removerEmpresa(Long empresaId) {
-        getEmpresaDAO().removerEmpresa(empresaId)
-    }
-
-
-    Long adicionarVaga(String nome, String descricao, String local, Long empresaId) {
-
+    @Override
+    List<Empresa> listar(){
         try {
-            Vaga vaga = new Vaga(nome, descricao, local)
-            Long vagaId = vagaDAO.adicionarVaga(vaga.nome, vaga.descricao, vaga.local, empresaId)
-            println "Vaga '${nome}' cadastrada para a empresa ID: ${empresaId}"
-
-            return vagaId
-
+            return getEmpresaDAO().listar()
         } catch (Exception e) {
-            println "Erro ao cadastrar vaga: ${e.message}"
+            println "Erro ao recuperar lista de empresas: ${e.message}"
             return null
         }
     }
 
-    List<Vaga> listarVagas(){
-        return getVagaDAO().listarVagas()
-    }
-
-    void atualizarVaga(Vaga vaga){
-        getVagaDAO().atualizarVaga(vaga)
-    }
-
-    void removerVaga(Long vagaId){
-        getVagaDAO().removerVaga(vagaId)
-    }
-
-
-    void adicionarCompetencia(List<String> competencias, Long vagaId){
-
+    @Override
+    void editar(Empresa empresa) {
         try {
-
-            competencias.each { nomeCompetencia ->
-                Competencia novaCompetencia = new Competencia(nomeCompetencia)
-                competenciaDAO.adicionarCompetencia(novaCompetencia.nome, null, vagaId)
-            }
-
+            manipularEntidade(empresa.id, "Empresa",
+                    { id -> verificarExistencia(id) },
+                    { id -> empresaDAO.editar(empresa) },
+                    "atualizado(a)"
+            )
         } catch (Exception e) {
-            println "Erro ao cadastrar competências: ${e.message}"
+            println "Erro ao editar empresa: ${e.message}"
         }
     }
 
-    void atualizarCompetencia(Competencia competencia){
-        getCompetenciaDAO().atualizarCompetencia(competencia)
+    @Override
+    void remover(Long empresaId) {
+        try {
+            manipularEntidade(empresaId, "Empresa",
+                    { id -> verificarExistencia(empresaId) },
+                    { id -> empresaDAO.remover(empresaId) },
+                    "removido(a)"
+            )
+        } catch (Exception e) {
+            println "Erro ao remover empresa: ${e.message}"
+        }
     }
 
-    void removerCompetencia(Long competenciaId){
-        getCompetenciaDAO().removerCompetencia(competenciaId)
+    @Override
+    boolean verificarExistencia(Long empresaId) {
+        return empresaDAO.verificarExistencia('empresas', empresaId)
     }
-
 }

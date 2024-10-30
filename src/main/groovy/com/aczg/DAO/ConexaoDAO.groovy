@@ -1,12 +1,14 @@
 package com.aczg.DAO
 
+import com.aczg.DAO.interfaces.IConexaoDAO
 import groovy.sql.Sql
 
-class ConexaoDAO {
+class ConexaoDAO implements IConexaoDAO{
 
     private Sql sql
 
-    static Sql newInstance(){
+    @Override
+    Sql newInstance(){
         final String url = 'jdbc:postgresql://localhost:5432/linketinder_testes'
         final String user = 'user123'
         final String password = 'pass123'
@@ -19,13 +21,14 @@ class ConexaoDAO {
             return null
         }
     }
-
+    @Override
     void close(){
         if(sql){
             sql.close()
         }
     }
 
+    @Override
     Sql getSql(){
         if(!sql){
             sql = newInstance()

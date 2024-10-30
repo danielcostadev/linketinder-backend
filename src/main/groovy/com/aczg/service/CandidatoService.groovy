@@ -1,70 +1,69 @@
 package com.aczg.service
 
-import com.aczg.DAO.CandidatoDAO
-import com.aczg.DAO.CompetenciaDAO
-import com.aczg.DAO.ConexaoDAO
+import com.aczg.DAO.interfaces.IEntidadeDAO
 import com.aczg.model.Candidato
-import com.aczg.model.Competencia
-import groovy.sql.Sql
+import com.aczg.service.interfaces.ManipulaEntidadeTrait
+import com.aczg.interfaces.IEntidade
 
-import java.sql.Date
+class CandidatoService implements IEntidade<Candidato>, ManipulaEntidadeTrait{
 
-class CandidatoService {
+    IEntidadeDAO candidatoDAO
 
-    CandidatoDAO candidatoDAO
-    CompetenciaDAO competenciaDAO
-    ConexaoDAO conexaoDAO = new ConexaoDAO()
-
-    CandidatoService(CandidatoDAO candidatoDAO, CompetenciaDAO competenciaDAO){
+    CandidatoService(IEntidadeDAO candidatoDAO){
         this.candidatoDAO = candidatoDAO
-        this.competenciaDAO = competenciaDAO
     }
 
-
-    Long adicionarCandidato(Candidato candidato){
-
+    @Override
+    Long cadastrar(Candidato candidato) {
         try {
-            Long candidatoId = candidatoDAO.adicionarCandidato(candidato)
-
+            Long candidatoId = candidatoDAO.cadastrar(candidato)
             return candidatoId
-
-        } catch (Exception e){
-            println "Erro ao cadastrar candidato: ${e.message}"
+        } catch (Exception e) {
+            println "Erro ao cadastrar candidato(a): ${e.message}"
+            return null
         }
     }
 
-    List<Candidato> listarCandidados(){
-        return getCandidatoDAO().listarCandidatos()
+    @Override
+    List<Candidato> listar() {
+        try {
+            return getCandidatoDAO().listar()
+        } catch (Exception e) {
+            println "Erro ao recuperar lista de candidatos: ${e.message}"
+            return null
+        }
     }
 
-    void atualizarCandidato(Candidato candidato){
-        getCandidatoDAO().atualizarCandidato(candidato)
-    }
-
-    void removerCandidato(Long candidatoId) {
-        getCandidatoDAO().removerCandidato(candidatoId)
-    }
-
-
-    void adicionarCompetencia(List<String> competencias, Long candidatoId){
+    @Override
+    void editar(Candidato candidato) {
 
         try {
-
-            competencias.each { nomeCompetencia ->
-                Competencia novaCompetencia = new Competencia(nomeCompetencia)
-                competenciaDAO.adicionarCompetencia(novaCompetencia.nome, candidatoId, null)
-            }
-
+            manipularEntidade(candidato.id, "Candidato",
+                    { id -> verificarExistencia(id) },
+                    { id -> candidatoDAO.editar(candidato) },
+                    "atualizado(a)"
+            )
         } catch (Exception e) {
-            println "Erro ao cadastrar competências: ${e.message}"
+            println "Erro ao editar candidato: ${e.message}"
         }
     }
 
-    List<Competencia> listarCompetencias(){
-        return getCompetenciaDAO().listarCompetencias()
+    @Override
+    void remover(Long candidatoId) {
+        try {
+            manipularEntidade(candidatoId, "Candidato",
+                    { id -> verificarExistencia(candidatoId) },
+                    { id -> candidatoDAO.remover(candidatoId) },
+                    "removido(a)"
+            )
+        } catch (Exception e) {
+            println "Erro ao remover candidato(a): ${e.message}"
+        }
     }
 
-
-
+    @Override
+    boolean verificarExistencia(Long candidatoId) {
+        return candidatoDAO.verificarExistencia('candidatos', candidatoId)
+    }
 
 }
