@@ -1,15 +1,18 @@
 package com.aczg.DAO
 
+import com.aczg.DAO.interfaces.IEntidadeDAO
+import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
 import com.aczg.model.Empresa
 import groovy.sql.Sql
 
-class EmpresaDAO implements VerificarExistenciaDeEntidadeTrait{
+class EmpresaDAO implements IEntidadeDAO<Empresa>, VerificarExistenciaDeEntidadeTrait{
 
     private ConexaoDAO conexaoDAO = new ConexaoDAO()
 
     Sql sql = conexaoDAO.getSql()
 
-    List<Empresa> listarEmpresas() {
+    @Override
+    List<Empresa> listar() {
         List<Empresa> empresas = []
 
         try {
@@ -52,7 +55,8 @@ class EmpresaDAO implements VerificarExistenciaDeEntidadeTrait{
         return empresas
     }
 
-    Long adicionarEmpresa(Empresa empresa) {
+    @Override
+    Long cadastrar(Empresa empresa) {
         Long empresaId = null
 
         try {
@@ -89,7 +93,8 @@ class EmpresaDAO implements VerificarExistenciaDeEntidadeTrait{
         return empresaId
     }
 
-    void atualizarEmpresa(Empresa empresa) {
+    @Override
+    void editar(Empresa empresa) {
 
         String queryUpdateEmpresa = '''
         UPDATE empresas
@@ -114,7 +119,8 @@ class EmpresaDAO implements VerificarExistenciaDeEntidadeTrait{
         }
     }
 
-    void removerEmpresa(Long empresaId) {
+    @Override
+    void remover(Long empresaId) {
 
         String queryDeleteEmpresa = '''
         DELETE FROM empresas 

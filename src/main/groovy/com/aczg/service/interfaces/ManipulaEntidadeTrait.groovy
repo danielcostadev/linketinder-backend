@@ -1,6 +1,6 @@
-package com.aczg.controller
+package com.aczg.service.interfaces
 
-trait EntidadeTrait {
+trait ManipulaEntidadeTrait {
 
     void manipularEntidade(Long idEntidade, String nomeEntidadePrincipal, Closure<Boolean> entidadeExiste, Closure<Void> acaoEntidade, String tipoAcao, String nomeEntidadeSecundaria = null) {
         try {
@@ -18,8 +18,4 @@ trait EntidadeTrait {
             println "Erro ao ${tipoAcao.toLowerCase()} ${nomeEntidadePrincipal}: ${e.message}"
         }
     }
-
-
-
-
 }

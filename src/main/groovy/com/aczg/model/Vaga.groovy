@@ -6,13 +6,18 @@ class Vaga {
     String nome
     String descricao
     String local
-    Integer idEmpresa
-    Vaga(Long id = null, String nome, String descricao, String local){
-        this.id = id
+    Long empresaId
+
+    Vaga(String nome, String descricao, String local, Long empresaId) {
         this.nome = nome
         this.descricao = descricao
         this.local = local
-        this.idEmpresa = idEmpresa
+        this.empresaId = empresaId
+    }
+
+    Vaga(Long id, String nome, String descricao, String local, Long empresaId) {
+        this(nome, descricao, local, empresaId)
+        this.id = id
     }
 
 }

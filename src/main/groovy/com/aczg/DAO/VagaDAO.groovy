@@ -1,21 +1,24 @@
 package com.aczg.DAO
 
+import com.aczg.DAO.interfaces.IEntidadeDAO
+import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
 import com.aczg.model.Vaga
 import groovy.sql.Sql
 
-class VagaDAO {
+class VagaDAO implements IEntidadeDAO<Vaga>, VerificarExistenciaDeEntidadeTrait{
 
     private ConexaoDAO conexaoDAO = new ConexaoDAO()
 
     Sql sql = conexaoDAO.getSql()
 
-    List<Vaga> listarVagas() {
+    @Override
+    List<Vaga> listar() {
         List<Vaga> vagas = []
 
         try {
 
             String query = '''
-                SELECT id, nome, descricao, local
+                SELECT *
                 FROM vagas
                 ORDER BY id
             '''
@@ -26,12 +29,14 @@ class VagaDAO {
                 String nome = row['nome']
                 String descricao = row['descricao']
                 String local = row['local']
+                Long empresaId = row['empresa_id']
 
                 Vaga vaga = new Vaga(
                         id,
                         nome,
                         descricao,
-                        local
+                        local,
+                        empresaId
                 )
 
                 vagas << vaga
@@ -43,7 +48,8 @@ class VagaDAO {
         return vagas
     }
 
-    Long adicionarVaga(String nomeVaga, String nomeDescricao, String nomeLocal, Long empresaId) {
+    @Override
+    Long cadastrar(Vaga vaga) {
 
         try {
 
@@ -52,7 +58,7 @@ class VagaDAO {
             VALUES (?, ? , ?, ?)
             RETURNING id
         '''
-            Long vagaId = sql.firstRow(queryVagas, [nomeVaga, nomeDescricao, nomeLocal, empresaId]).id
+            Long vagaId = sql.firstRow(queryVagas, [vaga.nome, vaga.descricao, vaga.local, vaga.empresaId]).id
 
             return vagaId
 
@@ -64,7 +70,8 @@ class VagaDAO {
         }
     }
 
-    void atualizarVaga(Vaga vaga) {
+    @Override
+    void editar(Vaga vaga) {
 
         String queryUpdateVaga = '''
         UPDATE vagas
@@ -85,7 +92,8 @@ class VagaDAO {
 
     }
 
-    void removerVaga(Long vagaId) {
+    @Override
+    void remover(Long vagaId) {
 
         String queryDeleteVaga = '''
         DELETE FROM vagas 
