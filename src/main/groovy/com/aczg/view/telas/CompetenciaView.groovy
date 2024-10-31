@@ -9,9 +9,9 @@
 
     class CompetenciaView implements ICompetenciaView<Long>, ManipulaEntidadeTrait, ValidadorEntradaTrait{
 
-        private ICompetencia competenciaController
-        private IEntidade candidatoController
-        private IEntidade vagaController
+        ICompetencia competenciaController
+        IEntidade candidatoController
+        IEntidade vagaController
 
         CompetenciaView(ICompetencia competenciaController, IEntidade candidatoController, IEntidade vagaController) {
             this.competenciaController = competenciaController
