@@ -11,7 +11,7 @@ import java.sql.Date
 
 class CandidatoView implements IEntidadeCRUDView, IEntidadeAuxiliarEdicaoView<Candidato>, ManipulaEntidadeTrait, ValidadorEntradaTrait {
 
-    private IEntidade candidatoController
+    IEntidade candidatoController
 
     CandidatoView(IEntidade candidatoController) {
         this.candidatoController = candidatoController
