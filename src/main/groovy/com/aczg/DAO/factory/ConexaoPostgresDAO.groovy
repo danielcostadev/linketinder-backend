@@ -1,16 +1,17 @@
-package com.aczg.DAO
+package com.aczg.DAO.factory
+
 
 import com.aczg.DAO.interfaces.IConexaoDAO
 import groovy.sql.Sql
 
-class ConexaoDAO implements IConexaoDAO{
+class ConexaoPostgresDAO implements IConexaoDAO {
 
-    private static final ConexaoDAO instance = new ConexaoDAO()
+    private static final IConexaoDAO instance = new ConexaoPostgresDAO()
     private Sql sql
 
-    private ConexaoDAO(){}
+    private ConexaoPostgresDAO(){}
 
-    static ConexaoDAO getInstance(){
+    static ConexaoPostgresDAO getInstance(){
         return instance
     }
 
@@ -28,12 +29,6 @@ class ConexaoDAO implements IConexaoDAO{
             return null
         }
     }
-    @Override
-    void close(){
-        if(sql){
-            sql.close()
-        }
-    }
 
     @Override
     Sql getSql(){
@@ -43,4 +38,10 @@ class ConexaoDAO implements IConexaoDAO{
         return sql
     }
 
+    @Override
+    void close(){
+        if(sql){
+            sql.close()
+        }
+    }
 }

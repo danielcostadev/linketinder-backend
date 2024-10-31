@@ -1,5 +1,7 @@
 package com.aczg.DAO
 
+import com.aczg.DAO.factory.ConexaoFactory
+import com.aczg.DAO.interfaces.IConexaoDAO
 import com.aczg.DAO.interfaces.IEntidadeDAO
 import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
 import com.aczg.model.Vaga
@@ -7,9 +9,8 @@ import groovy.sql.Sql
 
 class VagaDAO implements IEntidadeDAO<Vaga>, VerificarExistenciaDeEntidadeTrait{
 
-    private ConexaoDAO conexaoDAO = new ConexaoDAO()
-
-    Sql sql = conexaoDAO.getSql()
+    private IConexaoDAO conexaoDAO = ConexaoFactory.getConexao("PostgreSQL")
+    private Sql sql = conexaoDAO.getSql()
 
     @Override
     List<Vaga> listar() {

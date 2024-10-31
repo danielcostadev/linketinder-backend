@@ -1,15 +1,16 @@
 package com.aczg.DAO
 
+import com.aczg.DAO.interfaces.IConexaoDAO
 import com.aczg.DAO.interfaces.IEntidadeDAO
 import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
+import com.aczg.DAO.factory.ConexaoFactory
 import com.aczg.model.Candidato
 import groovy.sql.Sql
 
 class CandidatoDAO implements IEntidadeDAO<Candidato>, VerificarExistenciaDeEntidadeTrait{
 
-    private ConexaoDAO conexaoDAO = new ConexaoDAO()
-
-    Sql sql = conexaoDAO.getSql()
+    private IConexaoDAO conexaoDAO = ConexaoFactory.getConexao("PostgreSQL")
+    private Sql sql = conexaoDAO.getSql()
 
     @Override
     List<Candidato> listar() {
