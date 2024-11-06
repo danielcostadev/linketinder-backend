@@ -1,6 +1,6 @@
 package com.aczg.view.telas.interfaces
 
-interface IEntidadeEdicaoEExclusaoView {
+interface IFormularioEditarExcluir {
 
     void exibirFormulariodeEdicao()
     void exibirFormulariodeExclusao()

@@ -2,10 +2,10 @@ package com.aczg.service
 
 import com.aczg.DAO.interfaces.IEntidadeDAO
 import com.aczg.model.Vaga
+import com.aczg.service.interfaces.IVagaService
 import com.aczg.service.interfaces.ManipulaEntidadeTrait
-import com.aczg.interfaces.IEntidade
 
-class VagaService implements IEntidade<Vaga>, ManipulaEntidadeTrait {
+class VagaService implements IVagaService<Vaga>, ManipulaEntidadeTrait {
 
     IEntidadeDAO vagaDAO
 

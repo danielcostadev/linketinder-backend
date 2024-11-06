@@ -1,6 +1,6 @@
 package com.aczg.view.menus
 
-import com.aczg.view.telas.interfaces.IEntidadeCRUDView
+import com.aczg.view.telas.interfaces.ITela
 import com.aczg.view.menus.interfaces.GeradorDeMenus
 import com.aczg.view.menus.interfaces.IMenu
 import com.aczg.view.menus.interfaces.IMenuPrincipal
@@ -8,9 +8,9 @@ import com.aczg.view.menus.interfaces.IMenuPrincipal
 class MenuEmpresa implements IMenu, GeradorDeMenus{
 
     private IMenuPrincipal menuPrincipal
-    private IEntidadeCRUDView empresaView
+    private ITela empresaView
 
-    void setEmpresaView(IEntidadeCRUDView empresaView){
+    void setEmpresaView(ITela empresaView){
         this.empresaView = empresaView
     }
 

@@ -1,16 +1,14 @@
 package com.aczg.controller
 
-
-import com.aczg.model.Competencia
+import com.aczg.controller.interfaces.IEmpresaController
 import com.aczg.model.Empresa
-import com.aczg.model.Vaga
-import com.aczg.interfaces.IEntidade
+import com.aczg.service.interfaces.IEmpresaService
 
-class EmpresaController implements IEntidade<Empresa> {
+class EmpresaController implements IEmpresaController<Empresa> {
 
-    IEntidade empresaService
+    IEmpresaService empresaService
 
-    EmpresaController(IEntidade empresaService){
+    EmpresaController(IEmpresaService empresaService){
         this.empresaService = empresaService
     }
 

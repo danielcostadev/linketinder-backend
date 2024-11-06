@@ -63,8 +63,6 @@ class VagaDAO implements IEntidadeDAO<Vaga>, VerificarExistenciaDeEntidadeTrait{
 
             return vagaId
 
-           // println "Vaga '${nomeVaga}' cadastrada com sucesso"
-
         } catch (Exception e) {
             println "Erro ao cadastrar vaga: ${e.message}"
             return null

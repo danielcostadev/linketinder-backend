@@ -1,18 +1,17 @@
 package com.aczg.view.telas
 
-import com.aczg.interfaces.IEntidade
-import com.aczg.service.interfaces.ManipulaEntidadeTrait
-
+import com.aczg.controller.interfaces.IEmpresaController
 import com.aczg.model.Empresa
-import com.aczg.view.telas.interfaces.IEntidadeAuxiliarEdicaoView
-import com.aczg.view.telas.interfaces.IEntidadeCRUDView
+import com.aczg.service.interfaces.ManipulaEntidadeTrait
 import com.aczg.view.interfaces.ValidadorEntradaTrait
+import com.aczg.view.telas.interfaces.IFormularioAuxiliarEdicao
+import com.aczg.view.telas.interfaces.ITela
 
-class EmpresaView implements IEntidadeCRUDView, IEntidadeAuxiliarEdicaoView<Empresa>, ManipulaEntidadeTrait, ValidadorEntradaTrait {
+class EmpresaView implements ITela, IFormularioAuxiliarEdicao<Empresa>, ManipulaEntidadeTrait, ValidadorEntradaTrait {
 
-    IEntidade empresaController
+    IEmpresaController empresaController
 
-    EmpresaView(IEntidade empresaController) {
+    EmpresaView(IEmpresaController empresaController) {
         this.empresaController = empresaController
     }
 
@@ -59,7 +58,7 @@ class EmpresaView implements IEntidadeCRUDView, IEntidadeAuxiliarEdicaoView<Empr
                 return
             }
 
-            Empresa empresaAtualizada = coletarDados(empresaId)
+            Empresa empresaAtualizada = coletarDadosParaEdicao(empresaId)
             atualizar(empresaAtualizada)
         } catch (Exception e) {
             println "Não foi possível exibir o formulário: ${e.message}"
@@ -72,7 +71,7 @@ class EmpresaView implements IEntidadeCRUDView, IEntidadeAuxiliarEdicaoView<Empr
     }
 
     @Override
-    Empresa coletarDados(Long empresaId) {
+    Empresa coletarDadosParaEdicao(Long empresaId) {
         try {
             String newNome = validarTextoComRegex("nome", "Digite o NOME da empresa: ")
             String newEmail = validarTextoComRegex("email", "Digite o EMAIL da empresa: ")

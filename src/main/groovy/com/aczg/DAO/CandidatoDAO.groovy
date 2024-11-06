@@ -4,8 +4,12 @@ import com.aczg.DAO.interfaces.IConexaoDAO
 import com.aczg.DAO.interfaces.IEntidadeDAO
 import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
 import com.aczg.DAO.factory.ConexaoFactory
+import com.aczg.exceptions.EntidadeJaExisteException
+import com.aczg.exceptions.DatabaseException
 import com.aczg.model.Candidato
 import groovy.sql.Sql
+
+import java.sql.SQLException
 
 class CandidatoDAO implements IEntidadeDAO<Candidato>, VerificarExistenciaDeEntidadeTrait{
 
@@ -13,7 +17,50 @@ class CandidatoDAO implements IEntidadeDAO<Candidato>, VerificarExistenciaDeEnti
     private Sql sql = conexaoDAO.getSql()
 
     @Override
-    List<Candidato> listar() {
+    Long cadastrar(Candidato candidato) throws EntidadeJaExisteException, DatabaseException {
+        Long candidatoId = null
+
+        try {
+            String queryVerificaCandidato = '''
+            SELECT id FROM candidatos WHERE email = ? OR cpf = ?
+        '''
+            candidatoId = sql.firstRow(queryVerificaCandidato, [candidato.email, candidato.cpf])?.id
+
+            if (candidatoId == null) {
+                String queryCandidato = '''
+                INSERT INTO candidatos (nome, sobrenome, data_nascimento, email, telefone, linkedin, cpf, estado, cep, descricao, formacao, senha)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                RETURNING id
+            '''
+
+                candidatoId = sql.firstRow(queryCandidato, [
+                        candidato.nome,
+                        candidato.sobrenome,
+                        candidato.dataNascimento,
+                        candidato.email,
+                        candidato.telefone,
+                        candidato.linkedin,
+                        candidato.cpf,
+                        candidato.estado,
+                        candidato.cep,
+                        candidato.descricao,
+                        candidato.formacao,
+                        candidato.senha
+                ]).id
+            } else {
+                throw new EntidadeJaExisteException();
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException(e)
+        } catch (Exception e) {
+            throw e
+        }
+
+        return candidatoId
+    }
+
+    @Override
+    List<Candidato> listar() throws DatabaseException {
         List<Candidato> candidatos = []
 
         try {
@@ -58,57 +105,18 @@ class CandidatoDAO implements IEntidadeDAO<Candidato>, VerificarExistenciaDeEnti
 
                 candidatos << candidato
             }
+
+        } catch (SQLException e) {
+            throw new DatabaseException(e)
         } catch (Exception e) {
-            println "Erro ao buscar candidatos: ${e.message}"
+            throw e
         }
 
         return candidatos
     }
 
     @Override
-    Long cadastrar(Candidato candidato) {
-        Long candidatoId = null
-
-        try {
-            String queryVerificaCandidato = '''
-            SELECT id FROM candidatos WHERE email = ? OR cpf = ?
-        '''
-            candidatoId = sql.firstRow(queryVerificaCandidato, [candidato.email, candidato.cpf])?.id
-
-            if (candidatoId == null) {
-                String queryCandidato = '''
-                INSERT INTO candidatos (nome, sobrenome, data_nascimento, email, telefone, linkedin, cpf, estado, cep, descricao, formacao, senha)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                RETURNING id
-            '''
-
-                candidatoId = sql.firstRow(queryCandidato, [
-                        candidato.nome,
-                        candidato.sobrenome,
-                        candidato.dataNascimento,
-                        candidato.email,
-                        candidato.telefone,
-                        candidato.linkedin,
-                        candidato.cpf,
-                        candidato.estado,
-                        candidato.cep,
-                        candidato.descricao,
-                        candidato.formacao,
-                        candidato.senha
-                ]).id
-            } else {
-                println "Candidato já existe com o e-mail ou CPF fornecido. ID: ${candidatoId}"
-            }
-
-        } catch (Exception e) {
-            println "Erro ao cadastrar candidato: ${e.message}"
-        }
-
-        return candidatoId
-    }
-
-    @Override
-    void editar(Candidato candidato) {
+    void editar(Candidato candidato) throws DatabaseException {
 
         String queryUpdateCandidato = '''
         UPDATE candidatos
@@ -133,13 +141,15 @@ class CandidatoDAO implements IEntidadeDAO<Candidato>, VerificarExistenciaDeEnti
                     candidato.senha,
                     candidato.id
             ])
+        } catch (SQLException e) {
+            throw new DatabaseException(e)
         } catch (Exception e) {
-            println "Erro ao atualizar candidato: ${e.message}"
+            throw e
         }
     }
 
     @Override
-    void remover(Long candidatoId) {
+    void remover(Long candidatoId) throws DatabaseException{
 
         String queryDeleteCandidato = '''
         DELETE FROM candidatos 
@@ -155,8 +165,10 @@ class CandidatoDAO implements IEntidadeDAO<Candidato>, VerificarExistenciaDeEnti
                 println "Candidato com ID ${candidatoId} removido com sucesso."
             }
 
+        } catch (SQLException e) {
+            throw new DatabaseException(e)
         } catch (Exception e) {
-            println "Erro ao tentar remover candidato: ${e.message}"
+            throw e
         }
 
     }

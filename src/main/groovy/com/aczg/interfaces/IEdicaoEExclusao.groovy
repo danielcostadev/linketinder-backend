@@ -1,6 +1,6 @@
 package com.aczg.interfaces
 
-interface IEntidadeEdicaoEExclusao<T> {
+interface IEdicaoEExclusao<T> {
     void editar(T entidade)
     void remover(Long entidadeId)
 }

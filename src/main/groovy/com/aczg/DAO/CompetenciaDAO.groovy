@@ -4,8 +4,12 @@ import com.aczg.DAO.factory.ConexaoFactory
 import com.aczg.DAO.interfaces.ICompetenciaDAO
 import com.aczg.DAO.interfaces.IConexaoDAO
 import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
+import com.aczg.exceptions.DatabaseException
+import com.aczg.exceptions.EntidadeJaExisteException
 import com.aczg.model.Competencia
 import groovy.sql.Sql
+
+import java.sql.SQLException
 
 class CompetenciaDAO implements ICompetenciaDAO, VerificarExistenciaDeEntidadeTrait{
 
@@ -13,7 +17,7 @@ class CompetenciaDAO implements ICompetenciaDAO, VerificarExistenciaDeEntidadeTr
     private Sql sql = conexaoDAO.getSql()
 
     @Override
-    List<Competencia> listar() {
+    List<Competencia> listar() throws DatabaseException {
         List<Competencia> competencias = []
 
         try {
@@ -36,15 +40,17 @@ class CompetenciaDAO implements ICompetenciaDAO, VerificarExistenciaDeEntidadeTr
 
                 competencias << competencia
             }
+        } catch (SQLException e) {
+            throw new DatabaseException(e)
         } catch (Exception e) {
-            println "Erro ao buscar competencia: ${e.message}"
+            throw e
         }
 
         return competencias
     }
 
     @Override
-    Long cadastrar(String nomeCompetencia, Long candidatoId = null, Long vagaId = null) {
+    Long cadastrar(String nomeCompetencia, Long candidatoId = null, Long vagaId = null) throws EntidadeJaExisteException, DatabaseException {
         try {
             String queryCompetenciaExistente = '''
             SELECT id FROM competencias WHERE nome = ?

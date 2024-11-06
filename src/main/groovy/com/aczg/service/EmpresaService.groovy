@@ -2,10 +2,10 @@ package com.aczg.service
 
 import com.aczg.DAO.interfaces.IEntidadeDAO
 import com.aczg.model.Empresa
+import com.aczg.service.interfaces.IEmpresaService
 import com.aczg.service.interfaces.ManipulaEntidadeTrait
-import com.aczg.interfaces.IEntidade
 
-class EmpresaService implements IEntidade<Empresa>, ManipulaEntidadeTrait{
+class EmpresaService implements IEmpresaService<Empresa>, ManipulaEntidadeTrait{
 
     IEntidadeDAO empresaDAO
 

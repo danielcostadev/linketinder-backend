@@ -1,6 +1,6 @@
 package com.aczg.interfaces
 
-interface IEntidadeCadastroEListagem<T> {
+interface ICadastroEListagem<T> {
     Long cadastrar(T entidade)
     List<T> listar()
 }

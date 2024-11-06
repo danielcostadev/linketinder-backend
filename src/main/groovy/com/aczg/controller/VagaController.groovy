@@ -1,14 +1,14 @@
 package com.aczg.controller
 
-
+import com.aczg.controller.interfaces.IVagaController
 import com.aczg.model.Vaga
-import com.aczg.interfaces.IEntidade
+import com.aczg.service.interfaces.IVagaService
 
-class VagaController implements IEntidade<Vaga> {
+class VagaController implements IVagaController<Vaga> {
 
-    IEntidade vagaService
+    IVagaService vagaService
 
-    VagaController(IEntidade vagaService){
+    VagaController(IVagaService vagaService){
         this.vagaService = vagaService
     }
 

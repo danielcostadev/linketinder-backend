@@ -1,17 +1,19 @@
 package com.aczg.view.telas
 
-import com.aczg.interfaces.IEntidade
+import com.aczg.controller.interfaces.IEmpresaController
+import com.aczg.controller.interfaces.IVagaController
+
 import com.aczg.model.Vaga
 import com.aczg.service.interfaces.ManipulaEntidadeTrait
-import com.aczg.view.telas.interfaces.IEntidadeCRUDView
 import com.aczg.view.interfaces.ValidadorEntradaTrait
+import com.aczg.view.telas.interfaces.ITela
 
-class VagaView implements IEntidadeCRUDView, ManipulaEntidadeTrait, ValidadorEntradaTrait {
+class VagaView implements ITela, ManipulaEntidadeTrait, ValidadorEntradaTrait {
 
-    IEntidade vagaController
-    IEntidade empresaController
+    IVagaController vagaController
+    IEmpresaController empresaController
 
-    VagaView(IEntidade vagaController, IEntidade empresaController) {
+    VagaView(IVagaController vagaController, IEmpresaController empresaController) {
         this.vagaController = vagaController
         this.empresaController = empresaController
     }

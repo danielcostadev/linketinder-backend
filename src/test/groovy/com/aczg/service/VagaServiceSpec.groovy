@@ -1,14 +1,15 @@
 package com.aczg.service
 
 import com.aczg.DAO.interfaces.IEntidadeDAO
-import com.aczg.interfaces.IEntidade
+
 import com.aczg.model.Vaga
+import com.aczg.service.interfaces.IVagaService
 import spock.lang.Specification
 
 class VagaServiceSpec extends Specification{
 
     IEntidadeDAO vagaDAO = Mock()
-    IEntidade vagaService = new VagaService(vagaDAO)
+    IVagaService vagaService = new VagaService(vagaDAO)
 
     def "Deve adicionar uma nova vaga com sucesso"() {
         given: "Um Mock de Vaga"

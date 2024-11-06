@@ -1,9 +1,9 @@
 package com.aczg.view.telas.interfaces
 
-interface IEntidadeAuxiliarEdicaoView<T> {
+interface IFormularioAuxiliarEdicao<T> {
 
     boolean validarExistencia(Long entidadeId)
-    T coletarDados(Long entidadeaId)
+    T coletarDadosParaEdicao(Long entidadeaId)
     void atualizar(T entidadeAtualizada)
 
 }

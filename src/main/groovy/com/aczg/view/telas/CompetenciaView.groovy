@@ -1,7 +1,8 @@
     package com.aczg.view.telas
 
+    import com.aczg.controller.interfaces.ICandidatoController
+    import com.aczg.controller.interfaces.IVagaController
     import com.aczg.interfaces.ICompetencia
-    import com.aczg.interfaces.IEntidade
     import com.aczg.model.Competencia
     import com.aczg.service.interfaces.ManipulaEntidadeTrait
     import com.aczg.view.interfaces.ValidadorEntradaTrait
@@ -10,10 +11,10 @@
     class CompetenciaView implements ICompetenciaView<Long>, ManipulaEntidadeTrait, ValidadorEntradaTrait{
 
         ICompetencia competenciaController
-        IEntidade candidatoController
-        IEntidade vagaController
+        ICandidatoController candidatoController
+        IVagaController vagaController
 
-        CompetenciaView(ICompetencia competenciaController, IEntidade candidatoController, IEntidade vagaController) {
+        CompetenciaView(ICompetencia competenciaController, ICandidatoController candidatoController, IVagaController vagaController) {
             this.competenciaController = competenciaController
             this.candidatoController = candidatoController
             this.vagaController = vagaController

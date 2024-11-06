@@ -1,32 +1,27 @@
 package com.aczg.controller
 
+import com.aczg.controller.interfaces.ICandidatoController
+import com.aczg.exceptions.DatabaseException
+import com.aczg.exceptions.EntidadeJaExisteException
 import com.aczg.model.Candidato
-import com.aczg.interfaces.IEntidade
+import com.aczg.service.interfaces.ICandidatoService
 
-class CandidatoController implements IEntidade<Candidato> {
+class CandidatoController implements ICandidatoController<Candidato> {
 
-    IEntidade candidatoService
+    ICandidatoService candidatoService
 
-    CandidatoController(IEntidade candidatoService) {
+    CandidatoController(ICandidatoService candidatoService) {
         this.candidatoService = candidatoService
     }
 
     @Override
-    Long cadastrar(Candidato candidato) {
-        try {
+    Long cadastrar(Candidato candidato) throws EntidadeJaExisteException, DatabaseException {
             return getCandidatoService().cadastrar(candidato)
-        } catch (Exception e) {
-            println "Erro ao cadastrar candidato(a): ${e.message}"
-        }
     }
 
     @Override
-    List<Candidato> listar() {
-        try {
-           return getCandidatoService().listar()
-        } catch (Exception e) {
-            println "Erro ao recuperar lista de candidatos: ${e.message}"
-        }
+    List<Candidato> listar() throws DatabaseException{
+        return getCandidatoService().listar()
     }
 
     @Override

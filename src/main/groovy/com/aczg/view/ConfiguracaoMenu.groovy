@@ -2,9 +2,15 @@ package com.aczg.view;
 
 import com.aczg.DAO.*;
 import com.aczg.DAO.interfaces.*;
-import com.aczg.controller.*;
+import com.aczg.controller.*
+import com.aczg.controller.interfaces.ICandidatoController
+import com.aczg.controller.interfaces.IEmpresaController
+import com.aczg.controller.interfaces.IVagaController;
 import com.aczg.interfaces.*;
-import com.aczg.service.*;
+import com.aczg.service.*
+import com.aczg.service.interfaces.ICandidatoService
+import com.aczg.service.interfaces.IEmpresaService
+import com.aczg.service.interfaces.IVagaService;
 import com.aczg.view.menus.*;
 import com.aczg.view.menus.interfaces.*;
 import com.aczg.view.telas.*;
@@ -19,19 +25,19 @@ class ConfiguracaoMenu {
         IMenuPrincipal menuPrincipal = new MenuPrincipal();
 
         IEntidadeDAO empresaDAO = new EmpresaDAO();
-        IEntidade empresaService = new EmpresaService(empresaDAO);
-        IEntidade empresaController = new EmpresaController(empresaService);
-        IEntidadeCRUDView empresaView = new EmpresaView(empresaController);
+        IEmpresaService empresaService = new EmpresaService(empresaDAO);
+        IEmpresaController empresaController = new EmpresaController(empresaService);
+        ITela empresaView = new EmpresaView(empresaController);
 
         IEntidadeDAO candidatoDAO = new CandidatoDAO();
-        IEntidade candidatoService = new CandidatoService(candidatoDAO);
-        IEntidade candidatoController = new CandidatoController(candidatoService);
-        IEntidadeCRUDView candidatoView = new CandidatoView(candidatoController);
+        ICandidatoService candidatoService = new CandidatoService(candidatoDAO);
+        ICandidatoController candidatoController = new CandidatoController(candidatoService);
+        ITela candidatoView = new CandidatoView(candidatoController);
 
         IEntidadeDAO vagaDAO = new VagaDAO();
-        IEntidade vagaService = new VagaService(vagaDAO);
-        IEntidade vagaController = new VagaController(vagaService);
-        IEntidadeCRUDView vagaView = new VagaView(vagaController, empresaController);
+        IVagaService vagaService = new VagaService(vagaDAO);
+        IVagaController vagaController = new VagaController(vagaService);
+        ITela vagaView = new VagaView(vagaController, empresaController);
 
         ICompetenciaDAO competenciaDAO = new CompetenciaDAO();
         ICompetencia competenciaService = new CompetenciaService(competenciaDAO);

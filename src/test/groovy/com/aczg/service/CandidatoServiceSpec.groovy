@@ -2,8 +2,9 @@ package com.aczg.service
 
 
 import com.aczg.DAO.interfaces.IEntidadeDAO
-import com.aczg.interfaces.IEntidade
+
 import com.aczg.model.Candidato
+import com.aczg.service.interfaces.ICandidatoService
 import spock.lang.Specification
 
 import java.sql.Date
@@ -11,7 +12,7 @@ import java.sql.Date
 class CandidatoServiceSpec extends Specification{
 
     IEntidadeDAO candidatoDAO = Mock()
-    IEntidade candidatoService = new CandidatoService(candidatoDAO)
+    ICandidatoService candidatoService = new CandidatoService(candidatoDAO)
 
     def "Deve adicionar um novo candidato com sucesso"() {
         given: "Um Mock de Candidato"

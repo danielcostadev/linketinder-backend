@@ -1,6 +1,6 @@
 package com.aczg.view.telas.interfaces
 
-interface IEntidadeCadastroEListagemView {
+interface IFormularioCadastrarListar {
 
     void exibirFormularioDeCadastro()
     void exibirLista()

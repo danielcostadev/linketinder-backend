@@ -1,15 +1,17 @@
 package com.aczg.service
 
 import com.aczg.DAO.interfaces.IEntidadeDAO
-import com.aczg.interfaces.IEntidade
+
+import com.aczg.service.interfaces.ICandidatoService
+import com.aczg.service.interfaces.IEmpresaService
 import spock.lang.Specification
 
 class ManipulaEntidade extends Specification{
 
     IEntidadeDAO empresaDAO = Mock()
     IEntidadeDAO candidatoDAO = Mock()
-    IEntidade empresaService = new EmpresaService(empresaDAO)
-    IEntidade candidatoService = new CandidatoService(candidatoDAO)
+    IEmpresaService empresaService = new EmpresaService(empresaDAO)
+    ICandidatoService candidatoService = new CandidatoService(candidatoDAO)
 
     def "Deve chamar acaoEntidade e exibir mensagem de sucesso quando a entidade existe"() {
         given: "Um ID de entidade e as closures para verificar existência e realizar ação"

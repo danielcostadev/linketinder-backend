@@ -1,19 +1,21 @@
 package com.aczg.view.telas
 
-import com.aczg.interfaces.IEntidade
+import com.aczg.controller.interfaces.ICandidatoController
+import com.aczg.exceptions.DatabaseException
+import com.aczg.exceptions.EntidadeJaExisteException
 import com.aczg.model.Candidato
 import com.aczg.service.interfaces.ManipulaEntidadeTrait
-import com.aczg.view.telas.interfaces.IEntidadeAuxiliarEdicaoView
-import com.aczg.view.telas.interfaces.IEntidadeCRUDView
 import com.aczg.view.interfaces.ValidadorEntradaTrait
+import com.aczg.view.telas.interfaces.IFormularioAuxiliarEdicao
+import com.aczg.view.telas.interfaces.ITela
 
 import java.sql.Date
 
-class CandidatoView implements IEntidadeCRUDView, IEntidadeAuxiliarEdicaoView<Candidato>, ManipulaEntidadeTrait, ValidadorEntradaTrait {
+class CandidatoView implements ITela, IFormularioAuxiliarEdicao<Candidato>, ManipulaEntidadeTrait, ValidadorEntradaTrait {
 
-    IEntidade candidatoController
+    ICandidatoController candidatoController
 
-    CandidatoView(IEntidade candidatoController) {
+    CandidatoView(ICandidatoController candidatoController) {
         this.candidatoController = candidatoController
     }
 
@@ -33,10 +35,17 @@ class CandidatoView implements IEntidadeCRUDView, IEntidadeAuxiliarEdicaoView<Ca
             String formacao = validarTexto("Digite a FORMAÇÃO do candidato: ")
             String senha = validarTexto("Digite a SENHA do candidato: ")
 
-            getCandidatoController().cadastrar(new Candidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha))
-            println "candidato cadastrado com sucesso!"
+            Long candidatoId = getCandidatoController().cadastrar(new Candidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha))
+
+            if (candidatoId != null) {
+                println "Candidato cadastrado com sucesso! ID: " + candidatoId;
+            }
+        } catch (EntidadeJaExisteException e) {
+            println "Erro: Já existe um candidato cadastrado com o mesmo e-mail ou CPF.";
+        } catch (DatabaseException e) {
+            println "Erro: Houve um problema ao acessar o banco de dados. Tente novamente mais tarde.";
         } catch (Exception e) {
-            println "Erro ao cadastrar candidato: ${e.message}"
+            println "Erro inesperado: " + e.getMessage();
         }
     }
 
@@ -64,7 +73,7 @@ class CandidatoView implements IEntidadeCRUDView, IEntidadeAuxiliarEdicaoView<Ca
                 return
             }
 
-            Candidato candidatoAtualizado = coletarDados(candidatoId)
+            Candidato candidatoAtualizado = coletarDadosParaEdicao(candidatoId)
             atualizar(candidatoAtualizado)
         } catch (Exception e) {
             println "Não foi possível exibir o formulário: ${e.message}"
@@ -77,7 +86,7 @@ class CandidatoView implements IEntidadeCRUDView, IEntidadeAuxiliarEdicaoView<Ca
     }
 
     @Override
-    Candidato coletarDados(Long candidatoId) {
+    Candidato coletarDadosParaEdicao(Long candidatoId) {
 
         try {
             String newNome = validarTextoComRegex("nome", "Digite o NOME do candidato: ")
