@@ -1,11 +1,18 @@
 package com.aczg.service
 
 import com.aczg.DAO.interfaces.IEntidadeDAO
+import com.aczg.exceptions.DatabaseException
+import com.aczg.exceptions.EntidadeJaExisteException
 import com.aczg.model.Empresa
 import com.aczg.service.interfaces.IEmpresaService
 import com.aczg.service.interfaces.ManipulaEntidadeTrait
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 class EmpresaService implements IEmpresaService<Empresa>, ManipulaEntidadeTrait{
+
+    private static final Logger log = LoggerFactory.getLogger(CandidatoService)
 
     IEntidadeDAO empresaDAO
 
@@ -14,15 +21,15 @@ class EmpresaService implements IEmpresaService<Empresa>, ManipulaEntidadeTrait{
     }
 
     @Override
-    Long cadastrar(Empresa empresa){
+    Long cadastrar(Empresa empresa) throws EntidadeJaExisteException, DatabaseException {
 
         try {
             Long empresaId = empresaDAO.cadastrar(empresa)
+            log.info("Empresa cadastrada com sucesso")
             return empresaId
-
-        } catch (Exception e) {
-            println "Erro ao cadastrar empresa: ${e.message}"
-            return null
+        } catch (EntidadeJaExisteException | DatabaseException e) {
+            log.error("Erro: ${e.getMessage()}")
+            throw e;
         }
     }
 
@@ -30,40 +37,50 @@ class EmpresaService implements IEmpresaService<Empresa>, ManipulaEntidadeTrait{
     List<Empresa> listar(){
         try {
             return getEmpresaDAO().listar()
-        } catch (Exception e) {
-            println "Erro ao recuperar lista de empresas: ${e.message}"
-            return null
+        } catch (DatabaseException e) {
+            log.error("Erro: ${e.getMessage()}")
+            throw e
         }
     }
 
     @Override
-    void editar(Empresa empresa) {
+    void editar(Empresa empresa) throws DatabaseException {
         try {
             manipularEntidade(empresa.id, "Empresa",
                     { id -> verificarExistencia(id) },
                     { id -> empresaDAO.editar(empresa) },
                     "atualizado(a)"
             )
+        } catch (DatabaseException e) {
+            throw e
         } catch (Exception e) {
-            println "Erro ao editar empresa: ${e.message}"
+            log.error("Erro: ${e.getMessage()}")
+            throw e
         }
     }
 
     @Override
-    void remover(Long empresaId) {
+    void remover(Long empresaId) throws DatabaseException {
         try {
             manipularEntidade(empresaId, "Empresa",
                     { id -> verificarExistencia(empresaId) },
                     { id -> empresaDAO.remover(empresaId) },
                     "removido(a)"
             )
+        } catch (DatabaseException e) {
+            throw e
         } catch (Exception e) {
-            println "Erro ao remover empresa: ${e.message}"
+            log.error("Erro: ${e.getMessage()}")
+            throw e
         }
     }
 
     @Override
     boolean verificarExistencia(Long empresaId) {
-        return empresaDAO.verificarExistencia('empresas', empresaId)
+        try {
+            return empresaDAO.verificarExistencia('empresas', empresaId)
+        } catch (Exception e) {
+            log.warn("Erro: ${e.getMessage()}")
+        }
     }
 }

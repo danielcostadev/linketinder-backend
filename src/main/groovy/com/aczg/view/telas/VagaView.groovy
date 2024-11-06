@@ -80,7 +80,6 @@ class VagaView implements ITela, ManipulaEntidadeTrait, ValidadorEntradaTrait {
         }
     }
 
-
     Vaga coletarDadosVaga(Long empresaId) {
         try {
             String nome = validarTexto("Digite o TITULO da vaga: ")

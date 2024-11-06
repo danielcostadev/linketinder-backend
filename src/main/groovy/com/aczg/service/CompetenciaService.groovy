@@ -1,26 +1,45 @@
 package com.aczg.service
 
 import com.aczg.DAO.interfaces.ICompetenciaDAO
+import com.aczg.exceptions.DatabaseException
+import com.aczg.exceptions.EntidadeJaExisteException
 import com.aczg.interfaces.ICompetencia
 import com.aczg.model.Competencia
 import com.aczg.service.interfaces.ManipulaEntidadeTrait
 
-class CompetenciaService implements ICompetencia, ManipulaEntidadeTrait{
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+class CompetenciaService implements ICompetencia, ManipulaEntidadeTrait {
     ICompetenciaDAO competenciaDAO
+
+    private static final Logger log = LoggerFactory.getLogger(CandidatoService)
 
     CompetenciaService(ICompetenciaDAO competenciaDAO) {
         this.competenciaDAO = competenciaDAO
     }
 
-    void cadastrar(List<String> competencias, Long candidatoId, Long vagaId) {
-        competencias.each { competencia ->
-            Competencia novaCompetencia = new Competencia(competencia)
-            competenciaDAO.cadastrar(novaCompetencia.getNome(), candidatoId, vagaId)
+    void cadastrar(List<String> competencias, Long candidatoId, Long vagaId) throws DatabaseException {
+
+        try {
+            competencias.each { competencia ->
+                Competencia novaCompetencia = new Competencia(competencia)
+                competenciaDAO.cadastrar(novaCompetencia.getNome(), candidatoId, vagaId)
+                log.info("Candidato cadastrado com sucesso")
+            }
+        } catch (EntidadeJaExisteException | DatabaseException e) {
+            log.error("Erro: ${e.getMessage()}")
+            throw e;
         }
     }
 
     List<Competencia> listar() {
-        return competenciaDAO.listar()
+        try {
+            return competenciaDAO.listar()
+        } catch (DatabaseException e) {
+            log.error("Erro: ${e.getMessage()}")
+            throw e
+        }
     }
 
 }

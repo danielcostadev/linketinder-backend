@@ -1,6 +1,9 @@
 package com.aczg.controller
 
 import com.aczg.controller.interfaces.IEmpresaController
+import com.aczg.exceptions.DatabaseException
+import com.aczg.exceptions.EntidadeJaExisteException
+import com.aczg.exceptions.EntidadeNaoEncontradaException
 import com.aczg.model.Empresa
 import com.aczg.service.interfaces.IEmpresaService
 
@@ -8,58 +11,37 @@ class EmpresaController implements IEmpresaController<Empresa> {
 
     IEmpresaService empresaService
 
-    EmpresaController(IEmpresaService empresaService){
+    EmpresaController(IEmpresaService empresaService) {
         this.empresaService = empresaService
     }
 
     @Override
-    Long cadastrar(Empresa empresa){
-        try {
-            return getEmpresaService().cadastrar(empresa)
-        } catch (Exception e) {
-            println "Erro ao cadastrar empresa: ${e.message}"
+    Long cadastrar(Empresa empresa) throws EntidadeJaExisteException, DatabaseException {
+        return getEmpresaService().cadastrar(empresa)
+    }
+
+    @Override
+    List<Empresa> listar() throws DatabaseException {
+        return getEmpresaService().listar()
+    }
+
+    @Override
+    void editar(Empresa empresa) throws DatabaseException {
+        getEmpresaService().editar(empresa)
+    }
+
+    @Override
+    void remover(Long empresaId) throws EntidadeNaoEncontradaException, DatabaseException {
+        if (verificarExistencia(empresaId)) {
+            getEmpresaService().remover(empresaId)
+        } else {
+            throw new EntidadeNaoEncontradaException()
         }
     }
 
     @Override
-    List<Empresa> listar() {
-        try {
-            return getEmpresaService().listar()
-        } catch (Exception e) {
-            println "Erro ao listar empresas: ${e.message}"
-        }
-    }
-
-    @Override
-    void editar(Empresa empresa) {
-        try {
-            getEmpresaService().editar(empresa)
-        } catch (Exception e) {
-            println "Erro ao editar empresa: ${e.message}"
-        }
-    }
-
-    @Override
-    void remover(Long empresaId) {
-        try {
-            if (verificarExistencia(empresaId)) {
-                getEmpresaService().remover(empresaId)
-            } else {
-                println "Empresa com ID ${empresaId} não encontrada."
-            }
-        } catch (Exception e) {
-            println "Erro ao remover empresa: ${e.message}"
-        }
-    }
-
-    @Override
-    boolean verificarExistencia(Long empresaId) {
-        try {
-            return getEmpresaService().verificarExistencia(empresaId)
-        } catch (Exception e) {
-            println "Erro ao verificar existência da empresa: ${e.message}"
-            return false
-        }
+    boolean verificarExistencia(Long empresaId) throws EntidadeNaoEncontradaException, DatabaseException {
+        return getEmpresaService().verificarExistencia(empresaId)
     }
 
 }

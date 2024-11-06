@@ -4,8 +4,11 @@ import com.aczg.DAO.factory.ConexaoFactory
 import com.aczg.DAO.interfaces.IConexaoDAO
 import com.aczg.DAO.interfaces.IEntidadeDAO
 import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
+import com.aczg.exceptions.DatabaseException
 import com.aczg.model.Vaga
 import groovy.sql.Sql
+
+import java.sql.SQLException
 
 class VagaDAO implements IEntidadeDAO<Vaga>, VerificarExistenciaDeEntidadeTrait{
 
@@ -13,7 +16,28 @@ class VagaDAO implements IEntidadeDAO<Vaga>, VerificarExistenciaDeEntidadeTrait{
     private Sql sql = conexaoDAO.getSql()
 
     @Override
-    List<Vaga> listar() {
+    Long cadastrar(Vaga vaga) throws DatabaseException {
+
+        try {
+
+            String queryVagas = '''
+            INSERT INTO vagas (nome, descricao, local, empresa_id)
+            VALUES (?, ? , ?, ?)
+            RETURNING id
+        '''
+            Long vagaId = sql.firstRow(queryVagas, [vaga.nome, vaga.descricao, vaga.local, vaga.empresaId]).id
+
+            return vagaId
+
+        } catch (SQLException e) {
+            throw new DatabaseException(e)
+        } catch (Exception e) {
+            throw e
+        }
+    }
+
+    @Override
+    List<Vaga> listar() throws DatabaseException {
         List<Vaga> vagas = []
 
         try {
@@ -42,35 +66,17 @@ class VagaDAO implements IEntidadeDAO<Vaga>, VerificarExistenciaDeEntidadeTrait{
 
                 vagas << vaga
             }
+        } catch (SQLException e) {
+            throw new DatabaseException(e)
         } catch (Exception e) {
-            println "Erro ao buscar vagas: ${e.message}"
+            throw e
         }
 
         return vagas
     }
 
     @Override
-    Long cadastrar(Vaga vaga) {
-
-        try {
-
-            String queryVagas = '''
-            INSERT INTO vagas (nome, descricao, local, empresa_id)
-            VALUES (?, ? , ?, ?)
-            RETURNING id
-        '''
-            Long vagaId = sql.firstRow(queryVagas, [vaga.nome, vaga.descricao, vaga.local, vaga.empresaId]).id
-
-            return vagaId
-
-        } catch (Exception e) {
-            println "Erro ao cadastrar vaga: ${e.message}"
-            return null
-        }
-    }
-
-    @Override
-    void editar(Vaga vaga) {
+    void editar(Vaga vaga) throws DatabaseException {
 
         String queryUpdateVaga = '''
         UPDATE vagas
@@ -85,8 +91,10 @@ class VagaDAO implements IEntidadeDAO<Vaga>, VerificarExistenciaDeEntidadeTrait{
                     vaga.local,
                     vaga.id,
             ])
+        } catch (SQLException e) {
+            throw new DatabaseException(e)
         } catch (Exception e) {
-            println "Erro ao atualizar vaga: ${e.message}"
+            throw e
         }
 
     }
@@ -103,13 +111,13 @@ class VagaDAO implements IEntidadeDAO<Vaga>, VerificarExistenciaDeEntidadeTrait{
             int rowsAffected = sql.executeUpdate(queryDeleteVaga, [vagaId])
 
             if(rowsAffected == 0){
-                println "Nenhuma vaga encontrada com o ID ${vagaId}."
-            } else {
-                println "Vaga com ID ${vagaId} removida com sucesso."
+                throw EntidadeNaoEncontradaException()
             }
 
+        } catch (SQLException e) {
+            throw new DatabaseException(e)
         } catch (Exception e) {
-            println "Erro ao tentar remover vaga: ${e.message}"
+            throw e
         }
 
     }

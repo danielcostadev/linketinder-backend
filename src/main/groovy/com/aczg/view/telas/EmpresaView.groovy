@@ -1,6 +1,9 @@
 package com.aczg.view.telas
 
 import com.aczg.controller.interfaces.IEmpresaController
+import com.aczg.exceptions.DatabaseException
+import com.aczg.exceptions.EntidadeJaExisteException
+import com.aczg.exceptions.EntidadeNaoEncontradaException
 import com.aczg.model.Empresa
 import com.aczg.service.interfaces.ManipulaEntidadeTrait
 import com.aczg.view.interfaces.ValidadorEntradaTrait
@@ -27,10 +30,17 @@ class EmpresaView implements ITela, IFormularioAuxiliarEdicao<Empresa>, Manipula
             String descricao = validarTextoComRegex("descricao", "Digite uma breve descrição da empresa: ")
             String senha = validarTexto("Digite a SENHA da empresa: ")
 
-            getEmpresaController().cadastrar(new Empresa(nome, email, estado, cnpj, pais, cep, descricao, senha))
-            println "empresa cadastrada com sucesso!"
+            Long empresaId = getEmpresaController().cadastrar(new Empresa(nome, email, estado, cnpj, pais, cep, descricao, senha))
+
+            if (empresaId != null) {
+                println "Empresa cadastrada com sucesso! ID: ${empresaId}"
+            }
+        } catch (EntidadeJaExisteException e) {
+            println "Erro: Já existe uma empresa cadastrada com esses dados."
+        } catch (DatabaseException e) {
+            println "Erro: Houve um problema ao acessar o banco de dados."
         } catch (Exception e) {
-            println "Erro ao cadastrar empresa: ${e.message}"
+            println "Erro inesperado: ${e.getMessage()}"
         }
     }
 
@@ -42,8 +52,10 @@ class EmpresaView implements ITela, IFormularioAuxiliarEdicao<Empresa>, Manipula
             empresas.each { empresa ->
                 println "ID: ${empresa.getId()}, Descrição: ${empresa.getDescricao()}, Estado: ${empresa.getEstado()}"
             }
+        } catch (DatabaseException e) {
+            println "Erro: Houve um problema ao acessar o banco de dados."
         } catch (Exception e) {
-            println "erro ao recuperar lista de empresas: ${e.message}"
+            println "Erro inesperado: ${e.getMessage()}"
         }
 
     }
@@ -60,8 +72,13 @@ class EmpresaView implements ITela, IFormularioAuxiliarEdicao<Empresa>, Manipula
 
             Empresa empresaAtualizada = coletarDadosParaEdicao(empresaId)
             atualizar(empresaAtualizada)
+
+        } catch (EntidadeNaoEncontradaException e) {
+            println "Erro: Empresa não encontrada."
+        } catch (DatabaseException e) {
+            println "Erro: Houve um problema ao acessar o banco de dados."
         } catch (Exception e) {
-            println "Não foi possível exibir o formulário: ${e.message}"
+            println "Erro inesperado: ${e.message}"
         }
     }
 
@@ -71,34 +88,27 @@ class EmpresaView implements ITela, IFormularioAuxiliarEdicao<Empresa>, Manipula
     }
 
     @Override
-    Empresa coletarDadosParaEdicao(Long empresaId) {
-        try {
-            String newNome = validarTextoComRegex("nome", "Digite o NOME da empresa: ")
-            String newEmail = validarTextoComRegex("email", "Digite o EMAIL da empresa: ")
-            String newEstado = validarTextoComRegex("estado", "Digite o estado da empresa: ").toUpperCase()
-            String newCnpj = validarTextoComRegex("cnpj", "Digite o CNPJ da empresa: ")
-            String newPais = validarTexto("Digite o PAÍS da empresa: ")
-            String newCep = validarTextoComRegex("cep", "Digite o CEP da empresa: ").replaceAll(/\D/, '')
-            String newDescricao = validarTextoComRegex("descricao", "Digite uma breve descrição da empresa: ")
-            String newSenha = validarTexto("Digite a SENHA da empresa: ")
+    Empresa coletarDadosParaEdicao(Long empresaId) throws Exception {
+        String newNome = validarTextoComRegex("nome", "Digite o NOME da empresa: ")
+        String newEmail = validarTextoComRegex("email", "Digite o EMAIL da empresa: ")
+        String newEstado = validarTextoComRegex("estado", "Digite o estado da empresa: ").toUpperCase()
+        String newCnpj = validarTextoComRegex("cnpj", "Digite o CNPJ da empresa: ")
+        String newPais = validarTexto("Digite o PAÍS da empresa: ")
+        String newCep = validarTextoComRegex("cep", "Digite o CEP da empresa: ").replaceAll(/\D/, '')
+        String newDescricao = validarTextoComRegex("descricao", "Digite uma breve descrição da empresa: ")
+        String newSenha = validarTexto("Digite a SENHA da empresa: ")
 
-            return new Empresa(newNome, newEmail, newEstado, newCnpj, newPais, newCep, newDescricao, newSenha).with {
-                it.id = empresaId;
-                it
-            }
-        } catch (Exception e) {
-            println "Erro ao editar empresa: ${e.message}"
+        new Empresa(newNome, newEmail, newEstado, newCnpj, newPais, newCep, newDescricao, newSenha).with {
+            empresa.id = empresaId;
+            return empresa.id
         }
     }
 
     @Override
-    void atualizar(Empresa empresaAtualizada) {
-        try {
+    void atualizar(Empresa empresaAtualizada) throws Exception {
+
             empresaController.editar(empresaAtualizada)
             println "Empresa atualizada com sucesso!"
-        } catch (Exception e) {
-            println "Erro ao atualizar empresa: ${e.message}"
-        }
     }
 
     @Override
@@ -107,8 +117,13 @@ class EmpresaView implements ITela, IFormularioAuxiliarEdicao<Empresa>, Manipula
         try {
             empresaController.remover(empresaId)
             println "Empresa removida com sucesso!"
+
+        } catch (EntidadeNaoEncontradaException e) {
+            println "Erro: Empresa não encontrada: ${e.getMessage()}"
+        } catch (DatabaseException e) {
+            println "Erro: Houve um problema ao acessar o banco de dados: ${e.getMessage()}"
         } catch (Exception e) {
-            println "Erro ao remover empresa: ${e.message}"
+            println "Erro inesperado: ${e.getMessage()}"
         }
     }
 }

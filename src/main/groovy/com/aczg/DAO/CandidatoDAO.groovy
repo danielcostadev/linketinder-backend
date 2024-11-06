@@ -6,6 +6,7 @@ import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
 import com.aczg.DAO.factory.ConexaoFactory
 import com.aczg.exceptions.EntidadeJaExisteException
 import com.aczg.exceptions.DatabaseException
+import com.aczg.exceptions.EntidadeNaoEncontradaException
 import com.aczg.model.Candidato
 import groovy.sql.Sql
 
@@ -149,7 +150,7 @@ class CandidatoDAO implements IEntidadeDAO<Candidato>, VerificarExistenciaDeEnti
     }
 
     @Override
-    void remover(Long candidatoId) throws DatabaseException{
+    void remover(Long candidatoId) throws EntidadeNaoEncontradaException, DatabaseException {
 
         String queryDeleteCandidato = '''
         DELETE FROM candidatos 
@@ -160,9 +161,7 @@ class CandidatoDAO implements IEntidadeDAO<Candidato>, VerificarExistenciaDeEnti
             int rowsAffected = sql.executeUpdate(queryDeleteCandidato, [candidatoId])
 
             if(rowsAffected == 0){
-                println "Nenhum candidato encontrada com o ID ${candidatoId}."
-            } else {
-                println "Candidato com ID ${candidatoId} removido com sucesso."
+                throw EntidadeNaoEncontradaException()
             }
 
         } catch (SQLException e) {

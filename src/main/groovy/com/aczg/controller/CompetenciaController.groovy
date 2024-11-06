@@ -1,10 +1,10 @@
 package com.aczg.controller
 
+import com.aczg.exceptions.DatabaseException
 import com.aczg.interfaces.ICompetencia
-import com.aczg.interfaces.IEntidadeVerificarExistencia
 import com.aczg.model.Competencia
 
-class CompetenciaController implements ICompetencia, IEntidadeVerificarExistencia {
+class CompetenciaController implements ICompetencia {
 
     private ICompetencia competenciaService
 
@@ -13,17 +13,12 @@ class CompetenciaController implements ICompetencia, IEntidadeVerificarExistenci
     }
 
     @Override
-    void cadastrar(List<String> competencias, Long candidatoId, Long vagaId) {
+    void cadastrar(List<String> competencias, Long candidatoId, Long vagaId) throws DatabaseException {
         competenciaService.cadastrar(competencias, candidatoId, vagaId)
     }
 
     @Override
-    List<Competencia> listar() {
+    List<Competencia> listar() throws DatabaseException {
         return competenciaService.listar()
-    }
-
-    @Override
-    boolean verificarExistencia(Long entidadeId) {
-        return false
     }
 }

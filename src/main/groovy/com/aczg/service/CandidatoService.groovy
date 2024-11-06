@@ -21,7 +21,7 @@ class CandidatoService implements ICandidatoService<Candidato>, ManipulaEntidade
     }
 
     @Override
-    Long cadastrar(Candidato candidato) throws EntidadeJaExisteException, DatabaseException{
+    Long cadastrar(Candidato candidato) throws EntidadeJaExisteException, DatabaseException {
         try {
             Long candidatoId = candidatoDAO.cadastrar(candidato)
             log.info("Candidato cadastrado com sucesso")
@@ -33,7 +33,7 @@ class CandidatoService implements ICandidatoService<Candidato>, ManipulaEntidade
     }
 
     @Override
-    List<Candidato> listar() throws DatabaseException{
+    List<Candidato> listar() throws DatabaseException {
         try {
             return getCandidatoDAO().listar()
         } catch (DatabaseException e) {
@@ -43,7 +43,7 @@ class CandidatoService implements ICandidatoService<Candidato>, ManipulaEntidade
     }
 
     @Override
-    void editar(Candidato candidato) throws DatabaseException{
+    void editar(Candidato candidato) throws DatabaseException {
 
         try {
             manipularEntidade(candidato.id, "Candidato",
@@ -60,7 +60,7 @@ class CandidatoService implements ICandidatoService<Candidato>, ManipulaEntidade
     }
 
     @Override
-    void remover(Long candidatoId) throws DatabaseException{
+    void remover(Long candidatoId) throws DatabaseException {
         try {
             manipularEntidade(candidatoId, "Candidato",
                     { id -> verificarExistencia(candidatoId) },
@@ -77,7 +77,12 @@ class CandidatoService implements ICandidatoService<Candidato>, ManipulaEntidade
 
     @Override
     boolean verificarExistencia(Long candidatoId) {
-        return candidatoDAO.verificarExistencia('candidatos', candidatoId)
+
+        try {
+            return candidatoDAO.verificarExistencia('candidatos', candidatoId)
+        } catch (Exception e) {
+            log.warn("Erro: ${e.getMessage()}")
+        }
     }
 
 }

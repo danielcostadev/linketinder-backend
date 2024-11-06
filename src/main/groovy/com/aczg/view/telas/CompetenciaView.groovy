@@ -2,6 +2,8 @@
 
     import com.aczg.controller.interfaces.ICandidatoController
     import com.aczg.controller.interfaces.IVagaController
+    import com.aczg.exceptions.DatabaseException
+    import com.aczg.exceptions.EntidadeJaExisteException
     import com.aczg.interfaces.ICompetencia
     import com.aczg.model.Competencia
     import com.aczg.service.interfaces.ManipulaEntidadeTrait
@@ -26,9 +28,15 @@
                 Long candidatoId = validarInteiro("Digite o ID do candidato: ")
                 String competencias = validarTexto("Digite as competências separadas por vírgula: ")
                 List<String> listaCompetencias = competencias.split(",\\s*")
-                competenciaController.cadastrar(listaCompetencias, candidatoId, null) // Passar ID do candidato
+                Long competenciaId = competenciaController.cadastrar(listaCompetencias, candidatoId, null)
+
+                if (competenciaId != null) {
+                    println "Competência(s) cadastrada(s) com sucesso!"
+                }
+            } catch (DatabaseException e) {
+                println "Erro: Houve um problema ao acessar o banco de dados."
             } catch (Exception e) {
-                println "Erro ao cadastrar competências: ${e.message}"
+                println "Erro inesperado: ${e.getMessage()}"
             }
         }
 
@@ -38,9 +46,15 @@
                 Long vagaId = validarInteiro("Digite o ID da vaga: ")
                 String competencias = validarTexto("Digite as competências separadas por vírgula: ")
                 List<String> listaCompetencias = competencias.split(",\\s*")
-                competenciaController.cadastrar(listaCompetencias, null, vagaId) // Passar ID da vaga
+                Long competenciaId = competenciaController.cadastrar(listaCompetencias, null, vagaId)
+
+                if (competenciaId != null) {
+                    println "Competência(s) cadastrada(s) com sucesso!"
+                }
+            } catch (DatabaseException e) {
+                println "Erro: Houve um problema ao acessar o banco de dados."
             } catch (Exception e) {
-                println "Erro ao cadastrar competências: ${e.message}"
+                println "Erro inesperado: ${e.getMessage()}"
             }
         }
 
@@ -51,8 +65,10 @@
                 competencias.each { competencia ->
                     println "ID: ${competencia.id}, Nome: ${competencia.nome}"
                 }
+            } catch (DatabaseException e) {
+                println "Erro: Houve um problema ao acessar o banco de dados: ${e.getMessage()}"
             } catch (Exception e) {
-                println "Erro ao recuperar lista de competências: ${e.message}"
+                println "Erro inesperado: ${e.getMessage()}"
             }
         }
     }

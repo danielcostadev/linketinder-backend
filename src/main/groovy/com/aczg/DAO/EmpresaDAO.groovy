@@ -4,8 +4,13 @@ import com.aczg.DAO.factory.ConexaoFactory
 import com.aczg.DAO.interfaces.IConexaoDAO
 import com.aczg.DAO.interfaces.IEntidadeDAO
 import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
+import com.aczg.exceptions.DatabaseException
+import com.aczg.exceptions.EntidadeJaExisteException
+import com.aczg.exceptions.EntidadeNaoEncontradaException
 import com.aczg.model.Empresa
 import groovy.sql.Sql
+
+import java.sql.SQLException
 
 class EmpresaDAO implements IEntidadeDAO<Empresa>, VerificarExistenciaDeEntidadeTrait{
 
@@ -13,7 +18,47 @@ class EmpresaDAO implements IEntidadeDAO<Empresa>, VerificarExistenciaDeEntidade
     private Sql sql = conexaoDAO.getSql()
 
     @Override
-    List<Empresa> listar() {
+    Long cadastrar(Empresa empresa) throws EntidadeJaExisteException, DatabaseException {
+        Long empresaId = null
+
+        try {
+            String queryVerificaEmpresa = '''
+            SELECT id FROM empresas WHERE email = ? OR cnpj = ?
+        '''
+            empresaId = sql.firstRow(queryVerificaEmpresa, [empresa.email, empresa.cnpj])?.id
+
+            if (empresaId == null) {
+                String queryEmpresa = '''
+                INSERT INTO empresas (nome,email,estado,cnpj,pais,cep,descricao,senha)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                RETURNING id
+            '''
+
+                empresaId = sql.firstRow(queryEmpresa, [
+                        empresa.nome,
+                        empresa.email,
+                        empresa.estado,
+                        empresa.cnpj,
+                        empresa.pais,
+                        empresa.cep,
+                        empresa.descricao,
+                        empresa.senha
+                ]).id
+            } else {
+                throw new EntidadeJaExisteException();
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException(e)
+        } catch (Exception e) {
+            throw e
+        }
+
+        return empresaId
+    }
+
+    @Override
+    List<Empresa> listar() throws DatabaseException {
         List<Empresa> empresas = []
 
         try {
@@ -49,53 +94,17 @@ class EmpresaDAO implements IEntidadeDAO<Empresa>, VerificarExistenciaDeEntidade
 
                 empresas << empresa
             }
+        } catch (SQLException e) {
+            throw new DatabaseException(e)
         } catch (Exception e) {
-            println "Erro ao buscar empresas: ${e.message}"
+            throw e
         }
 
         return empresas
     }
 
     @Override
-    Long cadastrar(Empresa empresa) {
-        Long empresaId = null
-
-        try {
-            String queryVerificaEmpresa = '''
-            SELECT id FROM empresas WHERE email = ? OR cnpj = ?
-        '''
-            empresaId = sql.firstRow(queryVerificaEmpresa, [empresa.email, empresa.cnpj])?.id
-
-            if (empresaId == null) {
-                String queryEmpresa = '''
-                INSERT INTO empresas (nome,email,estado,cnpj,pais,cep,descricao,senha)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                RETURNING id
-            '''
-
-                empresaId = sql.firstRow(queryEmpresa, [
-                        empresa.nome,
-                        empresa.email,
-                        empresa.estado,
-                        empresa.cnpj,
-                        empresa.pais,
-                        empresa.cep,
-                        empresa.descricao,
-                        empresa.senha
-                ]).id
-            } else {
-                println "Empresa já existe com o e-mail ou CNPJ fornecido. ID: ${empresaId}"
-            }
-
-        } catch (Exception e) {
-            println "Erro ao cadastrar empresa: ${e.message}"
-        }
-
-        return empresaId
-    }
-
-    @Override
-    void editar(Empresa empresa) {
+    void editar(Empresa empresa) throws DatabaseException {
 
         String queryUpdateEmpresa = '''
         UPDATE empresas
@@ -115,13 +124,15 @@ class EmpresaDAO implements IEntidadeDAO<Empresa>, VerificarExistenciaDeEntidade
                     empresa.senha,
                     empresa.id
             ])
+        } catch (SQLException e) {
+            throw new DatabaseException(e)
         } catch (Exception e) {
-            println "Erro ao atualizar empresa: ${e.message}"
+            throw e
         }
     }
 
     @Override
-    void remover(Long empresaId) {
+    void remover(Long empresaId) throws EntidadeNaoEncontradaException, DatabaseException {
 
         String queryDeleteEmpresa = '''
         DELETE FROM empresas 
@@ -132,13 +143,13 @@ class EmpresaDAO implements IEntidadeDAO<Empresa>, VerificarExistenciaDeEntidade
             int rowsAffected = sql.executeUpdate(queryDeleteEmpresa, [empresaId])
 
             if(rowsAffected == 0){
-                println "Nenhuma empresa encontrada com o ID ${empresaId}."
-            } else {
-                println "Empresa com ID ${empresaId} removida com sucesso."
+                throw EntidadeNaoEncontradaException()
             }
 
+        } catch (SQLException e) {
+            throw new DatabaseException(e)
         } catch (Exception e) {
-            println "Erro ao tentar remover empresa: ${e.message}"
+            throw e
         }
 
     }

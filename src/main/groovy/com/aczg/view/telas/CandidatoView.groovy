@@ -3,6 +3,7 @@ package com.aczg.view.telas
 import com.aczg.controller.interfaces.ICandidatoController
 import com.aczg.exceptions.DatabaseException
 import com.aczg.exceptions.EntidadeJaExisteException
+import com.aczg.exceptions.EntidadeNaoEncontradaException
 import com.aczg.model.Candidato
 import com.aczg.service.interfaces.ManipulaEntidadeTrait
 import com.aczg.view.interfaces.ValidadorEntradaTrait
@@ -38,14 +39,14 @@ class CandidatoView implements ITela, IFormularioAuxiliarEdicao<Candidato>, Mani
             Long candidatoId = getCandidatoController().cadastrar(new Candidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha))
 
             if (candidatoId != null) {
-                println "Candidato cadastrado com sucesso! ID: " + candidatoId;
+                println "Candidato cadastrado com sucesso! ID: ${candidatoId}"
             }
         } catch (EntidadeJaExisteException e) {
-            println "Erro: Já existe um candidato cadastrado com o mesmo e-mail ou CPF.";
+            println "Erro: Já existe um candidato cadastrado com o mesmo e-mail ou CPF."
         } catch (DatabaseException e) {
-            println "Erro: Houve um problema ao acessar o banco de dados. Tente novamente mais tarde.";
+            println "Erro: Houve um problema ao acessar o banco de dados."
         } catch (Exception e) {
-            println "Erro inesperado: " + e.getMessage();
+            println "Erro inesperado: ${e.getMessage()}"
         }
     }
 
@@ -57,8 +58,10 @@ class CandidatoView implements ITela, IFormularioAuxiliarEdicao<Candidato>, Mani
             candidatos.each { candidato ->
                 println "ID: ${candidato.getId()}, Formação ${candidato.getFormacao()}, Descrição: ${candidato.getDescricao()}"
             }
+        } catch (DatabaseException e) {
+            println "Erro: Houve um problema ao acessar o banco de dados: ${e.getMessage()}"
         } catch (Exception e) {
-            println "Erro ao recuperar lista de candidatos: ${e.message}"
+            println "Erro inesperado: ${e.getMessage()}"
         }
 
     }
@@ -72,11 +75,15 @@ class CandidatoView implements ITela, IFormularioAuxiliarEdicao<Candidato>, Mani
                 println "Candidatoa(a) com ID ${candidatoId} não encontrado(a)."
                 return
             }
-
             Candidato candidatoAtualizado = coletarDadosParaEdicao(candidatoId)
             atualizar(candidatoAtualizado)
+
+        } catch (EntidadeNaoEncontradaException e) {
+            println "Erro: Candidato(a) não encontrado(a)."
+        } catch (DatabaseException e) {
+            println "Erro: Houve um problema ao acessar o banco de dados."
         } catch (Exception e) {
-            println "Não foi possível exibir o formulário: ${e.message}"
+            println "Erro inesperado: ${e.message}"
         }
     }
 
@@ -86,40 +93,31 @@ class CandidatoView implements ITela, IFormularioAuxiliarEdicao<Candidato>, Mani
     }
 
     @Override
-    Candidato coletarDadosParaEdicao(Long candidatoId) {
+    Candidato coletarDadosParaEdicao(Long candidatoId) throws Exception {
 
-        try {
-            String newNome = validarTextoComRegex("nome", "Digite o NOME do candidato: ")
-            String newSobrenome = validarTextoComRegex("sobrenome", "Digite O SOBRENOME do candidato ")
-            String newEmail = validarTextoComRegex("email", "Digite o EMAIL pessoal do candidato: ")
-            String newTelefone = validarTextoComRegex("telefone", "Digite o TELEFONE do candidato: ").replaceAll(/\D/, '')
-            String newLinkedin = validarTextoComRegex("linkedin", "Digite o LINKEDIN do candidato: ")
-            String newCpf = validarTextoComRegex("cpf", "Digite o CPF da candidato: ").replaceAll(/\D/, '')
-            Date newDataNascimento = validarData("Digite a DATA DE NASCIMENTO do candidato: ")
-            String newEstado = validarTextoComRegex("estado", "Digite o estado do candidato: ").toUpperCase()
-            String newCep = validarTextoComRegex("cep", "Digite o CEP do candidato: ").replaceAll(/\D/, '')
-            String newDescricao = validarTextoComRegex("descricao", "Digite uma breve descrição do candidato: ")
-            String newFormacao = validarTexto("Digite a FORMAÇÃO do candidato: ")
-            String newSenha = validarTexto("Digite a SENHA do candidato: ")
+        String newNome = validarTextoComRegex("nome", "Digite o NOME do candidato: ")
+        String newSobrenome = validarTextoComRegex("sobrenome", "Digite O SOBRENOME do candidato ")
+        String newEmail = validarTextoComRegex("email", "Digite o EMAIL pessoal do candidato: ")
+        String newTelefone = validarTextoComRegex("telefone", "Digite o TELEFONE do candidato: ").replaceAll(/\D/, '')
+        String newLinkedin = validarTextoComRegex("linkedin", "Digite o LINKEDIN do candidato: ")
+        String newCpf = validarTextoComRegex("cpf", "Digite o CPF da candidato: ").replaceAll(/\D/, '')
+        Date newDataNascimento = validarData("Digite a DATA DE NASCIMENTO do candidato: ")
+        String newEstado = validarTextoComRegex("estado", "Digite o estado do candidato: ").toUpperCase()
+        String newCep = validarTextoComRegex("cep", "Digite o CEP do candidato: ").replaceAll(/\D/, '')
+        String newDescricao = validarTextoComRegex("descricao", "Digite uma breve descrição do candidato: ")
+        String newFormacao = validarTexto("Digite a FORMAÇÃO do candidato: ")
+        String newSenha = validarTexto("Digite a SENHA do candidato: ")
 
-            return new Candidato(newNome, newSobrenome, newEmail, newTelefone, newLinkedin, newCpf, newDataNascimento, newEstado, newCep, newDescricao, newFormacao, newSenha).with {
-                it.id = candidatoId
-                it
-            }
-        } catch (Exception e) {
-            println "Erro ao editar candidato: ${e.message}"
+        new Candidato(newNome, newSobrenome, newEmail, newTelefone, newLinkedin, newCpf, newDataNascimento, newEstado, newCep, newDescricao, newFormacao, newSenha).with {
+            candidato.id = candidatoId
+            return candidato
         }
     }
 
     @Override
-    void atualizar(Candidato candidatoAtualizado) {
-
-        try {
-            candidatoController.editar(candidatoAtualizado)
-            println "Candidato atualizado com sucesso!"
-        } catch (Exception e) {
-            println "Erro ao atualizar candidato: ${e.message}"
-        }
+    void atualizar(Candidato candidatoAtualizado) throws Exception {
+        candidatoController.editar(candidatoAtualizado)
+        println "Candidato(a) atualizado(a) com sucesso!"
     }
 
     @Override
@@ -128,8 +126,13 @@ class CandidatoView implements ITela, IFormularioAuxiliarEdicao<Candidato>, Mani
         try {
             candidatoController.remover(candidatoId)
             println "Candidato removido com sucesso!"
+
+        } catch (EntidadeNaoEncontradaException e) {
+            println "Erro: Candidato(a) não encontrado(a): ${e.getMessage()}"
+        } catch (DatabaseException e) {
+            println "Erro: Houve um problema ao acessar o banco de dados: ${e.getMessage()}"
         } catch (Exception e) {
-            println "Erro ao remover candidato: ${e.message}"
+            println "Erro inesperado: ${e.getMessage()}"
         }
     }
 }
