@@ -16,7 +16,7 @@ class VagaController implements IVagaController<Vaga> {
     }
 
     @Override
-    Long cadastrar(Vaga vaga) throws EntidadeJaExisteException, DatabaseException {
+    Long cadastrar(Vaga vaga) throws DatabaseException {
         return getVagaService().cadastrar(vaga)
     }
 

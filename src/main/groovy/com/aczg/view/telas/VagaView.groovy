@@ -2,7 +2,9 @@ package com.aczg.view.telas
 
 import com.aczg.controller.interfaces.IEmpresaController
 import com.aczg.controller.interfaces.IVagaController
-
+import com.aczg.exceptions.DatabaseException
+import com.aczg.exceptions.EntidadeJaExisteException
+import com.aczg.exceptions.EntidadeNaoEncontradaException
 import com.aczg.model.Vaga
 import com.aczg.service.interfaces.ManipulaEntidadeTrait
 import com.aczg.view.interfaces.ValidadorEntradaTrait
@@ -28,8 +30,14 @@ class VagaView implements ITela, ManipulaEntidadeTrait, ValidadorEntradaTrait {
             }
             Vaga novaVaga = coletarDadosVaga(empresaId)
             adicionarVaga(novaVaga)
+
+            if (novaVaga.id != null) {
+                println "Vaga cadastrada com sucesso! ID: ${novaVaga.id}"
+            }
+        } catch (DatabaseException e) {
+            println "Erro: Houve um problema ao acessar o banco de dados."
         } catch (Exception e) {
-            println "Não foi possível exibir o formulário: ${e.message}"
+            println "Erro inesperado: ${e.getMessage()}"
         }
     }
 
@@ -41,8 +49,10 @@ class VagaView implements ITela, ManipulaEntidadeTrait, ValidadorEntradaTrait {
             vagas.each { vaga ->
                 println "ID: ${vaga.getId()}, Descrição: ${vaga.getDescricao()}, Estado: ${vaga.getLocal()}"
             }
+        } catch (DatabaseException e) {
+            println "Erro: Houve um problema ao acessar o banco de dados: ${e.getMessage()}"
         } catch (Exception e) {
-            println "erro ao recuperar lista de empresas: ${e.message}"
+            println "Erro inesperado: ${e.getMessage()}"
         }
     }
 
@@ -64,8 +74,13 @@ class VagaView implements ITela, ManipulaEntidadeTrait, ValidadorEntradaTrait {
             vagaAtualizada.id = vagaId
 
             atualizarVaga(vagaAtualizada)
+
+        } catch (EntidadeNaoEncontradaException e) {
+            println "Erro: Vaga não encontrado."
+        } catch (DatabaseException e) {
+            println "Erro: Houve um problema ao acessar o banco de dados."
         } catch (Exception e) {
-            println "Não foi possível exibir o formulário: ${e.message}"
+            println "Erro inesperado: ${e.message}"
         }
     }
 
@@ -75,20 +90,21 @@ class VagaView implements ITela, ManipulaEntidadeTrait, ValidadorEntradaTrait {
         try {
             vagaController.remover(vagaId)
             println "Vaga removida com sucesso!"
+        } catch (EntidadeNaoEncontradaException e) {
+            println "Erro: Candidato(a) não encontrado(a): ${e.getMessage()}"
+        } catch (DatabaseException e) {
+            println "Erro: Houve um problema ao acessar o banco de dados: ${e.getMessage()}"
         } catch (Exception e) {
-            println "Erro ao remover vaga: ${e.message}"
+            println "Erro inesperado: ${e.getMessage()}"
         }
     }
 
-    Vaga coletarDadosVaga(Long empresaId) {
-        try {
+    Vaga coletarDadosVaga(Long empresaId) throws Exception {
+
             String nome = validarTexto("Digite o TITULO da vaga: ")
             String descricao = validarTexto("Digite a DESCRIÇÃO da vaga: ")
             String local = validarTexto("Digite o LOCAL da vaga: ")
             return new Vaga(nome, descricao, local, empresaId)
-        } catch (Exception e) {
-            println "Erro ao coletar dados da vaga: ${e.message}"
-        }
     }
 
     void adicionarVaga(Vaga vaga) {
@@ -100,12 +116,8 @@ class VagaView implements ITela, ManipulaEntidadeTrait, ValidadorEntradaTrait {
         }
     }
 
-    void atualizarVaga(Vaga vagaAtualizada) {
-        try {
-            vagaController.editar(vagaAtualizada)
-            println "Vaga atualizada com sucesso!"
-        } catch (Exception e) {
-            println "Erro ao atualizar vaga: ${e.message}"
-        }
+    void atualizarVaga(Vaga vagaAtualizada) throws Exception {
+        vagaController.editar(vagaAtualizada)
+        println "Vaga atualizada com sucesso!"
     }
 }
