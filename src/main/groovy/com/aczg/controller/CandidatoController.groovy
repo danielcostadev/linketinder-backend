@@ -4,10 +4,11 @@ import com.aczg.controller.interfaces.ICandidatoController
 import com.aczg.exceptions.DatabaseException
 import com.aczg.exceptions.EntidadeJaExisteException
 import com.aczg.exceptions.EntidadeNaoEncontradaException
+import com.aczg.interfaces.IBuscaId
 import com.aczg.model.Candidato
 import com.aczg.service.interfaces.ICandidatoService
 
-class CandidatoController implements ICandidatoController<Candidato> {
+class CandidatoController implements ICandidatoController<Candidato>, IBuscaId{
 
     ICandidatoService candidatoService
 
@@ -44,4 +45,8 @@ class CandidatoController implements ICandidatoController<Candidato> {
         return getCandidatoService().verificarExistencia(candidatoId)
     }
 
+    @Override
+    Candidato buscarPorId(Long id) {
+        return getCandidatoService().buscarPorId(id)
+    }
 }

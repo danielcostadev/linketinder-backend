@@ -20,7 +20,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: pass123
     ports: 
-      - 8080:80
+      - 4567:80
     depends_on:
       - db
     networks:

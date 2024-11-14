@@ -1,18 +1,19 @@
 package com.aczg.DAO
 
-import com.aczg.DAO.interfaces.IConexaoDAO
-import com.aczg.DAO.interfaces.IEntidadeDAO
-import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
 import com.aczg.DAO.factory.ConexaoFactory
-import com.aczg.exceptions.EntidadeJaExisteException
+import com.aczg.DAO.interfaces.ICandidatoDAO
+import com.aczg.DAO.interfaces.IConexaoDAO
+import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
 import com.aczg.exceptions.DatabaseException
+import com.aczg.exceptions.EntidadeJaExisteException
 import com.aczg.exceptions.EntidadeNaoEncontradaException
 import com.aczg.model.Candidato
 import groovy.sql.Sql
 
 import java.sql.SQLException
+import java.time.LocalDate
 
-class CandidatoDAO implements IEntidadeDAO<Candidato>, VerificarExistenciaDeEntidadeTrait{
+class CandidatoDAO implements ICandidatoDAO, VerificarExistenciaDeEntidadeTrait {
 
     private IConexaoDAO conexaoDAO = ConexaoFactory.getConexao("PostgreSQL")
     private Sql sql = conexaoDAO.getSql()
@@ -119,29 +120,42 @@ class CandidatoDAO implements IEntidadeDAO<Candidato>, VerificarExistenciaDeEnti
     @Override
     void editar(Candidato candidato) throws DatabaseException {
 
-        String queryUpdateCandidato = '''
-        UPDATE candidatos
-        SET nome = ?, sobrenome = ?, email = ?, telefone = ?, linkedin = ?, cpf = ?, data_nascimento = ?, estado = ?,
-        cep = ?, descricao = ?, formacao = ?, senha = ?
-        WHERE id = ?
-        '''
-
         try {
-            sql.execute(queryUpdateCandidato, [
-                    candidato.nome,
-                    candidato.sobrenome,
-                    candidato.email,
-                    candidato.telefone,
-                    candidato.linkedin,
-                    candidato.cpf,
-                    candidato.dataNascimento,
-                    candidato.estado,
-                    candidato.cep,
-                    candidato.descricao,
-                    candidato.formacao,
-                    candidato.senha,
-                    candidato.id
-            ])
+
+            String queryVerificaCandidato = '''
+            SELECT id FROM candidatos WHERE email = ? OR cpf = ?
+            '''
+            Boolean candidatoExiste = sql.firstRow(queryVerificaCandidato, [candidato.email, candidato.cpf])?.id
+
+            if (!candidatoExiste) {
+                String queryUpdateCandidato = '''
+                UPDATE candidatos
+                SET nome = ?, sobrenome = ?, email = ?, telefone = ?, linkedin = ?, cpf = ?, data_nascimento = ?, estado = ?,
+                cep = ?, descricao = ?, formacao = ?, senha = ?
+                WHERE id = ?
+                '''
+
+                java.sql.Date dataNascimentoSql = candidato.dataNascimento ? java.sql.Date.valueOf(candidato.dataNascimento) : null
+
+                sql.execute(queryUpdateCandidato, [
+                        candidato.nome,
+                        candidato.sobrenome,
+                        candidato.email,
+                        candidato.telefone,
+                        candidato.linkedin,
+                        candidato.cpf,
+                        dataNascimentoSql,
+                        candidato.estado,
+                        candidato.cep,
+                        candidato.descricao,
+                        candidato.formacao,
+                        candidato.senha,
+                        candidato.id
+                ])
+            } else {
+                throw new EntidadeJaExisteException();
+            }
+
         } catch (SQLException e) {
             throw new DatabaseException(e)
         } catch (Exception e) {
@@ -160,7 +174,7 @@ class CandidatoDAO implements IEntidadeDAO<Candidato>, VerificarExistenciaDeEnti
         try {
             int rowsAffected = sql.executeUpdate(queryDeleteCandidato, [candidatoId])
 
-            if(rowsAffected == 0){
+            if (rowsAffected == 0) {
                 throw EntidadeNaoEncontradaException()
             }
 
@@ -172,4 +186,57 @@ class CandidatoDAO implements IEntidadeDAO<Candidato>, VerificarExistenciaDeEnti
 
     }
 
+    @Override
+    Candidato buscarPorId(Long entidadeId) throws EntidadeNaoEncontradaException, DatabaseException {
+        Candidato candidato = null
+
+        try {
+            String queryBuscaPorId = '''
+            SELECT * FROM candidatos WHERE id = ?
+            '''
+            sql.eachRow(queryBuscaPorId, [entidadeId]) { row ->
+
+                Long id = row["id"] as Long
+                String nome = row['nome']
+                String sobrenome = row['sobrenome']
+                String email = row['email']
+                String telefone = row['telefone']
+                String linkedin = row['linkedin']
+                String cpf = row['cpf']
+
+                LocalDate dataNascimento = row['data_nascimento']?.toLocalDate()
+
+                String estado = row['estado']
+                String cep = row['cep']
+                String descricao = row['descricao']
+                String formacao = row['formacao']
+                String senha = null
+
+                candidato = new Candidato(
+                        id,
+                        nome,
+                        sobrenome,
+                        email,
+                        telefone,
+                        linkedin,
+                        cpf,
+                        dataNascimento,
+                        estado,
+                        cep,
+                        descricao,
+                        formacao,
+                        senha
+                )
+
+            }
+
+            return candidato
+
+        } catch (SQLException e) {
+            throw new DatabaseException(e)
+        } catch (Exception e) {
+            throw e
+        }
+
+    }
 }

@@ -1,6 +1,6 @@
 package com.aczg.DAOTestes
 
-import com.aczg.DAO.ConexaoDAO
+
 import com.aczg.DAO.factory.ConexaoFactory
 import com.aczg.DAO.interfaces.IConexaoDAO
 import groovy.sql.Sql
