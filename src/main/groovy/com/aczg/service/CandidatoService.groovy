@@ -86,4 +86,5 @@ class CandidatoService implements ICandidatoService<Candidato>, ManipulaEntidade
             throw e
         }
     }
+
 }

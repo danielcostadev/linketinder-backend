@@ -49,4 +49,5 @@ class CandidatoController implements ICandidatoController<Candidato>, IBuscaId{
     Candidato buscarPorId(Long id) {
         return getCandidatoService().buscarPorId(id)
     }
+
 }
