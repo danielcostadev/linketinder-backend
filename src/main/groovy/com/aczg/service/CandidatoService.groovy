@@ -58,11 +58,7 @@ class CandidatoService implements ICandidatoService<Candidato>, ManipulaEntidade
     @Override
     void remover(Long candidatoId) throws DatabaseException {
         try {
-            manipularEntidade(candidatoId, "Candidato",
-                    { id -> verificarExistencia(candidatoId) },
-                    { id -> candidatoDAO.remover(candidatoId) },
-                    "removido(a)"
-            )
+            candidatoDAO.remover(candidatoId)
         } catch (DatabaseException e) {
             throw e
         } catch (Exception e) {

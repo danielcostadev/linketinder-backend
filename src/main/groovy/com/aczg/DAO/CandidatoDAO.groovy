@@ -23,34 +23,10 @@ class CandidatoDAO implements ICandidatoDAO, VerificarExistenciaDeEntidadeTrait 
         Long candidatoId = null
 
         try {
-            String queryVerificaCandidato = '''
-            SELECT id FROM candidatos WHERE email = ? OR cpf = ?
-        '''
-            candidatoId = sql.firstRow(queryVerificaCandidato, [candidato.email, candidato.cpf])?.id
-
-            if (candidatoId == null) {
-                String queryCandidato = '''
-                INSERT INTO candidatos (nome, sobrenome, data_nascimento, email, telefone, linkedin, cpf, estado, cep, descricao, formacao, senha)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                RETURNING id
-            '''
-
-                candidatoId = sql.firstRow(queryCandidato, [
-                        candidato.nome,
-                        candidato.sobrenome,
-                        candidato.dataNascimento,
-                        candidato.email,
-                        candidato.telefone,
-                        candidato.linkedin,
-                        candidato.cpf,
-                        candidato.estado,
-                        candidato.cep,
-                        candidato.descricao,
-                        candidato.formacao,
-                        candidato.senha
-                ]).id
-            } else {
+            if (cpfJaCadastrado(candidato) || emailJaCadastrado(candidato)) {
                 throw new EntidadeJaExisteException();
+            } else {
+                candidatoId = inserirCandidato(candidato)
             }
         } catch (SQLException e) {
             throw new DatabaseException(e)
@@ -63,99 +39,24 @@ class CandidatoDAO implements ICandidatoDAO, VerificarExistenciaDeEntidadeTrait 
 
     @Override
     List<Candidato> listar() throws DatabaseException {
-        List<Candidato> candidatos = []
-
         try {
-
-            String query = '''
-                SELECT id, nome, sobrenome, email, telefone, linkedin, cpf, data_nascimento, estado, cep, descricao, formacao, senha
-                FROM candidatos 
-                ORDER BY id
-            '''
-
-            sql.eachRow(query) { row ->
-
-                Long id = row["id"]
-                String nome = row['nome']
-                String sobrenome = row['sobrenome']
-                String email = row['email']
-                String telefone = row['telefone']
-                String linkedin = row['linkedin']
-                String cpf = row['cpf']
-                Date dataNascimento = row['data_nascimento']
-                String estado = row['estado']
-                String cep = row['cep']
-                String descricao = row['descricao']
-                String formacao = row['formacao']
-                String senha = null
-
-                Candidato candidato = new Candidato(
-                        id,
-                        nome,
-                        sobrenome,
-                        email,
-                        telefone,
-                        linkedin,
-                        cpf,
-                        dataNascimento,
-                        estado,
-                        cep,
-                        descricao,
-                        formacao,
-                        senha
-                )
-
-                candidatos << candidato
-            }
-
+            String query = obterQueryCandidatos()
+            return executarConsultaCandidatos(query)
         } catch (SQLException e) {
             throw new DatabaseException(e)
         } catch (Exception e) {
             throw e
         }
-
-        return candidatos
     }
 
     @Override
     void editar(Candidato candidato) throws DatabaseException {
-
         try {
-
-            String queryVerificaCandidato = '''
-            SELECT id FROM candidatos WHERE email = ? OR cpf = ?
-            '''
-            Boolean candidatoExiste = sql.firstRow(queryVerificaCandidato, [candidato.email, candidato.cpf])?.id
-
-            if (!candidatoExiste) {
-                String queryUpdateCandidato = '''
-                UPDATE candidatos
-                SET nome = ?, sobrenome = ?, email = ?, telefone = ?, linkedin = ?, cpf = ?, data_nascimento = ?, estado = ?,
-                cep = ?, descricao = ?, formacao = ?, senha = ?
-                WHERE id = ?
-                '''
-
-                java.sql.Date dataNascimentoSql = candidato.dataNascimento ? java.sql.Date.valueOf(candidato.dataNascimento) : null
-
-                sql.execute(queryUpdateCandidato, [
-                        candidato.nome,
-                        candidato.sobrenome,
-                        candidato.email,
-                        candidato.telefone,
-                        candidato.linkedin,
-                        candidato.cpf,
-                        dataNascimentoSql,
-                        candidato.estado,
-                        candidato.cep,
-                        candidato.descricao,
-                        candidato.formacao,
-                        candidato.senha,
-                        candidato.id
-                ])
+            if (emailJaCadastrado(candidato)) {
+                throw new EntidadeJaExisteException()
             } else {
-                throw new EntidadeJaExisteException();
+                atualizarCandidato(candidato)
             }
-
         } catch (SQLException e) {
             throw new DatabaseException(e)
         } catch (Exception e) {
@@ -175,7 +76,7 @@ class CandidatoDAO implements ICandidatoDAO, VerificarExistenciaDeEntidadeTrait 
             int rowsAffected = sql.executeUpdate(queryDeleteCandidato, [candidatoId])
 
             if (rowsAffected == 0) {
-                throw EntidadeNaoEncontradaException()
+                throw new EntidadeNaoEncontradaException()
             }
 
         } catch (SQLException e) {
@@ -239,4 +140,113 @@ class CandidatoDAO implements ICandidatoDAO, VerificarExistenciaDeEntidadeTrait 
         }
 
     }
+
+
+    private boolean cpfJaCadastrado(Candidato candidato) {
+        String queryVerificaCpf = '''
+        SELECT id FROM candidatos WHERE cpf = ?
+    '''
+        return sql.firstRow(queryVerificaCpf, [candidato.cpf])?.id != null
+    }
+
+    private boolean emailJaCadastrado(Candidato candidato) {
+        String queryVerificaEmail = '''
+        SELECT id FROM candidatos WHERE email = ? AND id != ?
+    '''
+        return sql.firstRow(queryVerificaEmail, [candidato.email, candidato.id])?.id != null
+    }
+
+    private Long inserirCandidato(Candidato candidato) {
+        String queryCandidato = '''
+        INSERT INTO candidatos (nome, sobrenome, email, telefone, linkedin, cpf, data_nascimento, estado, cep, descricao, formacao, senha)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        RETURNING id
+    '''
+        return sql.firstRow(queryCandidato, [
+                candidato.nome,
+                candidato.sobrenome,
+                candidato.email,
+                candidato.telefone,
+                candidato.linkedin,
+                candidato.cpf,
+                candidato.dataNascimento,
+                candidato.estado,
+                candidato.cep,
+                candidato.descricao,
+                candidato.formacao,
+                candidato.senha
+        ]).id
+    }
+
+    private void atualizarCandidato(Candidato candidato) {
+        String query = '''
+            UPDATE candidatos
+            SET nome = ?, sobrenome = ?, email = ?, telefone = ?, linkedin = ?, 
+                data_nascimento = ?, estado = ?, cep = ?, descricao = ?, formacao = ?, senha = ?
+            WHERE id = ?
+        '''
+        sql.execute(query, [
+                candidato.nome,
+                candidato.sobrenome,
+                candidato.email,
+                candidato.telefone,
+                candidato.linkedin,
+                candidato.dataNascimento ? java.sql.Date.valueOf(candidato.dataNascimento) : null,
+                candidato.estado,
+                candidato.cep,
+                candidato.descricao,
+                candidato.formacao,
+                candidato.senha,
+                candidato.id
+        ])
+    }
+
+    private String obterQueryCandidatos() {
+        return '''
+            SELECT id, nome, sobrenome, email, telefone, linkedin, cpf, data_nascimento, estado, cep, descricao, formacao, senha
+            FROM candidatos 
+            ORDER BY id
+        '''
+    }
+
+    private List<Candidato> executarConsultaCandidatos(String query) {
+
+        List<Candidato> candidatos = []
+        sql.eachRow(query) { row ->
+
+            Long id = row["id"]
+            String nome = row['nome']
+            String sobrenome = row['sobrenome']
+            String email = row['email']
+            String telefone = row['telefone']
+            String linkedin = row['linkedin']
+            String cpf = row['cpf']
+            LocalDate dataNascimento = row.getDate("data_nascimento").toLocalDate()
+            String estado = row['estado']
+            String cep = row['cep']
+            String descricao = row['descricao']
+            String formacao = row['formacao']
+            String senha = null
+
+            Candidato candidato = new Candidato(
+                    id,
+                    nome,
+                    sobrenome,
+                    email,
+                    telefone,
+                    linkedin,
+                    cpf,
+                    dataNascimento,
+                    estado,
+                    cep,
+                    descricao,
+                    formacao,
+                    senha
+            )
+
+            candidatos << candidato
+        }
+        return candidatos
+    }
+
 }

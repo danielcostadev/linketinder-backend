@@ -83,15 +83,18 @@ class CandidatoServlet extends HttpServlet {
             String id = request.getParameter("id")
 
             if (id == null || id.isEmpty()) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST)
-                ErrorResponse error = new ErrorResponse("ID do candidato não inserido.", "ID_NAO_FORNECIDO")
-                response.getWriter().write(new JsonBuilder(error).toString())
+                response.setStatus(HttpServletResponse.SC_OK)
+
+                List<Candidato> candidatos = getCandidatoController().listar()
+
+                response.getWriter().write(new JsonBuilder(candidatos).toString())
                 return
             }
 
             Long candidatoId = Long.parseLong(id)
 
             Candidato candidato = getCandidatoController().buscarPorId(candidatoId)
+
             if (candidato == null) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND)
                 ErrorResponse error = new ErrorResponse("Candidato não encontrado.", "CANDIDATO_NAO_ENCONTRADO")
@@ -101,14 +104,17 @@ class CandidatoServlet extends HttpServlet {
                 response.getWriter().write(new JsonBuilder(candidato).toString())
             }
         } catch (NumberFormatException e) {
+
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST)
             ErrorResponse error = new ErrorResponse("ID inválido: " + e.getMessage(), "ID_INVALIDO")
             response.getWriter().write(new JsonBuilder(error).toString())
         } catch (SQLException e) {
+
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
             ErrorResponse error = new ErrorResponse("Erro ao acessar o banco de dados: " + e.getMessage(), "ERRO_BANCO")
             response.getWriter().write(new JsonBuilder(error).toString())
         } catch (Exception e) {
+
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
             ErrorResponse error = new ErrorResponse("Erro ao buscar candidatos: " + e.getMessage(), "ERRO_DESCONHECIDO")
             response.getWriter().write(new JsonBuilder(error).toString())
@@ -185,9 +191,8 @@ class CandidatoServlet extends HttpServlet {
             }
 
             getCandidatoController().remover(candidatoId)
-
             response.setStatus(HttpServletResponse.SC_OK)
-            response.getWriter().write("Candidato removido com sucesso.")
+            response.getWriter().write("Candidato removido com sucesso!")
 
         } catch (NumberFormatException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST)
