@@ -1,15 +1,14 @@
 package com.aczg.service
 
 import com.aczg.DAO.interfaces.ICandidatoDAO
-import com.aczg.DAO.interfaces.IEntidadeDAO
-
+import com.aczg.DAO.interfaces.IEmpresaDAO
 import com.aczg.service.interfaces.ICandidatoService
 import com.aczg.service.interfaces.IEmpresaService
 import spock.lang.Specification
 
 class ManipulaEntidade extends Specification{
 
-    IEntidadeDAO empresaDAO = Mock()
+    IEmpresaDAO empresaDAO = Mock()
     ICandidatoDAO candidatoDAO = Mock()
     IEmpresaService empresaService = new EmpresaService(empresaDAO)
     ICandidatoService candidatoService = new CandidatoService(candidatoDAO)

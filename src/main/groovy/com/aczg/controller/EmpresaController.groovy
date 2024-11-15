@@ -44,4 +44,8 @@ class EmpresaController implements IEmpresaController<Empresa> {
         return getEmpresaService().verificarExistencia(empresaId)
     }
 
+    @Override
+    Empresa buscarPorId(Long id) {
+        return getEmpresaService().buscarPorId(id)
+    }
 }

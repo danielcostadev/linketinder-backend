@@ -3,14 +3,14 @@ package com.aczg.service
 import com.aczg.DAO.interfaces.ICandidatoDAO
 import com.aczg.exceptions.DatabaseException
 import com.aczg.exceptions.EntidadeJaExisteException
-import com.aczg.interfaces.IBuscaId
+
 import com.aczg.model.Candidato
 import com.aczg.service.interfaces.ICandidatoService
 import com.aczg.service.interfaces.ManipulaEntidadeTrait
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class CandidatoService implements ICandidatoService<Candidato>, ManipulaEntidadeTrait, IBuscaId{
+class CandidatoService implements ICandidatoService<Candidato>, ManipulaEntidadeTrait{
 
     private static final Logger log = LoggerFactory.getLogger(CandidatoService)
 
@@ -22,6 +22,7 @@ class CandidatoService implements ICandidatoService<Candidato>, ManipulaEntidade
 
     @Override
     Long cadastrar(Candidato candidato) throws EntidadeJaExisteException, DatabaseException {
+
         try {
             Long candidatoId = candidatoDAO.cadastrar(candidato)
             log.info("Candidato cadastrado com sucesso")

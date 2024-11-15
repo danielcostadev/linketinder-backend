@@ -88,14 +88,14 @@ class CandidatoDAO implements ICandidatoDAO, VerificarExistenciaDeEntidadeTrait 
     }
 
     @Override
-    Candidato buscarPorId(Long entidadeId) throws EntidadeNaoEncontradaException, DatabaseException {
+    Candidato buscarPorId(Long candidatoId) throws EntidadeNaoEncontradaException, DatabaseException {
         Candidato candidato = null
 
         try {
             String queryBuscaPorId = '''
             SELECT * FROM candidatos WHERE id = ?
             '''
-            sql.eachRow(queryBuscaPorId, [entidadeId]) { row ->
+            sql.eachRow(queryBuscaPorId, [candidatoId]) { row ->
 
                 Long id = row["id"] as Long
                 String nome = row['nome']

@@ -14,5 +14,15 @@
         <url-pattern>/candidatos</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>EmpresaServlet</servlet-name>
+        <servlet-class>com.aczg.controller.EmpresaServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>EmpresaServlet</servlet-name>
+        <url-pattern>/empresas</url-pattern>
+    </servlet-mapping>
+
 
 </web-app>
