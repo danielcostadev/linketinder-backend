@@ -91,7 +91,7 @@ class VagaView implements ITela, ManipulaEntidadeTrait, ValidadorEntradaTrait {
             vagaController.remover(vagaId)
             println "Vaga removida com sucesso!"
         } catch (EntidadeNaoEncontradaException e) {
-            println "Erro: Candidato(a) não encontrado(a): ${e.getMessage()}"
+            println "Erro: Vaga não encontrado(a): ${e.getMessage()}"
         } catch (DatabaseException e) {
             println "Erro: Houve um problema ao acessar o banco de dados: ${e.getMessage()}"
         } catch (Exception e) {

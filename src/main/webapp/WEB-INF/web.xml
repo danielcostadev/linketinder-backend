@@ -24,5 +24,15 @@
         <url-pattern>/empresas</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>VagaServlet</servlet-name>
+        <servlet-class>com.aczg.controller.VagaServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>VagaServlet</servlet-name>
+        <url-pattern>/vagas</url-pattern>
+    </servlet-mapping>
+
 
 </web-app>

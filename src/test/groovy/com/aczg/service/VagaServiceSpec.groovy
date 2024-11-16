@@ -46,12 +46,12 @@ class VagaServiceSpec extends Specification{
         when: "chamando o método editar service"
         vagaService.editar(vaga)
 
-        then: "O método editar do candidatoDAO deve ser chamado uma vez com a vaga"
+        then: "O método editar do vagaDAO deve ser chamado uma vez com a vaga"
         1 * vagaDAO.editar(vaga)
     }
 
-    def "Deve deletar um candidato pelo ID"() {
-        given: "Uma vaaga mockada com um ID válido"
+    def "Deve deletar uma vaga pelo ID"() {
+        given: "Uma vaga mockada com um ID válido"
         Vaga vaga = Mock(Vaga)
         vaga.id >> 1L
         vaga.nome >> "Vaga Teste"
