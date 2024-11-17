@@ -1,14 +1,15 @@
-package com.aczg.controller
+package com.aczg.controller.endpoints
 
 import com.aczg.DAO.EmpresaDAO
 import com.aczg.DAO.VagaDAO
 import com.aczg.DAO.interfaces.IEmpresaDAO
 import com.aczg.DAO.interfaces.IVagaDAO
+import com.aczg.controller.EmpresaController
+import com.aczg.controller.VagaController
 import com.aczg.controller.interfaces.IEmpresaController
 import com.aczg.controller.interfaces.IVagaController
 import com.aczg.exceptions.DatabaseException
 import com.aczg.exceptions.InvalidDataException
-import com.aczg.model.Candidato
 import com.aczg.model.Empresa
 import com.aczg.model.Vaga
 import com.aczg.service.EmpresaService

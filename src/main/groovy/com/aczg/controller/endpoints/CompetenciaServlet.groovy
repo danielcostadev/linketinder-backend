@@ -1,4 +1,4 @@
-package com.aczg.controller
+package com.aczg.controller.endpoints
 
 import com.aczg.DAO.CandidatoDAO
 import com.aczg.DAO.CompetenciaDAO
@@ -6,6 +6,9 @@ import com.aczg.DAO.VagaDAO
 import com.aczg.DAO.interfaces.ICandidatoDAO
 import com.aczg.DAO.interfaces.ICompetenciaDAO
 import com.aczg.DAO.interfaces.IVagaDAO
+import com.aczg.controller.CandidatoController
+import com.aczg.controller.CompetenciaController
+import com.aczg.controller.VagaController
 import com.aczg.controller.interfaces.ICandidatoController
 import com.aczg.controller.interfaces.IVagaController
 import com.aczg.exceptions.DatabaseException

@@ -1,17 +1,15 @@
-package com.aczg.controller
+package com.aczg.controller.endpoints
 
-import com.aczg.DAO.CandidatoDAO
-import com.aczg.DAO.interfaces.ICandidatoDAO
-import com.aczg.controller.interfaces.ICandidatoController
-
+import com.aczg.DAO.EmpresaDAO
+import com.aczg.DAO.interfaces.IEmpresaDAO
+import com.aczg.controller.EmpresaController
+import com.aczg.controller.interfaces.IEmpresaController
 import com.aczg.exceptions.DatabaseException
 import com.aczg.exceptions.EntidadeJaExisteException
-
 import com.aczg.exceptions.InvalidDataException
-import com.aczg.model.Candidato
 import com.aczg.model.Empresa
-import com.aczg.service.CandidatoService
-import com.aczg.service.interfaces.ICandidatoService
+import com.aczg.service.EmpresaService
+import com.aczg.service.interfaces.IEmpresaService
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 
@@ -21,20 +19,19 @@ import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import java.sql.SQLException
-import java.time.LocalDate
 
-class CandidatoServlet extends HttpServlet {
+class EmpresaServlet extends HttpServlet{
 
-    ICandidatoController candidatoController;
+    IEmpresaController empresaController
 
-    CandidatoServlet() {}
+    EmpresaServlet(){}
 
     @Override
     void init(ServletConfig config) throws ServletException {
         super.init(config)
-        ICandidatoDAO candidatoDAO = new CandidatoDAO()
-        ICandidatoService candidatoService = new CandidatoService(candidatoDAO)
-        this.candidatoController = new CandidatoController(candidatoService)
+        IEmpresaDAO empresaDAO = new EmpresaDAO()
+        IEmpresaService empresaService = new EmpresaService(empresaDAO)
+        this.empresaController = new EmpresaController(empresaService)
     }
 
     @Override
@@ -47,19 +44,36 @@ class CandidatoServlet extends HttpServlet {
             String json = request.reader.text
             Map jsonMap = new JsonSlurper().parseText(json)
 
-            Candidato candidato = criarCandidato(jsonMap)
+            Empresa empresa = criarEmpresa(jsonMap)
 
-            Long candidatoId = getCandidatoController().cadastrar(candidato)
+            Long empresaId = getEmpresaController().cadastrar(empresa)
 
-            response.setStatus(HttpServletResponse.SC_CREATED);
-            response.setHeader("Location", "/api/v1/candidatos/${candidatoId}")
+            response.setStatus(HttpServletResponse.SC_CREATED)
+            response.setHeader("Location", "/api/v1/empresas/${empresaId}")
 
-            Map responseMap = ResponseUtil.buildCandidatoResponse(candidatoId, candidato, "POST")
+            Map responseMap = [
+                    message: "Empresa criada com sucesso.",
+                    empresa: [
+                            id: empresaId,
+                            nome: empresa.getNome(),
+                            email: empresa.getEmail(),
+                            estado: empresa.getEstado(),
+                            cnpj: empresa.getCnpj(),
+                            pais: empresa.getPais(),
+                            cep: empresa.getCep(),
+                            descricao: empresa.getDescricao()
+                    ],
+                    links: [
+                            self: "/api/v1/empresas/${empresaId}",
+                            list: "/api/v1/empresas"
+                    ]
+            ]
+
             response.writer.write(new JsonBuilder(responseMap).toString())
 
         } catch (EntidadeJaExisteException e) {
             response.status = HttpServletResponse.SC_CONFLICT
-            ErrorResponse error = new ErrorResponse("O candidato já existe. ${e.getMessage()}", "EMPRESA_DUPLICADA")
+            ErrorResponse error = new ErrorResponse("A empresa já existe. ${e.getMessage()}", "EMPRESA_DUPLICADA")
             response.writer.write(new JsonBuilder(error).toString())
 
         } catch (InvalidDataException e) {
@@ -88,24 +102,23 @@ class CandidatoServlet extends HttpServlet {
 
             String pathInfo = request.getPathInfo()
             if (pathInfo == null || pathInfo == "/") {
-                List<Candidato> candidatos = getCandidatoController().listar()
+                List<Empresa> empresas = getEmpresaController().listar()
                 response.setStatus(HttpServletResponse.SC_OK)
-                response.getWriter().write(new JsonBuilder(candidatos).toString())
+                response.getWriter().write(new JsonBuilder(empresas).toString())
                 return
             }
 
             String idStr = pathInfo.substring(1)
-            Long candidatoId = Long.parseLong(idStr)
-            Candidato candidato = getCandidatoController().buscarPorId(candidatoId)
+            Long empresaId = Long.parseLong(idStr)
+            Empresa empresa = getEmpresaController().buscarPorId(empresaId)
 
-            if (candidato == null) {
+            if (empresa == null) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND)
-                ErrorResponse error = new ErrorResponse("Candidato não encontrado.", "CANDIDATO_NAO_ENCONTRADO")
+                ErrorResponse error = new ErrorResponse("Empresa não encontrada.", "EMPRESA_NAO_ENCONTRADA")
                 response.getWriter().write(new JsonBuilder(error).toString())
             } else {
                 response.setStatus(HttpServletResponse.SC_OK)
-                Map responseMap = ResponseUtil.buildCandidatoResponse(candidatoId, candidato,"GET")
-                response.writer.write(new JsonBuilder(responseMap).toString())
+                response.getWriter().write(new JsonBuilder(empresa).toString())
             }
         } catch (NumberFormatException e) {
 
@@ -122,7 +135,7 @@ class CandidatoServlet extends HttpServlet {
         } catch (Exception e) {
 
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-            ErrorResponse error = new ErrorResponse("Erro ao buscar candidatos: ${e.getMessage()}", "ERRO_DESCONHECIDO")
+            ErrorResponse error = new ErrorResponse("Erro ao buscar empresas: ${e.getMessage()}", "ERRO_DESCONHECIDO")
             response.getWriter().write(new JsonBuilder(error).toString())
         }
     }
@@ -140,27 +153,27 @@ class CandidatoServlet extends HttpServlet {
             String pathInfo = request.getPathInfo()
             if (pathInfo == null || pathInfo == ("/")) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST)
-                ErrorResponse error = new ErrorResponse("ID do candidato não inserido.", "ID_NAO_FORNECIDO")
+                ErrorResponse error = new ErrorResponse("ID da empresa não fornecido.", "ID_NAO_FORNECIDO")
                 response.getWriter().write(new JsonBuilder(error).toString())
                 return
             }
 
             String idStr = pathInfo.substring(1)
-            Long candidatoId = Long.parseLong(idStr)
-            Candidato candidatoExistente = getCandidatoController().buscarPorId(candidatoId)
+            Long empresaId = Long.parseLong(idStr)
+            Empresa empresaExistente = getEmpresaController().buscarPorId(empresaId)
 
-            if (candidatoExistente == null) {
+            if (empresaExistente == null) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND)
-                ErrorResponse error = new ErrorResponse("Candidato com ID ${candidatoId} não encontrado.", "CANDIDATO_NAO_ENCONTRADO")
+                ErrorResponse error = new ErrorResponse("Empresa com ID ${empresaId} não encontrada.", "EMPRESA_NAO_ENCONTRADA")
                 response.getWriter().write(new JsonBuilder(error).toString())
                 return
             }
 
-            candidatoExistente = editarCandidato(jsonMap, candidatoExistente)
-            getCandidatoController().editar(candidatoExistente)
+            empresaExistente = editarEmpresa(jsonMap, empresaExistente)
+            getEmpresaController().editar(empresaExistente)
 
             response.setStatus(HttpServletResponse.SC_OK)
-            response.getWriter().write("Candidato com ID ${candidatoId} atualizado com sucesso.")
+            response.getWriter().write("Empresa com ID ${empresaId} atualizada com sucesso.")
 
         } catch (NumberFormatException e) {
 
@@ -192,83 +205,70 @@ class CandidatoServlet extends HttpServlet {
             String pathInfo = request.getPathInfo()
             if (pathInfo == null || pathInfo == ("/")) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST)
-                ErrorResponse error = new ErrorResponse("ID do candidato não fornecido.", "ID_NAO_FORNECIDO")
+                ErrorResponse error = new ErrorResponse("ID da empresa não fornecido.", "ID_NAO_FORNECIDO")
                 response.getWriter().write(new JsonBuilder(error).toString())
                 return
             }
 
             String idStr = pathInfo.substring(1)
-            Long candidatoId = Long.parseLong(idStr)
+            Long empresaId = Long.parseLong(idStr)
 
-            Candidato candidatoExistente = getCandidatoController().buscarPorId(candidatoId)
-            if (candidatoExistente == null) {
+            Empresa empresaExistente = getEmpresaController().buscarPorId(empresaId)
+            if (empresaExistente == null) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND)
-                ErrorResponse error = new ErrorResponse("Candidato com ID ${candidatoId} não encontrado.", "CANDIDATO_NAO_ENCONTRADO")
+                ErrorResponse error = new ErrorResponse("Empresa com ID ${empresaId} não encontrada.", "EMPRESA_NAO_ENCONTRADA")
                 response.getWriter().write(new JsonBuilder(error).toString())
                 return
             }
 
-            getCandidatoController().remover(candidatoId)
+            getEmpresaController().remover(empresaId)
             response.setStatus(HttpServletResponse.SC_OK)
-            response.getWriter().write("Candidato com ID ${candidatoId} removido com sucesso!")
+            response.getWriter().write("Empresa com ID ${empresaId} removida com sucesso!")
 
         } catch (NumberFormatException e) {
-
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST)
-            ErrorResponse error = new ErrorResponse("ID inválido: " + e.getMessage(), "ID_INVALIDO")
+            ErrorResponse error = new ErrorResponse("ID inválido: ${e.getMessage()}", "ID_INVALIDO")
             response.getWriter().write(new JsonBuilder(error).toString())
-
         } catch (SQLException e) {
-
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-            ErrorResponse error = new ErrorResponse("Erro ao acessar o banco de dados: " + e.getMessage(), "ERRO_BANCO")
+            ErrorResponse error = new ErrorResponse("Erro ao acessar o banco de dados: ${e.getMessage()}", "ERRO_BANCO")
             response.getWriter().write(new JsonBuilder(error).toString())
-
         } catch (Exception e) {
-
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-            ErrorResponse error = new ErrorResponse("Erro ao buscar candidatos: " + e.getMessage(), "ERRO_DESCONHECIDO")
+            ErrorResponse error = new ErrorResponse("Erro ao buscar candidatos: ${e.getMessage()}", "ERRO_DESCONHECIDO")
             response.getWriter().write(new JsonBuilder(error).toString())
         }
 
     }
 
+    private Empresa criarEmpresa(Map jsonMap) {
 
-    private Candidato criarCandidato(Map jsonMap) {
+        String nome = jsonMap.get("nome")
+        String email = jsonMap.get("email")
+        String estado = jsonMap.get("estado")
+        String cnpj = jsonMap.get("cnpj")
+        String pais = jsonMap.get("pais")
+        String cep = jsonMap.get("cep")
+        String descricao = jsonMap.get("descricao")
+        String senha = jsonMap.get("senha")
 
-            String nome = jsonMap.get("nome")
-            String sobrenome = jsonMap.get("sobrenome")
-            String email = jsonMap.get("email")
-            String telefone = jsonMap.get("telefone")
-            String linkedin = jsonMap.get("linkedin")
-            String cpf = jsonMap.get("cpf")
-            LocalDate dataNascimento = LocalDate.parse(jsonMap.get("dataNascimento"))
-            String estado = jsonMap.get("estado")
-            String cep = jsonMap.get("cep")
-            String descricao = jsonMap.get("descricao")
-            String formacao = jsonMap.get("formacao")
-            String senha = jsonMap.get("senha")
-
-        return new Candidato(nome, sobrenome, email, telefone, linkedin, cpf, dataNascimento, estado, cep, descricao, formacao, senha)
+        return new Empresa(nome, email, estado, cnpj, pais, cep, descricao, senha)
     }
 
-    private Candidato editarCandidato(Map jsonMap, Candidato candidatoExistente) {
-        candidatoExistente.id = (candidatoExistente.id)
-        candidatoExistente.nome = jsonMap.nome ?: candidatoExistente.nome
-        candidatoExistente.sobrenome = jsonMap.sobrenome ?: candidatoExistente.sobrenome
-        candidatoExistente.email = jsonMap.email ?: candidatoExistente.email
-        candidatoExistente.telefone = jsonMap.telefone ?: candidatoExistente.telefone
-        candidatoExistente.linkedin = jsonMap.linkedin ?: candidatoExistente.linkedin
-        candidatoExistente.estado = jsonMap.estado ?: candidatoExistente.estado
-        candidatoExistente.cep = jsonMap.cep ?: candidatoExistente.cep
-        candidatoExistente.descricao = jsonMap.descricao ?: candidatoExistente.descricao
-        candidatoExistente.formacao = jsonMap.formacao ?: candidatoExistente.formacao
-        candidatoExistente.senha = jsonMap.senha ?: candidatoExistente.senha
+    private Empresa editarEmpresa(Map jsonMap, Empresa empresaExistente) {
+        empresaExistente.id = (empresaExistente.id)
+        empresaExistente.nome = jsonMap.nome ?: empresaExistente.nome
+        empresaExistente.email = jsonMap.email ?: empresaExistente.email
+        empresaExistente.estado = jsonMap.estado ?: empresaExistente.estado
+        empresaExistente.cnpj = jsonMap.cnpj ?: empresaExistente.cnpj
+        empresaExistente.pais = jsonMap.pais ?: empresaExistente.pais
+        empresaExistente.cep = jsonMap.cep ?: empresaExistente.cep
+        empresaExistente.descricao = jsonMap.descricao ?: empresaExistente.descricao
+        empresaExistente.senha = jsonMap.senha ?: empresaExistente.senha
 
-        return new Candidato(candidatoExistente.id, candidatoExistente.nome, candidatoExistente.sobrenome, candidatoExistente.email, candidatoExistente.telefone,
-                candidatoExistente.linkedin, candidatoExistente.cpf, candidatoExistente.dataNascimento, candidatoExistente.estado,
-                candidatoExistente.cep, candidatoExistente.descricao, candidatoExistente.formacao, candidatoExistente.senha)
+        return new Empresa(empresaExistente.id, empresaExistente.nome, empresaExistente.email,
+                empresaExistente.estado, empresaExistente.cnpj, empresaExistente.pais,
+                empresaExistente.cep, empresaExistente.descricao, empresaExistente.senha)
 
     }
-
 }

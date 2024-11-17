@@ -1,9 +1,8 @@
-package com.aczg.controller
+package com.aczg.controller.endpoints
 
 import com.aczg.model.Empresa
 import com.aczg.model.Candidato
 import com.aczg.model.Vaga
-import com.aczg.model.Competencia
 
 class ResponseUtil {
 

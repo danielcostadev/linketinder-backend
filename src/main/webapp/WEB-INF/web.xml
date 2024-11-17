@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>CandidatoServlet</servlet-name>
-        <servlet-class>com.aczg.controller.CandidatoServlet</servlet-class>
+        <servlet-class>com.aczg.controller.endpoints.CandidatoServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -16,7 +16,7 @@
 
     <servlet>
         <servlet-name>EmpresaServlet</servlet-name>
-        <servlet-class>com.aczg.controller.EmpresaServlet</servlet-class>
+        <servlet-class>com.aczg.controller.endpoints.EmpresaServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -26,7 +26,7 @@
 
     <servlet>
         <servlet-name>VagaServlet</servlet-name>
-        <servlet-class>com.aczg.controller.VagaServlet</servlet-class>
+        <servlet-class>com.aczg.controller.endpoints.VagaServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -36,7 +36,7 @@
 
     <servlet>
         <servlet-name>CompetenciaServlet</servlet-name>
-        <servlet-class>com.aczg.controller.CompetenciaServlet</servlet-class>
+        <servlet-class>com.aczg.controller.endpoints.CompetenciaServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

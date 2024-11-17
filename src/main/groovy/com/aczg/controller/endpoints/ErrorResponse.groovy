@@ -1,4 +1,4 @@
-package com.aczg.controller
+package com.aczg.controller.endpoints
 
 class ErrorResponse {
     String message
