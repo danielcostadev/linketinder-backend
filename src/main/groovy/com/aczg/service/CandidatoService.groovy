@@ -1,12 +1,12 @@
 package com.aczg.service
 
-import com.aczg.DAO.interfaces.IEntidadeDAO
+import com.aczg.DAO.interfaces.ICandidatoDAO
 import com.aczg.exceptions.DatabaseException
 import com.aczg.exceptions.EntidadeJaExisteException
+
 import com.aczg.model.Candidato
 import com.aczg.service.interfaces.ICandidatoService
 import com.aczg.service.interfaces.ManipulaEntidadeTrait
-
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -14,21 +14,22 @@ class CandidatoService implements ICandidatoService<Candidato>, ManipulaEntidade
 
     private static final Logger log = LoggerFactory.getLogger(CandidatoService)
 
-    IEntidadeDAO candidatoDAO
+    ICandidatoDAO candidatoDAO
 
-    CandidatoService(IEntidadeDAO candidatoDAO){
+    CandidatoService(ICandidatoDAO candidatoDAO){
         this.candidatoDAO = candidatoDAO
     }
 
     @Override
     Long cadastrar(Candidato candidato) throws EntidadeJaExisteException, DatabaseException {
+
         try {
             Long candidatoId = candidatoDAO.cadastrar(candidato)
             log.info("Candidato cadastrado com sucesso")
             return candidatoId
         } catch (EntidadeJaExisteException | DatabaseException e) {
             log.error("Erro: ${e.getMessage()}")
-            throw e;
+            throw e
         }
     }
 
@@ -46,11 +47,7 @@ class CandidatoService implements ICandidatoService<Candidato>, ManipulaEntidade
     void editar(Candidato candidato) throws DatabaseException {
 
         try {
-            manipularEntidade(candidato.id, "Candidato",
-                    { id -> verificarExistencia(id) },
-                    { id -> candidatoDAO.editar(candidato) },
-                    "atualizado(a)"
-            )
+            candidatoDAO.editar(candidato)
         } catch (DatabaseException e) {
             throw e
         } catch (Exception e) {
@@ -62,11 +59,7 @@ class CandidatoService implements ICandidatoService<Candidato>, ManipulaEntidade
     @Override
     void remover(Long candidatoId) throws DatabaseException {
         try {
-            manipularEntidade(candidatoId, "Candidato",
-                    { id -> verificarExistencia(candidatoId) },
-                    { id -> candidatoDAO.remover(candidatoId) },
-                    "removido(a)"
-            )
+            candidatoDAO.remover(candidatoId)
         } catch (DatabaseException e) {
             throw e
         } catch (Exception e) {
@@ -82,6 +75,16 @@ class CandidatoService implements ICandidatoService<Candidato>, ManipulaEntidade
             return candidatoDAO.verificarExistencia('candidatos', candidatoId)
         } catch (Exception e) {
             log.warn("Erro: ${e.getMessage()}")
+        }
+    }
+
+    @Override
+    Candidato buscarPorId(Long id) throws DatabaseException {
+        try {
+            return candidatoDAO.buscarPorId(id)
+        } catch (Exception e) {
+            log.warn("Erro ao buscar candidato com ID: ${id} - ${e.message}")
+            throw e
         }
     }
 

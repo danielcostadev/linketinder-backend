@@ -1,22 +1,21 @@
 package com.aczg.service
 
-import com.aczg.DAO.interfaces.IEntidadeDAO
+import com.aczg.DAO.interfaces.IEmpresaDAO
 import com.aczg.exceptions.DatabaseException
 import com.aczg.exceptions.EntidadeJaExisteException
 import com.aczg.model.Empresa
 import com.aczg.service.interfaces.IEmpresaService
 import com.aczg.service.interfaces.ManipulaEntidadeTrait
-
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class EmpresaService implements IEmpresaService<Empresa>, ManipulaEntidadeTrait{
 
-    private static final Logger log = LoggerFactory.getLogger(CandidatoService)
+    private static final Logger log = LoggerFactory.getLogger(EmpresaService)
 
-    IEntidadeDAO empresaDAO
+    IEmpresaDAO empresaDAO
 
-    EmpresaService(IEntidadeDAO empresaDAO){
+    EmpresaService(IEmpresaDAO empresaDAO){
         this.empresaDAO = empresaDAO
     }
 
@@ -29,12 +28,12 @@ class EmpresaService implements IEmpresaService<Empresa>, ManipulaEntidadeTrait{
             return empresaId
         } catch (EntidadeJaExisteException | DatabaseException e) {
             log.error("Erro: ${e.getMessage()}")
-            throw e;
+            throw e
         }
     }
 
     @Override
-    List<Empresa> listar(){
+    List<Empresa> listar() throws DatabaseException {
         try {
             return getEmpresaDAO().listar()
         } catch (DatabaseException e) {
@@ -45,12 +44,9 @@ class EmpresaService implements IEmpresaService<Empresa>, ManipulaEntidadeTrait{
 
     @Override
     void editar(Empresa empresa) throws DatabaseException {
+
         try {
-            manipularEntidade(empresa.id, "Empresa",
-                    { id -> verificarExistencia(id) },
-                    { id -> empresaDAO.editar(empresa) },
-                    "atualizado(a)"
-            )
+            empresaDAO.editar(empresa)
         } catch (DatabaseException e) {
             throw e
         } catch (Exception e) {
@@ -62,11 +58,7 @@ class EmpresaService implements IEmpresaService<Empresa>, ManipulaEntidadeTrait{
     @Override
     void remover(Long empresaId) throws DatabaseException {
         try {
-            manipularEntidade(empresaId, "Empresa",
-                    { id -> verificarExistencia(empresaId) },
-                    { id -> empresaDAO.remover(empresaId) },
-                    "removido(a)"
-            )
+            empresaDAO.remover(empresaId)
         } catch (DatabaseException e) {
             throw e
         } catch (Exception e) {
@@ -81,6 +73,16 @@ class EmpresaService implements IEmpresaService<Empresa>, ManipulaEntidadeTrait{
             return empresaDAO.verificarExistencia('empresas', empresaId)
         } catch (Exception e) {
             log.warn("Erro: ${e.getMessage()}")
+        }
+    }
+
+    @Override
+    Empresa buscarPorId(Long id) {
+        try {
+            return empresaDAO.buscarPorId(id)
+        } catch (Exception e) {
+            log.warn("Erro ao buscar empresa com ID: ${id} - ${e.message}")
+            throw e
         }
     }
 }

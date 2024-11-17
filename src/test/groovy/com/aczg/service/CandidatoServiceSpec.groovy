@@ -1,17 +1,14 @@
 package com.aczg.service
 
-
-import com.aczg.DAO.interfaces.IEntidadeDAO
+import com.aczg.DAO.interfaces.ICandidatoDAO
 
 import com.aczg.model.Candidato
 import com.aczg.service.interfaces.ICandidatoService
 import spock.lang.Specification
 
-import java.sql.Date
-
 class CandidatoServiceSpec extends Specification{
 
-    IEntidadeDAO candidatoDAO = Mock()
+    ICandidatoDAO candidatoDAO = Mock()
     ICandidatoService candidatoService = new CandidatoService(candidatoDAO)
 
     def "Deve adicionar um novo candidato com sucesso"() {
@@ -27,7 +24,7 @@ class CandidatoServiceSpec extends Specification{
 
     def "Deve listar todos os candidatos"() {
         given: "Uma lista mockada de candidatos"
-        List<Candidato> candidatosEsperados = [new Candidato("Daniel", "Costa", "daniel@test.com", "(79)99911-0213", "https://linkedin.com/in/daniel", "03658426560", Date.valueOf("1990-08-06"), "SE", "49400000", "Descrição", "Superior", "senha123")]
+        List<Candidato> candidatosEsperados = Mock()
         candidatoDAO.listar() >> candidatosEsperados
 
         when: "Mostrar candidatos"

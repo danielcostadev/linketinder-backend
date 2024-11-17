@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory
 class CompetenciaService implements ICompetencia, ManipulaEntidadeTrait {
     ICompetenciaDAO competenciaDAO
 
-    private static final Logger log = LoggerFactory.getLogger(CandidatoService)
+    private static final Logger log = LoggerFactory.getLogger(CompetenciaService)
 
     CompetenciaService(ICompetenciaDAO competenciaDAO) {
         this.competenciaDAO = competenciaDAO
@@ -25,7 +25,7 @@ class CompetenciaService implements ICompetencia, ManipulaEntidadeTrait {
             competencias.each { competencia ->
                 Competencia novaCompetencia = new Competencia(competencia)
                 competenciaDAO.cadastrar(novaCompetencia.getNome(), candidatoId, vagaId)
-                log.info("Candidato cadastrado com sucesso")
+                log.info("Competência cadastrada com sucesso")
             }
         } catch (EntidadeJaExisteException | DatabaseException e) {
             log.error("Erro: ${e.getMessage()}")
@@ -42,4 +42,13 @@ class CompetenciaService implements ICompetencia, ManipulaEntidadeTrait {
         }
     }
 
+    @Override
+    Competencia buscarPorId(Long id) {
+        try {
+            return competenciaDAO.buscarPorId(id)
+        } catch (Exception e) {
+            log.warn("Erro ao buscar competência com ID: ${id} - ${e.message}")
+            throw e
+        }
+    }
 }

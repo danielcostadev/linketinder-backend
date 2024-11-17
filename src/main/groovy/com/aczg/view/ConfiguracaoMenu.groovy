@@ -24,17 +24,17 @@ class ConfiguracaoMenu {
         IMenuCompetencia menuCompetencia = new MenuCompetencia();
         IMenuPrincipal menuPrincipal = new MenuPrincipal();
 
-        IEntidadeDAO empresaDAO = new EmpresaDAO();
+        IEmpresaDAO empresaDAO = new EmpresaDAO();
         IEmpresaService empresaService = new EmpresaService(empresaDAO);
         IEmpresaController empresaController = new EmpresaController(empresaService);
         ITela empresaView = new EmpresaView(empresaController);
 
-        IEntidadeDAO candidatoDAO = new CandidatoDAO();
+        ICandidatoDAO candidatoDAO = new CandidatoDAO();
         ICandidatoService candidatoService = new CandidatoService(candidatoDAO);
         ICandidatoController candidatoController = new CandidatoController(candidatoService);
         ITela candidatoView = new CandidatoView(candidatoController);
 
-        IEntidadeDAO vagaDAO = new VagaDAO();
+        IVagaDAO vagaDAO = new VagaDAO();
         IVagaService vagaService = new VagaService(vagaDAO);
         IVagaController vagaController = new VagaController(vagaService);
         ITela vagaView = new VagaView(vagaController, empresaController);

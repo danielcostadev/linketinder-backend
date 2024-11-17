@@ -2,6 +2,307 @@
 
 Linketinder é uma aplicação Groovy que permite a interação entre candidatos e empresas, e promete revolucionar o método como são realizadas as contratações de novos colaboradores, esta aplicação está sendo desenvolvida como um dos projetos do ACZG 6.0.
 
+## API REST v1
+
+<details>
+
+<summary>Documentação</summary>
+
+
+**GET**
+**empresasas**
+
+- http://localhost:8080/api/v1/empresas
+- http://localhost:8080/api/v1/empresas/{id}
+
+**candidatos**
+- http://localhost:8080/api/v1/candidatos
+- http://localhost:8080/api/v1/candidatos/{id}
+
+**vagas**
+- http://localhost:8080/api/v1/vagas
+- http://localhost:8080/api/v1/vagas/{id}
+
+**competencias**
+- http://localhost:8080/api/v1/competencias
+- http://localhost:8080/api/v1/competencias/{id}
+
+**POST**
+**empresas**
+
+- http://localhost:8080/api/v1/empresas
+
+
+    {
+        "nome": "Empresa Exemplo 3",
+        "email": "contaskjkjko@emprsessaesxemplo.com",
+        "estado": "SP",
+        "cnpj": "12345558150109",
+        "pais": "Brasil",
+        "cep": "12345678",
+        "descricao": "Empresa de desenvolvimento de software personalizado",
+        "senha": "1234abcd"
+    }
+
+**candidatos - ok**
+http://localhost:8080/api/v1/candidatos
+
+    {
+        "nome": "João",
+        "sobrenome": "Silva",
+        "email": "joao@example.com",
+        "telefone": "+55 11 91234-5678",
+        "linkedin": "https://www.linkedin.com/in/joao-silva",
+        "cpf": "143.436.729-00",
+        "dataNascimento": "1990-05-15",
+        "estado": "SP",
+        "cep": "12345-678",
+        "descricao": "Profissional experiente em desenvolvimento de software com foco em soluções escaláveis.",
+        "formacao": "Engenharia de Software",
+        "senha": "senhaSegura123"
+    }
+
+**vagas - ok**
+
+http://localhost:8080/api/v1/vagas
+
+    {
+        "empresaId": "5",
+        "nome": "Desenvolvedor Backend",
+        "descricao": "Responsável pelo desenvolvimento de APIs RESTful e integrações com serviços externos.",
+        "local": "Remoto"
+    }
+
+**competencias - ok**
+
+http://localhost:8080/api/v1/competencias
+
+    {
+        "vagaId": "4",
+        "competencias": "COMPETENCIA, COPA, LOVE, aaa"
+    }
+
+**PUT**
+**empresas - ok**
+
+http://localhost:8080/api/v1/empresas/{id}
+
+    {
+        "nome": "Empresa Exemplo 3",
+        "email": "contaskjkjko@emprsessaesxemplo.com",
+        "estado": "SP",
+        "cnpj": "12345558150109",
+        "pais": "Brasil",
+        "cep": "12345678",
+        "descricao": "Empresa de desenvolvimento de software personalizado",
+        "senha": "1234abcd"
+    }
+
+**candidatos - ok**
+
+http://localhost:8080/api/v1/candidatos/{id}
+
+    {
+    
+      "nome": "JP",
+      "sobrenome": "Fontes",
+      "email": "testanduuu@example.com",
+      "telefone": "123456789",
+      "linkedin": "https://linkedin.com/in/joaosilva",
+      "dataNascimento": "1990-01-01",
+      "estado": "SP",
+      "cep": "12345678",
+      "descricao": "Candidato com experiência em desenvolvimento.",
+      "formacao": "Engenharia de Software",
+      "senha": "senha123"
+    }
+
+**vagas - ok**
+
+http://localhost:8080/api/v1/vagas/{id}
+
+    {
+        "nome": "Desenvolvedor Backend",
+        "descricao": "Responsável pelo desenvolvimento de APIs RESTful e integrações com serviços externos.",
+        "local": "Remoto"
+    }
+
+**DELETE**
+**empresas - ok**
+
+http://localhost:8080/api/v1/empresas/{id}
+
+**candidatos - ok**
+
+http://localhost:8080/api/v1/candidatos/{id}
+
+**vagas - ok**
+
+http://localhost:8080/api/v1/vagas/{id}
+
+### Métodos HTTP Utilizados
+
+O servlet possui implementação para quatro métodos HTTP:
+
+1.  **POST** - `doPost()`
+2.  **GET** - `doGet()`
+3.  **PUT** - `doPut()`
+4.  **DELETE** - `doDelete()`
+
+Cada um destes métodos é responsável por uma operação CRUD específica:
+
+-   **POST**: Criação de uma nova empresa.
+-   **GET**: Listar ou buscar uma empresa específica.
+-   **PUT**: Atualizar os dados de uma empresa existente.
+-   **DELETE**: Remover uma empresa.
+
+### Códigos de Resposta HTTP Utilizados
+
+#### **doPost (POST) - Criação de Empresa**
+
+-   **201 (Created)**: Empresa criada com sucesso.
+-   **409 (Conflict)**: A empresa já existe. Exceção lançada: `EntidadeJaExisteException`.
+-   **400 (Bad Request)**: Dados inválidos enviados na requisição. Exceção lançada: `InvalidDataException`.
+-   **500 (Internal Server Error)**: Problema no banco de dados ou erro desconhecido. Exceções lançadas: `DatabaseException` ou `Exception`.
+
+#### **doGet (GET) - Listagem ou Busca por ID**
+
+-   **200 (OK)**: Operação bem-sucedida, seja para listar todas as empresas ou buscar uma empresa por ID.
+-   **404 (Not Found)**: Empresa não encontrada (se o ID informado não for encontrado).
+-   **400 (Bad Request)**: ID inválido (não pode ser convertido para Long). Exceção lançada: `NumberFormatException`.
+-   **500 (Internal Server Error)**: Problema ao acessar o banco de dados ou erro desconhecido. Exceções lançadas: `SQLException` ou `Exception`.
+
+#### **doPut (PUT) - Atualizar Empresa**
+
+-   **200 (OK)**: Empresa atualizada com sucesso.
+-   **400 (Bad Request)**: ID não fornecido ou ID inválido.
+    -   Caso o ID não seja fornecido (`pathInfo == null`), retorna o erro com a mensagem "ID da empresa não fornecido."
+    -   Caso o ID seja inválido (não converte para Long), uma `NumberFormatException` é lançada.
+-   **404 (Not Found)**: Empresa não encontrada para o ID fornecido.
+-   **500 (Internal Server Error)**: Problema ao atualizar a empresa no banco de dados ou erro desconhecido. Exceções lançadas: `DatabaseException` ou `Exception`.
+
+#### **doDelete (DELETE) - Remover Empresa**
+
+-   **200 (OK)**: Empresa removida com sucesso.
+-   **400 (Bad Request)**: ID não fornecido ou ID inválido.
+    -   Caso o ID não seja fornecido (`pathInfo == null`), retorna o erro com a mensagem "ID da empresa não fornecido."
+    -   Caso o ID seja inválido (não converte para Long), uma `NumberFormatException` é lançada.
+-   **404 (Not Found)**: Empresa não encontrada para o ID fornecido.
+-   **500 (Internal Server Error)**: Problema ao acessar o banco de dados ou erro desconhecido. Exceções lançadas: `SQLException` ou `Exception`.
+
+### Resumo dos Códigos de Erro Utilizados:
+
+-   **200 (OK)**: Requisição bem-sucedida.
+-   **201 (Created)**: Recurso criado com sucesso (usado em POST).
+-   **400 (Bad Request)**: Requisição inválida. Pode ocorrer em:
+    -   Falta de ID.
+    -   ID em formato inválido.
+    -   Dados inválidos para criação de empresa.
+-   **404 (Not Found)**: Recurso não encontrado (empresa com ID fornecido não existe).
+-   **409 (Conflict)**: Conflito ao criar um recurso que já existe.
+-   **500 (Internal Server Error)**: Erro interno do servidor, geralmente relacionado ao banco de dados ou algum erro inesperado.
+
+### Tratamento de Exceções e Mensagens de Erro
+
+O servlet utiliza exceções customizadas para diferenciar os tipos de erros e gerar uma resposta adequada para cada situação:
+
+-   `EntidadeJaExisteException`: Utilizada quando uma tentativa de criação é feita para um recurso que já existe.
+-   `InvalidDataException`: Utilizada para indicar que os dados fornecidos na requisição são inválidos.
+-   `DatabaseException`: Utilizada para indicar problemas ao acessar ou modificar dados no banco de dados.
+-   `NumberFormatException`: Utilizada quando um valor inválido é fornecido no lugar de um ID numérico.
+-   `Exception`: Captura qualquer outro erro desconhecido.
+
+Além disso, as respostas incluem um `ErrorResponse` JSON com uma mensagem e um código de erro mais específico, por exemplo:
+
+-   `"EMPRESA_DUPLICADA"` para conflitos de duplicidade.
+-   `"DADOS_INVALIDOS"` para dados de entrada inválidos.
+-   `"ID_INVALIDO"` para problemas com o formato do ID.
+-   `"ERRO_BANCO"` para erros no banco de dados.
+-   `"ERRO_DESCONHECIDO"` para erros não específicos.
+
+Estas mensagens tornam as respostas da API mais descritivas e úteis para o consumidor da API.
+
+</details>
+
+<details>
+
+<summary>Criando API REST</summary>
+
+- API REST desenvolvida em Groovy sem framework para fins didáticos.
+
+### Configurando Servidor TomCat no Intelij + Gradle
+
+Baixe o Tomcat: [apache-tomcat-9.0.65-deployer.tar.gz](https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.65/bin/apache-tomcat-9.0.65-deployer.tar.gz)
+
+Extraia o arquivo TAR.GZ em `/opt/tomcat` no Linux/Mac
+
+1 - Crie um projeto Java/Groovy  
+2 - Crie essa estrutura de diretórios `webapp/WEB-INF` dentro da pasta `main` do projeto  
+3 - Crie um arquivo chamado `web.xml` dentro do diretório `WEB-INF`
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" 
+         version="3.1">
+    <display-name>MeuAppWeb</display-name>
+    <!-- Configurações adicionais -->
+</web-app>
+```
+
+
+4 - Edite seu arquivo build.gradle:
+
+- Em plugins adicione a seguinte linha:
+  id 'war'
+- Em dependencies adicione a seguinte linha:
+  providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
+- Acrescente a seguinte instrução:
+
+`war {
+archiveFileName = 'meuappweb.war'
+}`
+
+Ctrl + Shift + O (Para salvar as alterações no arquivo gradle.build)
+
+5 - Abra o terminal do próprio Intelij e use o comando: gradle clean build e aguarde o build completar.
+6 - Vá até o diretório build/libs, copie o artefato "meuappweb.war" e cole dentro do diretório webapp
+
+7 - Adicione um Servidor de Aplicação:
+
+No IntelliJ IDEA, clique em Run > Edit Configurations.
+Na janela de configurações, clique no ícone de + no canto superior esquerdo.
+Escolha Tomcat Server > Local.
+
+8 -Configure o Tomcat:
+
+Na aba Configuration, localize o campo Application Server e clique em Configure....
+Clique em + e selecione a pasta onde você extraiu o Apache Tomcat.
+O IntelliJ deve detectar automaticamente a versão do Tomcat.
+Clique em OK.
+
+9 - Adicione um Artefato:
+
+Ainda na aba Configuration, vá até Deployment.
+Clique no botão + e selecione Artifact.
+Escolha o artefato (como um .war) que será implantado no Tomcat.
+Certifique-se de que o caminho de contexto está correto (exemplo: / ou /meu-app).
+
+10 - Configurações Adicionais (Opcional):
+
+Na aba Server, você pode ajustar a porta do Tomcat (padrão é 8080).
+Configure o logs para facilitar a depuração.
+
+11 - Testando a Configuração:
+
+Clique em OK para salvar as configurações.
+No menu superior, selecione a configuração do Tomcat recém-criada e clique em Run (ou pressione Shift+F10).
+O IntelliJ irá iniciar o Tomcat e abrir o navegador para o caminho do aplicativo implantado (como http://localhost:8080).
+
+</details>
+
 ## Modelagem de Dados e SQL
 
 <details><summary>Clique para ler a Documentação</summary>

@@ -43,4 +43,10 @@ class VagaController implements IVagaController<Vaga> {
     boolean verificarExistencia(Long vagaId) throws EntidadeNaoEncontradaException, DatabaseException {
         return getVagaService().verificarExistencia(vagaId)
     }
+
+    @Override
+    Vaga buscarPorId(Long id) {
+        return getVagaService().buscarPorId(id)
+
+    }
 }

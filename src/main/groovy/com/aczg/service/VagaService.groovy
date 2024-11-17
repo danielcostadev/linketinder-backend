@@ -1,8 +1,8 @@
 package com.aczg.service
 
-import com.aczg.DAO.interfaces.IEntidadeDAO
+
+import com.aczg.DAO.interfaces.IVagaDAO
 import com.aczg.exceptions.DatabaseException
-import com.aczg.exceptions.EntidadeJaExisteException
 import com.aczg.model.Vaga
 import com.aczg.service.interfaces.IVagaService
 import com.aczg.service.interfaces.ManipulaEntidadeTrait
@@ -12,22 +12,22 @@ import org.slf4j.LoggerFactory
 
 class VagaService implements IVagaService<Vaga>, ManipulaEntidadeTrait {
 
-    private static final Logger log = LoggerFactory.getLogger(CandidatoService)
+    private static final Logger log = LoggerFactory.getLogger(VagaService)
 
-    IEntidadeDAO vagaDAO
+    IVagaDAO vagaDAO
 
-    VagaService(IEntidadeDAO vagaDAO) {
+    VagaService(IVagaDAO vagaDAO) {
         this.vagaDAO = vagaDAO
     }
 
     @Override
-    Long cadastrar(Vaga vaga) throws EntidadeJaExisteException, DatabaseException {
+    Long cadastrar(Vaga vaga) throws DatabaseException {
         try {
             Long vagaId = vagaDAO.cadastrar(vaga)
-            log.info("Candidato cadastrado com sucesso")
+            log.info("Vaga cadastrada com sucesso")
             return vagaId
 
-        } catch (EntidadeJaExisteException | DatabaseException e) {
+        } catch (DatabaseException e) {
             log.error("Erro: ${e.getMessage()}")
             throw e;
         }
@@ -46,11 +46,7 @@ class VagaService implements IVagaService<Vaga>, ManipulaEntidadeTrait {
     @Override
     void editar(Vaga vaga) throws DatabaseException {
         try {
-            manipularEntidade(vaga.id, "Vaga",
-                    { id -> verificarExistencia(id) },
-                    { id -> vagaDAO.editar(vaga) },
-                    "atualizado(a)"
-            )
+            vagaDAO.editar(vaga)
         } catch (DatabaseException e) {
             throw e
         } catch (Exception e) {
@@ -62,11 +58,7 @@ class VagaService implements IVagaService<Vaga>, ManipulaEntidadeTrait {
     @Override
     void remover(Long vagaId) throws DatabaseException {
         try {
-            manipularEntidade(vagaId, "Vaga",
-                    { id -> verificarExistencia(vagaId) },
-                    { id -> vagaDAO.remover(vagaId) },
-                    "removido(a)"
-            )
+            vagaDAO.remover(vagaId)
         } catch (DatabaseException e) {
             throw e
         } catch (Exception e) {
@@ -81,6 +73,16 @@ class VagaService implements IVagaService<Vaga>, ManipulaEntidadeTrait {
             return vagaDAO.verificarExistencia('vagas', vagaId)
         } catch (Exception e) {
             log.warn("Erro: ${e.getMessage()}")
+        }
+    }
+
+    @Override
+    Vaga buscarPorId(Long id) throws DatabaseException {
+        try {
+            return vagaDAO.buscarPorId(id)
+        } catch (Exception e) {
+            log.warn("Erro ao buscar vaga com ID: ${id} - ${e.message}")
+            throw e
         }
     }
 }
