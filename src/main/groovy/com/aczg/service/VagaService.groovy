@@ -1,10 +1,8 @@
 package com.aczg.service
 
-import com.aczg.DAO.interfaces.IEntidadeDAO
+
 import com.aczg.DAO.interfaces.IVagaDAO
 import com.aczg.exceptions.DatabaseException
-import com.aczg.exceptions.EntidadeJaExisteException
-import com.aczg.model.Candidato
 import com.aczg.model.Vaga
 import com.aczg.service.interfaces.IVagaService
 import com.aczg.service.interfaces.ManipulaEntidadeTrait

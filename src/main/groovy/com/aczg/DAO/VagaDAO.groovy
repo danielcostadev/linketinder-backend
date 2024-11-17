@@ -116,13 +116,14 @@ class VagaDAO implements IVagaDAO, VerificarExistenciaDeEntidadeTrait {
         }
     }
 
+
     private Long inserirVaga(Vaga vaga) {
-        String queryCandidato = '''
+        String queryVaga = '''
         INSERT INTO vagas (nome, descricao, local, empresa_id)
         VALUES (?, ?, ?, ?)
         RETURNING id
     '''
-        return sql.firstRow(queryCandidato, [
+        return sql.firstRow(queryVaga, [
                 vaga.nome,
                 vaga.descricao,
                 vaga.local,

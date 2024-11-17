@@ -3,17 +3,15 @@ package com.aczg.DAO
 import com.aczg.DAO.factory.ConexaoFactory
 import com.aczg.DAO.interfaces.IConexaoDAO
 import com.aczg.DAO.interfaces.IEmpresaDAO
-import com.aczg.DAO.interfaces.IEntidadeDAO
+
 import com.aczg.DAO.interfaces.VerificarExistenciaDeEntidadeTrait
 import com.aczg.exceptions.DatabaseException
 import com.aczg.exceptions.EntidadeJaExisteException
 import com.aczg.exceptions.EntidadeNaoEncontradaException
-import com.aczg.model.Candidato
 import com.aczg.model.Empresa
 import groovy.sql.Sql
 
 import java.sql.SQLException
-import java.time.LocalDate
 
 class EmpresaDAO implements IEmpresaDAO, VerificarExistenciaDeEntidadeTrait{
 

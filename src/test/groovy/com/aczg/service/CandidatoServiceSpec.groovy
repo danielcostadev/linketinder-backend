@@ -1,14 +1,10 @@
 package com.aczg.service
 
 import com.aczg.DAO.interfaces.ICandidatoDAO
-import com.aczg.DAO.interfaces.IEntidadeDAO
 
 import com.aczg.model.Candidato
 import com.aczg.service.interfaces.ICandidatoService
 import spock.lang.Specification
-
-import java.sql.Date
-import java.time.LocalDate
 
 class CandidatoServiceSpec extends Specification{
 

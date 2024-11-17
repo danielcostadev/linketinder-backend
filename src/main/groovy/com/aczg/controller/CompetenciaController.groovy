@@ -21,4 +21,9 @@ class CompetenciaController implements ICompetencia {
     List<Competencia> listar() throws DatabaseException {
         return competenciaService.listar()
     }
+
+    @Override
+    Competencia buscarPorId(Long id) {
+        return competenciaService.buscarPorId(id)
+    }
 }

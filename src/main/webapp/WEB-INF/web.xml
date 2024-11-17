@@ -34,5 +34,15 @@
         <url-pattern>/vagas</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>CompetenciaServlet</servlet-name>
+        <servlet-class>com.aczg.controller.CompetenciaServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CompetenciaServlet</servlet-name>
+        <url-pattern>/competencias</url-pattern>
+    </servlet-mapping>
+
 
 </web-app>

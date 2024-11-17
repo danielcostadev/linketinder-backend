@@ -1,6 +1,6 @@
 package com.aczg.service
 
-import com.aczg.DAO.interfaces.IEntidadeDAO
+import com.aczg.DAO.interfaces.IEmpresaDAO
 
 import com.aczg.model.Empresa
 import com.aczg.service.interfaces.IEmpresaService
@@ -8,7 +8,7 @@ import spock.lang.Specification
 
 class EmpresaServiceSpec extends Specification{
 
-    IEntidadeDAO empresaDAO = Mock()
+    IEmpresaDAO empresaDAO = Mock()
     IEmpresaService empresaService = new EmpresaService(empresaDAO)
 
     def "Deve adicionar uma nova empresa com sucesso"() {

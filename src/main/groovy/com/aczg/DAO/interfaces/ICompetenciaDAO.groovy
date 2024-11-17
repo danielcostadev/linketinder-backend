@@ -1,5 +1,6 @@
 package com.aczg.DAO.interfaces
 
+
 import com.aczg.model.Competencia
 
 interface ICompetenciaDAO {
@@ -8,4 +9,6 @@ interface ICompetenciaDAO {
     Long cadastrar(String nomeCompetencia, Long candidatoId, Long vagaId)
     void editar(Competencia competencia)
     void remover(Long competenciaId)
+    Competencia buscarPorId(Long competenciaId)
+
 }
