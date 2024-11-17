@@ -11,7 +11,7 @@
 
     <servlet-mapping>
         <servlet-name>CandidatoServlet</servlet-name>
-        <url-pattern>/candidatos</url-pattern>
+        <url-pattern>/candidatos/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -21,7 +21,7 @@
 
     <servlet-mapping>
         <servlet-name>EmpresaServlet</servlet-name>
-        <url-pattern>/empresas</url-pattern>
+        <url-pattern>/empresas/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -31,7 +31,7 @@
 
     <servlet-mapping>
         <servlet-name>VagaServlet</servlet-name>
-        <url-pattern>/vagas</url-pattern>
+        <url-pattern>/vagas/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -41,7 +41,7 @@
 
     <servlet-mapping>
         <servlet-name>CompetenciaServlet</servlet-name>
-        <url-pattern>/competencias</url-pattern>
+        <url-pattern>/competencias/*</url-pattern>
     </servlet-mapping>
 
 

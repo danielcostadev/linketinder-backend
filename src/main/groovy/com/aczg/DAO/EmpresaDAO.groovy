@@ -149,7 +149,7 @@ class EmpresaDAO implements IEmpresaDAO, VerificarExistenciaDeEntidadeTrait{
 
     private Long inserirEmpresa(Empresa empresa) {
         String queryEmpresa = '''
-        INSERT INTO candidatos (nome, email, estado, cnpj, pais, cep, descricao, senha)
+        INSERT INTO empresas (nome, email, estado, cnpj, pais, cep, descricao, senha)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         RETURNING id
     '''

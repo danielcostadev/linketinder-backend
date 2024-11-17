@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory
 class CompetenciaService implements ICompetencia, ManipulaEntidadeTrait {
     ICompetenciaDAO competenciaDAO
 
-    private static final Logger log = LoggerFactory.getLogger(CandidatoService)
+    private static final Logger log = LoggerFactory.getLogger(CompetenciaService)
 
     CompetenciaService(ICompetenciaDAO competenciaDAO) {
         this.competenciaDAO = competenciaDAO

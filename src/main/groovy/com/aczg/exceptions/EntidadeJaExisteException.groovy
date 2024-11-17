@@ -3,7 +3,7 @@ package com.aczg.exceptions
 class EntidadeJaExisteException extends Exception{
 
     public EntidadeJaExisteException() {
-        super("Candidato já existe com o e-mail ou CPF fornecido.");
+        super("Entidade já existe com o e-mail ou CPF/CNPJ fornecidos.");
     }
 
 }

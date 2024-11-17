@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
 
 class EmpresaService implements IEmpresaService<Empresa>, ManipulaEntidadeTrait{
 
-    private static final Logger log = LoggerFactory.getLogger(CandidatoService)
+    private static final Logger log = LoggerFactory.getLogger(EmpresaService)
 
     IEmpresaDAO empresaDAO
 

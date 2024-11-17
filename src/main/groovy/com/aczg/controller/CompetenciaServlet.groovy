@@ -54,8 +54,9 @@ class CompetenciaServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            response.contentType = "application/json; charset=UTF-8"
-            response.characterEncoding = "UTF-8"
+            request.setCharacterEncoding("UTF-8")
+            response.setContentType("application/json; charset=UTF-8")
+            response.setCharacterEncoding("UTF-8")
 
             String json = request.reader.text
             Map jsonMap = new JsonSlurper().parseText(json)
@@ -78,31 +79,44 @@ class CompetenciaServlet extends HttpServlet {
 
             String competencias = jsonMap.competencias
             competencias = competencias.replaceAll("[\\[\\]]", "")
-            List<String> listaCompetencias = competencias.split(",")*.trim() as List
+            List<String> listaCompetencias = competencias.split(",")*.trim()*.toLowerCase() as List
 
             if (vagaId) competenciaController.cadastrar(listaCompetencias, null, vagaId)
             if (candidatoId) competenciaController.cadastrar(listaCompetencias, candidatoId, null)
 
             response.status = HttpServletResponse.SC_CREATED
-            response.writer.write(new JsonBuilder([message: "Competência cadastrada com sucesso!"]).toString())
+            response.setHeader("Location", "/api/v1/competencias/")
+
+            Map responseMap = [
+                    message: "Competência(s) criada(s) com sucesso.",
+                    competencias: [
+                            nome: listaCompetencias,
+                    ],
+                    links: [
+                            list: "/api/v1/competencias"
+                    ]
+            ]
+
+            response.writer.write(new JsonBuilder(responseMap).toString())
+
 
         } catch (EntidadeJaExisteException e) {
-            response.status = HttpServletResponse.SC_CONFLICT  // 409 Conflict
-            ErrorResponse error = new ErrorResponse("O candidato já existe. " + e.message, "CANDIDATO_DUPLICADO")
+            response.status = HttpServletResponse.SC_CONFLICT
+            ErrorResponse error = new ErrorResponse("O candidato já existe. ${e.getMessage()}", "CANDIDATO_DUPLICADO")
             response.writer.write(new JsonBuilder(error).toString())
 
         } catch (InvalidDataException e) {
-            response.status = HttpServletResponse.SC_BAD_REQUEST  // 400 Bad Request
-            ErrorResponse error = new ErrorResponse("Dados inválidos. " + e.message, "DADOS_INVALIDOS")
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+            ErrorResponse error = new ErrorResponse("Dados inválidos. ${e.getMessage()}", "DADOS_INVALIDOS")
             response.writer.write(new JsonBuilder(error).toString())
 
         } catch (DatabaseException e) {
-            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR  // 500 Internal Server Error
-            ErrorResponse error = new ErrorResponse("Erro ao processar a requisição no banco de dados. " + e.message, "ERRO_BANCO")
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            ErrorResponse error = new ErrorResponse("Erro ao processar a requisição no banco de dados. ${e.getMessage()}", "ERRO_BANCO")
             response.writer.write(new JsonBuilder(error).toString())
 
         } catch (Exception e) {
-            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR  // 500 Internal Server Error
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
             ErrorResponse error = new ErrorResponse("Erro desconhecido. Por favor, tente novamente mais tarde.", "ERRO_DESCONHECIDO")
             response.writer.write(new JsonBuilder(error).toString())
         }
@@ -111,43 +125,53 @@ class CompetenciaServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            response.contentType = "application/json; charset=UTF-8"
-            response.characterEncoding = "UTF-8"
+            request.setCharacterEncoding("UTF-8")
+            response.setContentType("application/json; charset=UTF-8")
+            response.setCharacterEncoding("UTF-8")
 
-            String id = request.getParameter("id")
-            if (!id) {
-                List<Competencia> compentencias = competenciaController.listar()
-                response.status = HttpServletResponse.SC_OK
+            String pathInfo = request.getPathInfo()
+            if (pathInfo == null || pathInfo == "/") {
+                List<Competencia> compentencias = getCompetenciaController().listar()
+                response.setStatus(HttpServletResponse.SC_OK)
                 response.writer.write(new JsonBuilder(compentencias).toString())
                 return
             }
 
-            Long competenciaId = id as Long
-            Competencia competencia = buscarCompetenciaPorId(competenciaId, response)
-            if (!competencia) return
+            String idStr = pathInfo.substring(1)
+            Long competenciaId = Long.parseLong(idStr)
+            Competencia competencia = getCompetenciaController().buscarPorId(competenciaId)
 
-            response.status = HttpServletResponse.SC_OK
-            response.writer.write(new JsonBuilder(competencia).toString())
+            if (competencia == null) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND)
+                ErrorResponse error = new ErrorResponse("Competência não encontrada.", "COMPETENCIA_NAO_ENCONTRADA")
+                response.getWriter().write(new JsonBuilder(error).toString())
+            } else {
+                response.status = HttpServletResponse.SC_OK
+                response.writer.write(new JsonBuilder(competencia).toString())
+            }
+
         } catch (NumberFormatException e) {
 
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST)
-            ErrorResponse error = new ErrorResponse("ID inválido: " + e.getMessage(), "ID_INVALIDO")
+            ErrorResponse error = new ErrorResponse("ID inválido: ${e.getMessage()}", "ID_INVALIDO")
             response.getWriter().write(new JsonBuilder(error).toString())
+
         } catch (SQLException e) {
 
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-            ErrorResponse error = new ErrorResponse("Erro ao acessar o banco de dados: " + e.getMessage(), "ERRO_BANCO")
+            ErrorResponse error = new ErrorResponse("Erro ao acessar o banco de dados: ${e.getMessage()}", "ERRO_BANCO")
             response.getWriter().write(new JsonBuilder(error).toString())
+
         } catch (Exception e) {
 
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-            ErrorResponse error = new ErrorResponse("Erro ao buscar compêtencias: " + e.getMessage(), "ERRO_DESCONHECIDO")
+            ErrorResponse error = new ErrorResponse("Erro ao buscar compêtencias: ${e.getMessage()}", "ERRO_DESCONHECIDO")
             response.getWriter().write(new JsonBuilder(error).toString())
         }
     }
 
     private Vaga buscarVagaPorId(Long id, HttpServletResponse response) {
-        Vaga vaga = vagaController.buscarPorId(id)
+        Vaga vaga = getVagaController().buscarPorId(id)
         if (!vaga) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND)
             ErrorResponse error = new ErrorResponse("Vaga com ID $id não encontrada.", "VAGA_NAO_ENCONTRADA")
@@ -157,7 +181,7 @@ class CompetenciaServlet extends HttpServlet {
     }
 
     private Candidato buscarCandidatoPorId(Long id, HttpServletResponse response) {
-        Candidato candidato = candidatoController.buscarPorId(id)
+        Candidato candidato = getCandidatoController().buscarPorId(id)
         if (!candidato) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND)
             ErrorResponse error = new ErrorResponse("Candidato com ID $id não encontrado.", "CANDIDATO_NAO_ENCONTRADO")
@@ -166,13 +190,4 @@ class CompetenciaServlet extends HttpServlet {
         return candidato
     }
 
-    private Competencia buscarCompetenciaPorId(Long id, HttpServletResponse response) {
-        Competencia competencia = competenciaController.buscarPorId(id)
-        if (!competencia) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND)
-            ErrorResponse error = new ErrorResponse("Competência com ID $id não encontrada.", "CANDIDATO_NAO_ENCONTRADO")
-            response.getWriter().write(new JsonBuilder(error).toString())
-        }
-        return competencia
-    }
 }
